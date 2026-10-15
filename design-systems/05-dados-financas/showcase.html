@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<!-- data-theme="light" é deliberado: o showcase abre sempre na face canônica da
+     marca (o :root do tokens.css), sem seguir o modo do sistema operacional.
+     Numa máquina em modo escuro o documento abriria no tema escuro e o lado
+     claro — que é o principal do Cotejo — nunca apareceria. O escuro continua
+     a um clique no alternador do topo, e a escolha fica salva. -->
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cotejo — Design System</title>
+<meta name="description" content="Design system do Cotejo: tokens, paleta azul-aço, tipografia tabular e componentes de painel financeiro em tema claro e escuro.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230A0F1A'/><rect x='7' y='11.5' width='18' height='3' fill='%237FA8D1'/><rect x='7' y='18.5' width='18' height='3' fill='%237FA8D1'/></svg>">
+<style>
+/* =====================================================================
+   COTEJO — Design System · tokens.css
+   Fonte da verdade. Nenhum valor visual nasce fora deste arquivo.
+
+   Uso:
+     <link rel="stylesheet" href="tokens.css">
+   ou, em artefato standalone, copie o bloco de variáveis para dentro
+   do <style> do HTML.
+
+   ARQUITETURA DE TEMA (leia antes de mexer)
+   -------------------------------------------------------------------
+   1) :root                                   -> tema CLARO (padrão)
+   2) @media (prefers-color-scheme: dark)     -> tema ESCURO automático
+   3) :root[data-theme="dark"]                -> escuro forçado pelo usuário
+   4) :root[data-theme="light"]               -> claro forçado pelo usuário
+                                                 (vence a media query)
+   Os blocos 3 e 4 vêm DEPOIS da media query e têm especificidade maior
+   (0,2,0 contra 0,1,0), então sobrescrevem nos dois sentidos.
+   Regra dura: todo token declarado no escuro existe no claro. Sem exceção.
+   ===================================================================== */
+
+:root {
+  /* ===================================================================
+     1. RAMPA DA ASSINATURA — AZUL-AÇO
+     O azul-aço é a cor da MARCA: ação, seleção, foco, link, série
+     primária de gráfico. Ele nunca significa "deu certo" nem "deu ruim" —
+     alta e baixa têm cores próprias (grupo 4). Meta de ocupação: < 10%
+     da tela. Se o azul dominar o painel, o número perdeu o palco.
+     =================================================================== */
+  --steel-300: #7FA8D1;  /* texto/link sobre fundo escuro · ponta clara   */
+  --steel-400: #4E86BE;  /* hover no escuro · série secundária de gráfico */
+  --steel-500: #2E6DA4;  /* A ASSINATURA — preenchimento de botão, foco   */
+  --steel-600: #245685;  /* hover no claro · borda de seleção             */
+  --steel-700: #1B4468;  /* pressed no claro · texto pequeno sobre claro  */
+
+  --steel-rgb: 46, 109, 164;   /* para rgba() sem hardcode do hex */
+
+  /* Alfas da assinatura — sempre rgba nomeado, nunca opacity no elemento
+     (opacity apaga o filho junto e ninguém entende por quê).            */
+  --steel-a08: rgba(46, 109, 164, 0.08);   /* fundo de chip/linha ativa  */
+  --steel-a16: rgba(46, 109, 164, 0.16);   /* borda sutil de seleção     */
+  --steel-a32: rgba(46, 109, 164, 0.32);   /* anel de foco               */
+
+  /* ===================================================================
+     2. NEUTROS E SUPERFÍCIES
+     Tinta azul-marinho quase preta. O cinza é AZULADO porque a
+     assinatura é fria — cinza neutro puro ao lado de azul-aço deixa a
+     interface com aparência suja. Base nunca é #000 nem #fff.
+     =================================================================== */
+  --bg-base:     #F4F6FA;   /* a página                                   */
+  --bg-surface:  #FFFFFF;   /* card, painel, linha de tabela              */
+  --bg-elevated: #EAEEF5;   /* input, cabeçalho de tabela, linha em hover */
+  --bg-sunken:   #E3E9F1;   /* trilho, well, área de código               */
+  --bg-overlay:  rgba(10, 15, 26, 0.55);  /* fundo de modal              */
+  --bg-inverse:  #0A0F1A;   /* tile escuro dentro do tema claro           */
+
+  /* ===================================================================
+     3. TEXTO — três níveis, não mais.
+     Um quarto nível ou fica ilegível ou vira igual ao terceiro.
+     =================================================================== */
+  --fg:        #0D1522;   /* números, títulos, corpo                      */
+  --fg-muted:  #4A5A6E;   /* rótulo de coluna, descrição, texto de apoio  */
+  --fg-subtle: #5D6C7E;   /* caption, unidade, timestamp, placeholder     */
+  --fg-on-fill:#FFFFFF;   /* texto sobre preenchimento da assinatura      */
+
+  /* ===================================================================
+     4. SEMÂNTICAS DE ALTA E BAIXA
+     Separadas da marca de propósito. Positivo é JADE ESCURO (hue ~163),
+     negativo é VERMELHO-TIJOLO (hue ~4). Nenhum dos dois encosta no
+     azul-aço, então "variação" e "ação" nunca se confundem.
+     Cor nunca é o ÚNICO sinal: acompanhe sempre de + / − e do triângulo
+     de direção (.ctj-delta faz isso).
+     =================================================================== */
+  --pos:        #0E6F53;                      /* alta / crédito / receita */
+  --pos-bg:     rgba(14, 111, 83, 0.10);
+  --pos-border: rgba(14, 111, 83, 0.28);
+
+  --neg:        #A03027;                      /* baixa / débito / atraso  */
+  --neg-bg:     rgba(160, 48, 39, 0.10);
+  --neg-border: rgba(160, 48, 39, 0.28);
+
+  --warn:        #9A6407;                     /* pendência, prazo curto   */
+  --warn-bg:     rgba(154, 100, 7, 0.12);
+  --warn-border: rgba(154, 100, 7, 0.30);
+
+  --flat:      var(--fg-subtle);              /* variação nula            */
+  --info:      var(--steel-600);              /* nota do sistema          */
+  --brand-ink: var(--steel-500);              /* mark e wordmark          */
+
+  /* ===================================================================
+     5. BORDAS — hairline de 1px é lei. 2px só no anel de foco.
+     =================================================================== */
+  --border:        #D5DDE8;   /* padrão: card, input, célula             */
+  --border-muted:  #E4EAF2;   /* divisória interna de lista/tabela       */
+  --border-strong: #B9C6D6;   /* cabeçalho de tabela, rodapé de total    */
+  --border-active: var(--steel-500);
+
+  /* ===================================================================
+     6. AÇÃO — estados do botão primário, por tema.
+     No claro o hover ESCURECE; no escuro o hover CLAREIA. Não é
+     simetria de valor, é o que mantém contraste em cada fundo.
+     =================================================================== */
+  --action-bg:       var(--steel-500);
+  --action-bg-hover: var(--steel-600);
+  --action-bg-press: var(--steel-700);
+  --action-fg:       #FFFFFF;
+
+  --ring: 0 0 0 3px var(--steel-a32);   /* anel de foco visível */
+
+  /* ===================================================================
+     7. TIPOGRAFIA — duas famílias, ambas nativas do sistema.
+     Zero webfont, zero CDN: painel financeiro abre em rede de escritório,
+     em VPN, em máquina travada. Fonte que não carrega é número que não
+     aparece. A pilha nativa também garante que o mono seja o mono REAL
+     do sistema, com dígitos de largura fixa de verdade.
+     =================================================================== */
+  --font-sans: ui-sans-serif, -apple-system, "Segoe UI Variable Text",
+               "Segoe UI", Roboto, system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+               "Liberation Mono", "DejaVu Sans Mono", monospace;
+
+  /* Escala de tipo — produto denso: teto baixo, piso 12px.
+     Não existe display de 72px aqui; a tela é para trabalhar.           */
+  --fs-display: 2.25rem;   /* 36px — número herói do painel              */
+  --fs-h1:      1.75rem;   /* 28px — título de página                    */
+  --fs-h2:      1.375rem;  /* 22px — título de seção                     */
+  --fs-h3:      1.125rem;  /* 18px — título de card                      */
+  --fs-lead:    1.0625rem; /* 17px — parágrafo de abertura               */
+  --fs-body:    1rem;      /* 16px — corpo. Nunca menos em texto corrido */
+  --fs-sm:      0.875rem;  /* 14px — célula de tabela, botão, input      */
+  --fs-xs:      0.8125rem; /* 13px — rótulo de coluna, badge             */
+  --fs-micro:   0.75rem;   /* 12px — piso absoluto: unidade, nota        */
+
+  /* Números têm escala própria: sempre mono, sempre tabular.            */
+  --fs-num-xl:  2.25rem;   /* KPI principal do card de métrica           */
+  --fs-num-lg:  1.375rem;  /* KPI secundário                             */
+  --fs-num-md:  0.9375rem; /* 15px — valor em célula de tabela           */
+
+  --fw-regular:  400;
+  --fw-medium:   500;   /* rótulo, badge, botão                          */
+  --fw-semibold: 600;   /* título, cabeçalho de coluna, número em foco   */
+  --fw-bold:     700;   /* KPI, total, wordmark                          */
+
+  /* Tracking: negativo cresce com o tamanho; caixa-alta pequena abre.   */
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.01em;
+  --tracking-body:     0;
+  --tracking-num:     -0.01em;   /* mono tabular fecha um pouco melhor   */
+  --tracking-overline: 0.14em;   /* UPPERCASE pequeno                    */
+  --tracking-wordmark: 0.08em;
+
+  --lh-display: 1.05;
+  --lh-heading: 1.25;
+  --lh-body:    1.55;
+  --lh-tight:   1.2;    /* célula de tabela, badge                       */
+
+  /* ===================================================================
+     8. ESPAÇO — base 4px. Densidade alta: o passo de trabalho é 8/12px,
+     não 24. Espaço comunica preço; aqui ele comunica "ferramenta".
+     =================================================================== */
+  --sp-1:  0.25rem;   /*  4px */
+  --sp-2:  0.5rem;    /*  8px */
+  --sp-3:  0.75rem;   /* 12px */
+  --sp-4:  1rem;      /* 16px */
+  --sp-5:  1.25rem;   /* 20px */
+  --sp-6:  1.5rem;    /* 24px */
+  --sp-8:  2rem;      /* 32px */
+  --sp-10: 2.5rem;    /* 40px */
+  --sp-12: 3rem;      /* 48px */
+  --sp-16: 4rem;      /* 64px */
+
+  --section-y:        var(--sp-12);  /* respiro entre blocos do painel   */
+  --row-h:            2.125rem;      /* 34px — altura da linha de dado   */
+  --row-h-compact:    1.75rem;       /* 28px — modo adensado             */
+  --container-prose:  46rem;         /* 736px — texto corrido            */
+  --container-app:    80rem;         /* 1280px — grade do painel         */
+
+  /* ===================================================================
+     9. RAIO — cantos pequenos, sempre. O sistema inteiro vive entre
+     3px e 6px. Raio grande arredonda a autoridade do número.
+     --radius-full existe só para indicador circular e avatar.
+     =================================================================== */
+  --radius-xs:   3px;   /* badge, chip, swatch pequeno                   */
+  --radius-sm:   4px;   /* botão, input, célula selecionada              */
+  --radius-md:   5px;   /* card, painel                                  */
+  --radius-lg:   6px;   /* container, modal, área de tabela              */
+  --radius-full: 999px; /* SÓ indicador de status e avatar               */
+
+  /* ===================================================================
+     10. ELEVAÇÃO — no tema claro é SOMBRA (difusa, Y > blur/2, alfa
+     baixo). No escuro a sombra some sobre marinho: lá quem separa plano
+     é a BORDA mais clara. Os dois estão desenhados, não calculados um
+     do outro.
+     =================================================================== */
+  --shadow-1: 0 1px 2px rgba(13, 21, 34, 0.06),
+              0 1px 1px rgba(13, 21, 34, 0.04);
+  --shadow-2: 0 8px 20px -12px rgba(13, 21, 34, 0.22),
+              0 1px 2px rgba(13, 21, 34, 0.06);
+  --shadow-3: 0 24px 48px -24px rgba(13, 21, 34, 0.30),
+              0 2px 6px rgba(13, 21, 34, 0.08);
+  --shadow-inset: none;   /* declarado para dizer: não usar */
+
+  /* Preenchimento de área do sparkline (SVG) */
+  --spark-line: var(--steel-500);
+  --spark-fill: rgba(46, 109, 164, 0.14);
+
+  /* Zebra e hover de linha de tabela */
+  --row-hover:  #F2F6FB;
+  --row-select: rgba(46, 109, 164, 0.12);
+
+  /* ===================================================================
+     11. MOTION — marca séria: sem bounce, sem overshoot. Duração curta
+     porque o usuário está trabalhando, não assistindo.
+     =================================================================== */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --dur-fast: 90ms;    /* hover, foco                                    */
+  --dur-base: 140ms;   /* mudança de estado                              */
+  --dur-slow: 220ms;   /* troca de tema, abertura de painel              */
+
+  /* ===================================================================
+     12. CAMADAS
+     =================================================================== */
+  --z-sticky:  1020;
+  --z-overlay: 1040;
+  --z-modal:   1050;
+  --z-toast:   1070;
+
+  color-scheme: light;
+}
+
+/* =====================================================================
+   TEMA ESCURO — automático (preferência do sistema)
+   Só os tokens que MUDAM. Todos existem no :root acima.
+   ===================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-base:     #0A0F1A;
+    --bg-surface:  #101827;
+    --bg-elevated: #17202F;
+    --bg-sunken:   #080D16;
+    --bg-overlay:  rgba(4, 8, 15, 0.70);
+    --bg-inverse:  #F4F6FA;
+
+    --fg:         #E8EDF4;
+    --fg-muted:   #9BA9BC;
+    --fg-subtle:  #78889C;
+    --fg-on-fill: #06101C;
+
+    --pos:        #3FB98A;
+    --pos-bg:     rgba(63, 185, 138, 0.14);
+    --pos-border: rgba(63, 185, 138, 0.34);
+
+    --neg:        #E0705F;
+    --neg-bg:     rgba(224, 112, 95, 0.15);
+    --neg-border: rgba(224, 112, 95, 0.36);
+
+    --warn:        #E0A33A;
+    --warn-bg:     rgba(224, 163, 58, 0.15);
+    --warn-border: rgba(224, 163, 58, 0.34);
+
+    --info: var(--steel-300);
+    --brand-ink: var(--steel-300);
+
+    --border:        #223046;
+    --border-muted:  #1A2434;
+    --border-strong: #33445E;
+
+    --action-bg:       var(--steel-400);
+    --action-bg-hover: #6FA0D0;
+    --action-bg-press: #93B6DC;
+    --action-fg:       #06101C;
+
+    --steel-a08: rgba(126, 168, 209, 0.10);
+    --steel-a16: rgba(126, 168, 209, 0.20);
+    --steel-a32: rgba(126, 168, 209, 0.40);
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.50),
+                0 0 0 1px rgba(255, 255, 255, 0.02);
+    --shadow-2: 0 10px 24px -14px rgba(0, 0, 0, 0.75),
+                0 0 0 1px rgba(255, 255, 255, 0.035);
+    --shadow-3: 0 28px 56px -28px rgba(0, 0, 0, 0.85),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+
+    --spark-line: var(--steel-300);
+    --spark-fill: rgba(126, 168, 209, 0.16);
+
+    --row-hover:  #16202F;
+    --row-select: rgba(126, 168, 209, 0.14);
+
+    color-scheme: dark;
+  }
+}
+
+/* =====================================================================
+   TEMA ESCURO — forçado pelo usuário (vence a media query "claro")
+   ===================================================================== */
+:root[data-theme="dark"] {
+  --bg-base:     #0A0F1A;
+  --bg-surface:  #101827;
+  --bg-elevated: #17202F;
+  --bg-sunken:   #080D16;
+  --bg-overlay:  rgba(4, 8, 15, 0.70);
+  --bg-inverse:  #F4F6FA;
+
+  --fg:         #E8EDF4;
+  --fg-muted:   #9BA9BC;
+  --fg-subtle:  #78889C;
+  --fg-on-fill: #06101C;
+
+  --pos:        #3FB98A;
+  --pos-bg:     rgba(63, 185, 138, 0.14);
+  --pos-border: rgba(63, 185, 138, 0.34);
+
+  --neg:        #E0705F;
+  --neg-bg:     rgba(224, 112, 95, 0.15);
+  --neg-border: rgba(224, 112, 95, 0.36);
+
+  --warn:        #E0A33A;
+  --warn-bg:     rgba(224, 163, 58, 0.15);
+  --warn-border: rgba(224, 163, 58, 0.34);
+
+  --info: var(--steel-300);
+  --brand-ink: var(--steel-300);
+
+  --border:        #223046;
+  --border-muted:  #1A2434;
+  --border-strong: #33445E;
+
+  --action-bg:       var(--steel-400);
+  --action-bg-hover: #6FA0D0;
+  --action-bg-press: #93B6DC;
+  --action-fg:       #06101C;
+
+  --steel-a08: rgba(126, 168, 209, 0.10);
+  --steel-a16: rgba(126, 168, 209, 0.20);
+  --steel-a32: rgba(126, 168, 209, 0.40);
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.50),
+              0 0 0 1px rgba(255, 255, 255, 0.02);
+  --shadow-2: 0 10px 24px -14px rgba(0, 0, 0, 0.75),
+              0 0 0 1px rgba(255, 255, 255, 0.035);
+  --shadow-3: 0 28px 56px -28px rgba(0, 0, 0, 0.85),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  --spark-line: var(--steel-300);
+  --spark-fill: rgba(126, 168, 209, 0.16);
+
+  --row-hover:  #16202F;
+  --row-select: rgba(126, 168, 209, 0.14);
+
+  color-scheme: dark;
+}
+
+/* =====================================================================
+   TEMA CLARO — forçado pelo usuário (vence a media query "escuro")
+   ===================================================================== */
+:root[data-theme="light"] {
+  --bg-base:     #F4F6FA;
+  --bg-surface:  #FFFFFF;
+  --bg-elevated: #EAEEF5;
+  --bg-sunken:   #E3E9F1;
+  --bg-overlay:  rgba(10, 15, 26, 0.55);
+  --bg-inverse:  #0A0F1A;
+
+  --fg:         #0D1522;
+  --fg-muted:   #4A5A6E;
+  --fg-subtle:  #5D6C7E;
+  --fg-on-fill: #FFFFFF;
+
+  --pos:        #0E6F53;
+  --pos-bg:     rgba(14, 111, 83, 0.10);
+  --pos-border: rgba(14, 111, 83, 0.28);
+
+  --neg:        #A03027;
+  --neg-bg:     rgba(160, 48, 39, 0.10);
+  --neg-border: rgba(160, 48, 39, 0.28);
+
+  --warn:        #9A6407;
+  --warn-bg:     rgba(154, 100, 7, 0.12);
+  --warn-border: rgba(154, 100, 7, 0.30);
+
+  --info: var(--steel-600);
+  --brand-ink: var(--steel-500);
+
+  --border:        #D5DDE8;
+  --border-muted:  #E4EAF2;
+  --border-strong: #B9C6D6;
+
+  --action-bg:       var(--steel-500);
+  --action-bg-hover: var(--steel-600);
+  --action-bg-press: var(--steel-700);
+  --action-fg:       #FFFFFF;
+
+  --steel-a08: rgba(46, 109, 164, 0.08);
+  --steel-a16: rgba(46, 109, 164, 0.16);
+  --steel-a32: rgba(46, 109, 164, 0.32);
+
+  --shadow-1: 0 1px 2px rgba(13, 21, 34, 0.06),
+              0 1px 1px rgba(13, 21, 34, 0.04);
+  --shadow-2: 0 8px 20px -12px rgba(13, 21, 34, 0.22),
+              0 1px 2px rgba(13, 21, 34, 0.06);
+  --shadow-3: 0 24px 48px -24px rgba(13, 21, 34, 0.30),
+              0 2px 6px rgba(13, 21, 34, 0.08);
+
+  --spark-line: var(--steel-500);
+  --spark-fill: rgba(46, 109, 164, 0.14);
+
+  --row-hover:  #F2F6FB;
+  --row-select: rgba(46, 109, 164, 0.12);
+
+  color-scheme: light;
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--steel-a32);
+  color: var(--fg);
+}
+
+/* Foco visível é obrigatório — quem opera painel financeiro navega por
+   teclado o dia inteiro. Nunca use outline:none sem substituto.         */
+:focus-visible {
+  outline: 2px solid var(--steel-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================================
+   UTILITÁRIAS — prefixo .ctj-
+   Componentes do COTEJO. Copiar e colar em produção; nenhum hex aqui.
+   ===================================================================== */
+
+/* ---------- Wordmark e mark ---------------------------------------- */
+.ctj-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-sans);
+  line-height: 1;
+  text-decoration: none;
+  color: var(--fg);
+}
+/* O mark: O PAR QUE FECHA — duas barras horizontais de mesma medida,
+   rentes nas duas pontas. É o filete duplo que a contabilidade desenha
+   embaixo de um total encerrado, e é a forma de repouso do indicador de
+   cotejo (.ctj-match): quando os dois lados batem, as barras têm o mesmo
+   comprimento. Sempre em --brand-ink, sempre na altura da caixa-alta do
+   wordmark. Desenhado em SVG inline, nunca em imagem.                   */
+.ctj-mark { color: var(--brand-ink); flex: none; display: block; }
+.ctj-wordmark__name {
+  font-size: 1.0625rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wordmark);
+  text-transform: uppercase;
+}
+.ctj-wordmark__rule {
+  width: 1px;
+  height: 1.125em;
+  background: var(--border-strong);
+}
+.ctj-wordmark__desc {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ---------- Filete duplo: a marca de conta encerrada ---------------- */
+/* Segunda manifestação da assinatura. As duas linhas são desenhadas com
+   gradiente, não com borda: assim o par mede 1px em cima e 1px embaixo
+   em qualquer box-sizing, e nenhuma das duas engorda no zoom.
+   .ctj-doubleline  -> filete duplo de largura total (rodapé de total).
+   .ctj-sectionmark -> o mesmo par, curto, abrindo uma seção.            */
+.ctj-doubleline,
+.ctj-sectionmark {
+  display: block;
+  height: 4px;
+  border: none;
+  background:
+    linear-gradient(var(--brand-ink), var(--brand-ink)) left top    / 100% 1px no-repeat,
+    linear-gradient(var(--brand-ink), var(--brand-ink)) left bottom / 100% 1px no-repeat;
+}
+.ctj-sectionmark { width: 1.75rem; margin-bottom: var(--sp-3); }
+
+/* ---------- Cotejo: o par conferido --------------------------------- */
+/* Terceira manifestação, e a única viva. A barra de cima é o razão; a de
+   baixo é o extrato, com o comprimento proporcional ao que já bateu
+   (--match). Conciliado = as duas do mesmo tamanho, e o glifo vira o
+   próprio mark. A diferença aparece como falta de barra, não só como
+   cor — quem não distingue matiz lê o vão.                              */
+.ctj-match {
+  --match: 100%;
+  position: relative;
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.5rem;
+  vertical-align: middle;
+  color: var(--pos);
+}
+.ctj-match::before,
+.ctj-match::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+}
+.ctj-match::before { top: 0;    width: 100%; }
+.ctj-match::after  { bottom: 0; width: var(--match); }
+/* Cotejo parcial: sobrou diferença dentro do prazo. */
+.ctj-match--partial { color: var(--warn); }
+/* Cotejo aberto: a diferença passou do prazo. */
+.ctj-match--off     { color: var(--neg); }
+/* Sem cotejo: o razão existe, o extrato ainda não. A barra de baixo vira
+   pontilhado — ausência desenhada, nunca célula vazia. */
+.ctj-match--none    { color: var(--fg-subtle); }
+.ctj-match--none::after {
+  width: 100%;
+  height: 1px;
+  background: repeating-linear-gradient(to right,
+              currentColor 0 2px, transparent 2px 4px);
+}
+
+/* ---------- Overline ------------------------------------------------ */
+.ctj-overline {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ---------- Números: cidadãos de primeira classe -------------------- */
+.ctj-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: var(--tracking-num);
+  text-align: right;
+  white-space: nowrap;
+}
+.ctj-num--xl { font-size: var(--fs-num-xl); font-weight: var(--fw-bold);     line-height: var(--lh-display); }
+.ctj-num--lg { font-size: var(--fs-num-lg); font-weight: var(--fw-semibold); line-height: var(--lh-tight); }
+.ctj-num--md { font-size: var(--fs-num-md); font-weight: var(--fw-medium);   line-height: var(--lh-tight); }
+.ctj-num__unit {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  color: var(--fg-subtle);
+}
+
+/* ---------- Delta: a coluna de variação ----------------------------- */
+.ctj-delta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-num-md);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-num);
+  white-space: nowrap;
+}
+.ctj-delta::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  flex: none;
+}
+.ctj-delta--up   { color: var(--pos); }
+.ctj-delta--up::before   { border-bottom: 5px solid currentColor; }
+.ctj-delta--down { color: var(--neg); }
+.ctj-delta--down::before { border-top: 5px solid currentColor; }
+.ctj-delta--flat { color: var(--flat); }
+.ctj-delta--flat::before {
+  border: none;
+  width: 7px;
+  height: 1px;
+  background: currentColor;
+}
+/* Polaridade invertida: em custo, despesa e inadimplência, SUBIR é ruim.
+   A direção do triângulo continua honesta (para cima é para cima); só a
+   cor troca. Sem isso, um painel pinta de verde a despesa que estourou. */
+.ctj-delta--up.ctj-delta--inverse   { color: var(--neg); }
+.ctj-delta--down.ctj-delta--inverse { color: var(--pos); }
+
+/* ---------- Botões -------------------------------------------------- */
+.ctj-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: 2rem;
+  padding: 0 var(--sp-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--action-bg);
+  color: var(--action-fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard);
+}
+.ctj-btn:hover  { background: var(--action-bg-hover); }
+.ctj-btn:active { background: var(--action-bg-press); }
+.ctj-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+.ctj-btn[disabled],
+.ctj-btn.is-disabled {
+  background: var(--bg-elevated);
+  color: var(--fg-subtle);
+  border-color: var(--border);
+  cursor: not-allowed;
+}
+
+.ctj-btn--secondary {
+  background: var(--bg-surface);
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+.ctj-btn--secondary:hover  { background: var(--bg-elevated); border-color: var(--steel-500); }
+.ctj-btn--secondary:active { background: var(--bg-sunken); }
+
+.ctj-btn--ghost {
+  background: transparent;
+  color: var(--fg-muted);
+  border-color: transparent;
+}
+.ctj-btn--ghost:hover  { background: var(--bg-elevated); color: var(--fg); }
+.ctj-btn--ghost:active { background: var(--bg-sunken); }
+
+.ctj-btn--danger {
+  background: transparent;
+  color: var(--neg);
+  border-color: var(--neg-border);
+}
+.ctj-btn--danger:hover  { background: var(--neg-bg); }
+.ctj-btn--danger:active { background: var(--neg-bg); border-color: var(--neg); }
+
+.ctj-btn--sm { height: 1.75rem; padding: 0 var(--sp-2); font-size: var(--fs-xs); }
+
+/* ---------- Campo de formulário ------------------------------------- */
+.ctj-field { display: block; }
+.ctj-field__label {
+  display: block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--fg-muted);
+}
+.ctj-input {
+  width: 100%;
+  height: 2rem;
+  padding: 0 var(--sp-3);
+  box-sizing: border-box;
+  background: var(--bg-surface);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  transition: border-color var(--dur-fast) var(--ease-standard),
+              box-shadow var(--dur-fast) var(--ease-standard);
+}
+.ctj-input::placeholder { color: var(--fg-subtle); }
+.ctj-input:hover { border-color: var(--border-strong); }
+.ctj-input:focus {
+  outline: none;
+  border-color: var(--steel-500);
+  box-shadow: var(--ring);
+}
+.ctj-input[disabled] {
+  background: var(--bg-elevated);
+  color: var(--fg-subtle);
+  cursor: not-allowed;
+}
+/* Todo input de VALOR é mono e alinhado à direita. Sem exceção. */
+.ctj-input--num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.ctj-input--error { border-color: var(--neg); }
+.ctj-input--error:focus { box-shadow: 0 0 0 3px var(--neg-bg); }
+.ctj-field__hint  { margin-top: var(--sp-1); font-size: var(--fs-micro); color: var(--fg-subtle); }
+.ctj-field__error { margin-top: var(--sp-1); font-size: var(--fs-micro); color: var(--neg); }
+
+/* Prefixo de moeda colado no input */
+.ctj-inputgroup { display: flex; align-items: stretch; }
+.ctj-inputgroup__prefix {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--sp-2);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-subtle);
+}
+.ctj-inputgroup .ctj-input { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+/* ---------- Badge de status ----------------------------------------- */
+.ctj-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 1px var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--bg-elevated);
+  color: var(--fg-muted);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.ctj-badge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex: none;
+}
+.ctj-badge--pos  { background: var(--pos-bg);  color: var(--pos);  border-color: var(--pos-border); }
+.ctj-badge--neg  { background: var(--neg-bg);  color: var(--neg);  border-color: var(--neg-border); }
+.ctj-badge--warn { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+.ctj-badge--info { background: var(--steel-a08); color: var(--info); border-color: var(--steel-a16); }
+
+/* ---------- Card ---------------------------------------------------- */
+.ctj-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+}
+.ctj-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border-muted);
+}
+.ctj-card__title {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-muted);
+}
+.ctj-card__body { padding: var(--sp-4); }
+
+/* ---------- Card de métrica com sparkline --------------------------- */
+.ctj-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  transition: border-color var(--dur-base) var(--ease-standard),
+              box-shadow var(--dur-base) var(--ease-standard);
+}
+.ctj-metric:hover { border-color: var(--steel-500); box-shadow: var(--shadow-2); }
+.ctj-metric__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--fg-muted);
+}
+.ctj-metric__value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-num-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-num);
+  line-height: var(--lh-display);
+  color: var(--fg);
+}
+.ctj-metric__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-micro);
+  color: var(--fg-subtle);
+}
+/* Sparkline desenhado à mão em SVG. O viewBox é 0 0 120 34 e a caixa é
+   esticada em X (preserveAspectRatio="none"): por isso TODO traço usa
+   vector-effect: non-scaling-stroke — sem ele a linha engorda junto com
+   a largura do card. O ponto final é um subpath de comprimento zero com
+   linecap redondo: vira um círculo perfeito mesmo com o eixo distorcido. */
+.ctj-spark { display: block; width: 100%; height: 38px; overflow: visible; }
+.ctj-spark__line {
+  fill: none;
+  stroke: var(--spark-line);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.ctj-spark__area { fill: var(--spark-fill); stroke: none; }
+.ctj-spark__dot {
+  fill: none;
+  stroke: var(--spark-line);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.ctj-spark__base {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  vector-effect: non-scaling-stroke;
+}
+.ctj-spark--pos { --spark-line: var(--pos); --spark-fill: var(--pos-bg); }
+.ctj-spark--neg { --spark-line: var(--neg); --spark-fill: var(--neg-bg); }
+
+/* ---------- Tabela de dados ----------------------------------------- */
+.ctj-tablewrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}
+.ctj-table {
+  width: 100%;
+  min-width: 44rem;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.ctj-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-strong);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  text-align: left;
+  white-space: nowrap;
+}
+.ctj-table thead th.ctj-num { text-align: right; }
+.ctj-table tbody td {
+  height: var(--row-h);
+  padding: 0 var(--sp-3);
+  border-bottom: 1px solid var(--border-muted);
+  color: var(--fg);
+  line-height: var(--lh-tight);
+  vertical-align: middle;
+}
+.ctj-table tbody tr:last-child td { border-bottom: none; }
+.ctj-table tbody tr:hover td { background: var(--row-hover); }
+.ctj-table tbody tr[aria-selected="true"] td {
+  background: var(--row-select);
+  box-shadow: inset 0 1px 0 var(--steel-500), inset 0 -1px 0 var(--steel-500);
+}
+.ctj-table td.ctj-num, .ctj-table th.ctj-num { text-align: right; }
+.ctj-table .ctj-table__group td {
+  background: var(--bg-elevated);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  height: 1.625rem;
+}
+/* Rodapé de total: o filete duplo, exatamente como no mark. Aqui o par é
+   NEUTRO (--border-strong) e não azul-aço — a linha de total carrega
+   número, e azul-aço na altura de um número leria como ação.           */
+.ctj-table tfoot td {
+  height: var(--row-h);
+  padding: 0 var(--sp-3);
+  border-top: 1px solid var(--border-strong);
+  background-color: var(--bg-elevated);
+  background-image: linear-gradient(var(--border-strong), var(--border-strong));
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 2px;
+  font-weight: var(--fw-semibold);
+  color: var(--fg);
+}
+.ctj-table__sub { color: var(--fg-subtle); font-size: var(--fs-micro); }
+
+/* ---------- Controle segmentado (período) --------------------------- */
+.ctj-seg {
+  display: inline-flex;
+  padding: 2px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  gap: 2px;
+}
+.ctj-seg__item {
+  padding: var(--sp-1) var(--sp-3);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard);
+}
+.ctj-seg__item:hover { color: var(--fg); }
+.ctj-seg__item[aria-pressed="true"] {
+  background: var(--bg-surface);
+  color: var(--fg);
+  box-shadow: var(--shadow-1);
+}
+.ctj-seg__item:focus-visible { outline: none; box-shadow: var(--ring); }
+
+/* ---------- Par rótulo/valor (ficha de conta) ----------------------- */
+.ctj-kv {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border-muted);
+}
+.ctj-kv:last-child { border-bottom: none; }
+.ctj-kv__k { font-size: var(--fs-xs); color: var(--fg-muted); }
+.ctj-kv__v {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-num-md);
+  font-weight: var(--fw-medium);
+  color: var(--fg);
+}
+
+/* ---------- Toast --------------------------------------------------- */
+.ctj-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-6);
+  transform: translate(-50%, 12px);
+  z-index: var(--z-toast);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-3);
+  font-size: var(--fs-sm);
+  color: var(--fg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-standard),
+              transform var(--dur-base) var(--ease-standard);
+}
+.ctj-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Hairline ------------------------------------------------ */
+.ctj-rule { height: 1px; background: var(--border); border: none; margin: 0; }
+
+/* =====================================================================
+   CSS DA PÁGINA DE SHOWCASE — não faz parte do design system.
+   Serve só para montar a documentação. O sistema é o bloco acima.
+   ===================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--container-app);
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: var(--z-modal);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--steel-500);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+}
+.skip:focus { left: var(--sp-4); top: var(--sp-2); }
+
+/* ---------- Topbar --------------------------------------------------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+.topbar__in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  height: 3rem;
+}
+.topbar__right { display: flex; align-items: center; gap: var(--sp-3); }
+
+/* Em tela estreita o lockup aplica a própria regra de marca: o descritor
+   e o filete saem primeiro, o chip de versão depois. */
+@media (max-width: 32rem) {
+  .wrap { padding: 0 var(--sp-4); }
+  .topbar__in .ctj-wordmark__desc,
+  .topbar__in .ctj-wordmark__rule { display: none; }
+  .topbar__right .ctj-badge { display: none; }
+}
+
+/* ---------- Cabeçalho da página -------------------------------------- */
+.hero { padding: var(--sp-12) 0 var(--sp-10); border-bottom: 1px solid var(--border); }
+.hero h1 {
+  margin: var(--sp-3) 0 0;
+  max-width: 22ch;
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--lh-heading);
+}
+.hero .lead {
+  max-width: var(--container-prose);
+  margin: var(--sp-4) 0 0;
+  font-size: var(--fs-lead);
+  color: var(--fg-muted);
+}
+.hero__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1px;
+  margin: var(--sp-8) 0 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+/* A hairline entre as células é a sombra de 1px de cada célula ocupando
+   o gap. Assim uma célula vazia (quando a grade quebra em 2 colunas no
+   celular) não vira um bloco cinza solto. */
+.hero__meta > div {
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 1px var(--border);
+  padding: var(--sp-3) var(--sp-4);
+}
+.hero__meta dt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+.hero__meta dd { margin: var(--sp-1) 0 0; font-size: var(--fs-sm); color: var(--fg); }
+
+/* ---------- Seções ---------------------------------------------------- */
+section.sec { padding: var(--section-y) 0; border-bottom: 1px solid var(--border); }
+.sec__head { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.sec__head h2 {
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-heading);
+}
+.sec__intro { max-width: var(--container-prose); margin: 0 0 var(--sp-6); color: var(--fg-muted); }
+.sec__intro b { color: var(--fg); font-weight: var(--fw-semibold); }
+h3.sub {
+  margin: var(--sp-8) 0 var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ---------- Grades genéricas ------------------------------------------ */
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: var(--sp-4); }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--sp-4); }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); gap: var(--sp-6); }
+.split  { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: var(--sp-8); align-items: start; }
+@media (max-width: 62rem) { .split { grid-template-columns: 1fr; } }
+
+/* ---------- Marca ----------------------------------------------------- */
+.brandtile {
+  display: flex;
+  align-items: center;
+  min-height: 6.5rem;
+  padding: var(--sp-6);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.brandtile--inv { background: var(--bg-inverse); color: var(--bg-base); border-color: transparent; }
+.brandtile--inv .ctj-mark { color: var(--steel-400); }
+.brandtile--inv .ctj-wordmark { color: inherit; }
+.brandtile--inv .ctj-wordmark__desc { color: inherit; opacity: 0.75; }
+.brandtile--inv .ctj-wordmark__rule { background: currentColor; opacity: 0.45; }
+.brandtile--mono .ctj-mark { color: var(--fg); }
+.tilecap {
+  margin: var(--sp-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  line-height: 1.5;
+  color: var(--fg-subtle);
+}
+
+/* ---------- Swatches -------------------------------------------------- */
+.swgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr)); gap: var(--sp-3); }
+.sw {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-standard),
+              box-shadow var(--dur-fast) var(--ease-standard);
+}
+.sw:hover { border-color: var(--steel-500); box-shadow: var(--shadow-2); }
+.sw:focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--steel-500); }
+/* O anel interno existe para que amostra branca (#FFFFFF) e amostra
+   quase-branca não sumam dentro do card no tema claro. */
+.sw__chip {
+  display: block;
+  height: 3.25rem;
+  border-bottom: 1px solid var(--border);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.sw__meta { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3) 0; }
+.sw__role { font-size: var(--fs-xs); font-weight: var(--fw-medium); color: var(--fg); }
+.sw__hex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-subtle);
+  text-transform: uppercase;
+}
+.sw__token {
+  display: block;
+  padding: 2px var(--sp-3) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-subtle);
+  opacity: 0.75;
+}
+
+/* ---------- Tipografia ------------------------------------------------ */
+.spec { padding: var(--sp-3) 0; border-bottom: 1px solid var(--border-muted); }
+.spec:last-child { border-bottom: none; }
+.spec__meta {
+  margin: 0 0 var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-subtle);
+}
+.spec__sample { margin: 0; color: var(--fg); }
+.s-display { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-display); font-weight: var(--fw-bold); letter-spacing: var(--tracking-display); line-height: var(--lh-display); }
+.s-h1      { font-size: var(--fs-h1); font-weight: var(--fw-bold); letter-spacing: var(--tracking-heading); line-height: var(--lh-heading); }
+.s-h2      { font-size: var(--fs-h2); font-weight: var(--fw-semibold); letter-spacing: var(--tracking-heading); line-height: var(--lh-heading); }
+.s-h3      { font-size: var(--fs-h3); font-weight: var(--fw-semibold); line-height: var(--lh-heading); }
+.s-lead    { font-size: var(--fs-lead); color: var(--fg-muted); line-height: var(--lh-body); }
+.s-body    { font-size: var(--fs-body); line-height: var(--lh-body); }
+.s-sm      { font-size: var(--fs-sm); line-height: var(--lh-body); }
+.s-xs      { font-size: var(--fs-xs); color: var(--fg-muted); }
+.s-micro   { font-size: var(--fs-micro); color: var(--fg-subtle); }
+
+.numdemo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.numdemo > div { background: var(--bg-surface); padding: var(--sp-3) var(--sp-4); }
+.numdemo ul { list-style: none; margin: var(--sp-2) 0 0; padding: 0; }
+.numdemo li { font-size: var(--fs-num-md); line-height: 1.75; text-align: right; color: var(--fg); }
+.numdemo .bad li  { font-family: var(--font-sans); font-variant-numeric: proportional-nums; }
+.numdemo .good li { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: var(--tracking-num); }
+
+.reglist { margin: 0; padding: 0; list-style: none; }
+.reglist li {
+  position: relative;
+  padding: var(--sp-2) 0 var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--border-muted);
+  font-size: var(--fs-sm);
+  color: var(--fg-muted);
+}
+.reglist li:last-child { border-bottom: none; }
+.reglist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.15em;
+  width: 7px;
+  height: 1px;
+  background: var(--border-strong);
+}
+.reglist li b { color: var(--fg); font-weight: var(--fw-semibold); }
+
+/* ---------- Matriz de estados ----------------------------------------- */
+.matrixwrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-surface); }
+.matrix { min-width: 52rem; }
+.matrix__row {
+  display: grid;
+  grid-template-columns: 7.5rem repeat(5, 1fr);
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border-muted);
+}
+.matrix__row:last-child { border-bottom: none; }
+.matrix__row--head {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-strong);
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
+}
+.matrix__row--head span {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.matrix__k { font-size: var(--fs-xs); font-weight: var(--fw-medium); color: var(--fg-muted); }
+
+/* Estados forçados só para a documentação — em produção quem manda é
+   :hover, :focus-visible e :active. */
+.ctj-btn.is-hover  { background: var(--action-bg-hover); }
+.ctj-btn.is-active { background: var(--action-bg-press); }
+.ctj-btn.is-focus  { box-shadow: var(--ring); }
+.ctj-btn--secondary.is-hover  { background: var(--bg-elevated); border-color: var(--steel-500); }
+.ctj-btn--secondary.is-active { background: var(--bg-sunken); border-color: var(--steel-600); }
+.ctj-btn--ghost.is-hover  { background: var(--bg-elevated); color: var(--fg); }
+.ctj-btn--ghost.is-active { background: var(--bg-sunken); color: var(--fg); }
+.ctj-btn--danger.is-hover  { background: var(--neg-bg); }
+.ctj-btn--danger.is-active { background: var(--neg-bg); border-color: var(--neg); }
+
+/* ---------- Raio e elevação -------------------------------------------- */
+.radiogrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: var(--sp-3); }
+.radiotile {
+  height: 4.5rem;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--sp-2);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-muted);
+}
+.elevtile {
+  padding: var(--sp-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Regras ------------------------------------------------------ */
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: var(--sp-8); }
+.rules h4 {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+}
+.rules h4.ok { color: var(--pos); }
+.rules h4.no { color: var(--neg); }
+
+/* ---------- Rodapé ------------------------------------------------------ */
+footer.foot { padding: var(--sp-8) 0 var(--sp-12); }
+footer.foot p { margin: var(--sp-3) 0 0; font-size: var(--fs-xs); color: var(--fg-subtle); max-width: var(--container-prose); }
+
+.note {
+  margin: var(--sp-4) 0 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  color: var(--fg-muted);
+  max-width: 62rem;
+}
+.note b { color: var(--fg); }
+.mono { font-family: var(--font-mono); font-size: 0.95em; }
+
+.fieldgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--sp-4); }
+.badgerow { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <span class="ctj-wordmark">
+      <svg class="ctj-mark" width="18" height="13" viewBox="0 0 18 13" aria-hidden="true">
+        <rect x="0" y="1.4" width="18" height="2.4" fill="currentColor"/>
+        <rect x="0" y="9.2" width="18" height="2.4" fill="currentColor"/>
+      </svg>
+      <span class="ctj-wordmark__name">Cotejo</span>
+      <span class="ctj-wordmark__rule" aria-hidden="true"></span>
+      <span class="ctj-wordmark__desc">Fechamento</span>
+    </span>
+    <div class="topbar__right">
+      <span class="ctj-badge ctj-badge--info">Tokens v1.0</span>
+      <button type="button" class="ctj-btn ctj-btn--secondary ctj-btn--sm" id="theme-toggle" aria-pressed="false">
+        <span id="theme-label">Tema escuro</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="wrap">
+
+  <!-- ============================================================ -->
+  <section class="hero">
+    <p class="ctj-overline">Design system · versão 1.0 · julho de 2026</p>
+    <h1>O sistema visual do fechamento financeiro</h1>
+    <p class="lead">
+      O Cotejo é a plataforma de fechamento contábil usada por controladorias que encerram o mês
+      no dia 1. Este documento é a fonte da verdade do visual: cor, tipo, espaço, raio, elevação
+      e componente. Quem opera o Cotejo está trabalhando — cada decisão aqui protege a leitura do
+      número, não a estética da tela.
+    </p>
+    <dl class="hero__meta">
+      <div>
+        <dt>Assinatura</dt>
+        <dd>Azul-aço <span class="mono">#2E6DA4</span></dd>
+      </div>
+      <div>
+        <dt>Faces</dt>
+        <dd>Sans e mono do sistema</dd>
+      </div>
+      <div>
+        <dt>Raio</dt>
+        <dd>De 3 a 6 px, nada maior</dd>
+      </div>
+      <div>
+        <dt>Densidade</dt>
+        <dd>Linha de dado de 34 px</dd>
+      </div>
+      <div>
+        <dt>Temas</dt>
+        <dd>Claro e escuro, os dois completos</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Marca</span>
+      <h2>Wordmark e aplicações</h2>
+    </div>
+    <p class="sec__intro">
+      O mark é <b>o par que fecha</b>: duas barras horizontais de mesma medida, rentes nas duas
+      pontas. É o filete duplo que a contabilidade desenha embaixo de um total encerrado, e é o
+      que acontece na tela quando o razão e o extrato batem. Cotejar é pôr dois registros lado a
+      lado e provar que dizem a mesma coisa — o mark é o resultado dessa prova.
+      O wordmark é <b>Cotejo</b> em caixa-alta, tracking de 0,08em, seguido de um filete de 1 px
+      e do descritor em mono.
+    </p>
+
+    <div class="grid-3">
+      <div>
+        <div class="brandtile">
+          <span class="ctj-wordmark">
+            <svg class="ctj-mark" width="25" height="18" viewBox="0 0 18 13" aria-hidden="true">
+              <rect x="0" y="1.4" width="18" height="2.4" fill="currentColor"/>
+              <rect x="0" y="9.2" width="18" height="2.4" fill="currentColor"/>
+            </svg>
+            <span class="ctj-wordmark__name" style="font-size:1.5rem">Cotejo</span>
+            <span class="ctj-wordmark__rule" aria-hidden="true"></span>
+            <span class="ctj-wordmark__desc">Fechamento</span>
+          </span>
+        </div>
+        <p class="tilecap">Lockup principal · sobre superfície</p>
+      </div>
+
+      <div>
+        <div class="brandtile brandtile--inv">
+          <span class="ctj-wordmark">
+            <svg class="ctj-mark" width="25" height="18" viewBox="0 0 18 13" aria-hidden="true">
+              <rect x="0" y="1.4" width="18" height="2.4" fill="currentColor"/>
+              <rect x="0" y="9.2" width="18" height="2.4" fill="currentColor"/>
+            </svg>
+            <span class="ctj-wordmark__name" style="font-size:1.5rem">Cotejo</span>
+            <span class="ctj-wordmark__rule" aria-hidden="true"></span>
+            <span class="ctj-wordmark__desc">Fechamento</span>
+          </span>
+        </div>
+        <p class="tilecap">Invertido · tela de login, favicon, capa de relatório</p>
+      </div>
+
+      <div>
+        <div class="brandtile brandtile--mono">
+          <span class="ctj-wordmark">
+            <svg class="ctj-mark" width="25" height="18" viewBox="0 0 18 13" aria-hidden="true">
+              <rect x="0" y="1.4" width="18" height="2.4" fill="currentColor"/>
+              <rect x="0" y="9.2" width="18" height="2.4" fill="currentColor"/>
+            </svg>
+            <span class="ctj-wordmark__name" style="font-size:1.5rem">Cotejo</span>
+          </span>
+        </div>
+        <p class="tilecap">Monocromático reduzido · PDF, impressão, anexo do banco</p>
+      </div>
+    </div>
+
+    <h3 class="sub">As três manifestações do par</h3>
+    <p class="sec__intro">
+      O mesmo par de barras aparece em três escalas, e é isso que faz o Cotejo reconhecível de
+      longe sem nenhum ícone: <b>o mark</b> no wordmark e no favicon, <b>o filete duplo</b>
+      abrindo seção e fechando total, e <b>o par conferido</b> dentro da linha de dado, onde ele
+      deixa de ser ornamento e passa a carregar estado.
+    </p>
+
+    <div class="grid-3">
+      <div>
+        <div class="brandtile" style="display:block">
+          <span class="ctj-sectionmark" aria-hidden="true"></span>
+          <span class="ctj-overline">Competência 07/2026</span>
+          <hr class="ctj-doubleline" style="margin-top:var(--sp-4)">
+        </div>
+        <p class="tilecap">Filete duplo · .ctj-sectionmark na abertura de seção,
+          .ctj-doubleline no fecho de total</p>
+      </div>
+
+      <div>
+        <div class="brandtile" style="display:block">
+          <table style="width:100%;border-collapse:collapse;font-size:var(--fs-micro)">
+            <tr>
+              <td style="padding:var(--sp-1) 0"><span class="ctj-match" role="img" aria-label="Conciliado"></span></td>
+              <td style="padding:var(--sp-1) 0 var(--sp-1) var(--sp-3);color:var(--fg-muted)">Conciliado</td>
+            </tr>
+            <tr>
+              <td style="padding:var(--sp-1) 0"><span class="ctj-match ctj-match--partial" style="--match:62%" role="img" aria-label="Conciliado em 62 por cento"></span></td>
+              <td style="padding:var(--sp-1) 0 var(--sp-1) var(--sp-3);color:var(--fg-muted)">Parcial · 62%</td>
+            </tr>
+            <tr>
+              <td style="padding:var(--sp-1) 0"><span class="ctj-match ctj-match--off" style="--match:24%" role="img" aria-label="Em aberto, conciliado em 24 por cento"></span></td>
+              <td style="padding:var(--sp-1) 0 var(--sp-1) var(--sp-3);color:var(--fg-muted)">Em aberto · 24%</td>
+            </tr>
+            <tr>
+              <td style="padding:var(--sp-1) 0"><span class="ctj-match ctj-match--none" role="img" aria-label="Sem extrato"></span></td>
+              <td style="padding:var(--sp-1) 0 var(--sp-1) var(--sp-3);color:var(--fg-muted)">Sem extrato</td>
+            </tr>
+          </table>
+        </div>
+        <p class="tilecap">Par conferido · .ctj-match. A barra de cima é o razão, a de
+          baixo é o extrato. A diferença é o vão, não só a cor.</p>
+      </div>
+
+      <div>
+        <div class="brandtile" style="display:block">
+          <p class="ctj-overline" style="margin:0 0 var(--sp-2)">Caixa livre</p>
+          <p class="ctj-num" style="font-size:var(--fs-display);font-weight:var(--fw-bold);margin:0">1.947.500,00</p>
+          <hr class="ctj-doubleline" style="margin-top:var(--sp-2)">
+        </div>
+        <p class="tilecap">Número encerrado · o par embaixo do total é a mesma forma do mark,
+          em neutro</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Regra de aplicação.</b> O mark nunca aparece abaixo de 13 px de altura — abaixo disso o
+      vão entre as duas barras fecha e o par vira um traço só, que é justamente o que ele não
+      pode dizer. O descritor sai em espaços apertados, e o filete sai junto com ele.
+      Nunca troque a cor do mark por semântica: um mark verde lê como "conciliado" e mente
+      sobre o estado da tela.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Cor</span>
+      <h2>Paleta</h2>
+    </div>
+    <p class="sec__intro">
+      Clique em qualquer amostra para copiar o hex. Os valores mostrados são os do
+      <b>tema ativo</b> — alterne o tema no topo da página para ver os dois lados do sistema.
+      A assinatura é a mesma nos dois; superfície, texto e semântica foram desenhados
+      separadamente, nunca invertidos por cálculo.
+    </p>
+
+    <h3 class="sub" style="margin-top:0">Assinatura — azul-aço</h3>
+    <div class="swgrid" id="sw-steel"></div>
+
+    <h3 class="sub">Superfícies</h3>
+    <div class="swgrid" id="sw-surface"></div>
+
+    <h3 class="sub">Texto e bordas</h3>
+    <div class="swgrid" id="sw-text"></div>
+
+    <h3 class="sub">Alta, baixa e pendência</h3>
+    <div class="swgrid" id="sw-sem"></div>
+
+    <div class="note">
+      <b>Por que a alta não usa a cor da marca.</b> Se o azul-aço também significasse "subiu",
+      o usuário perderia a diferença entre "isto é uma ação do Cotejo" e "isto é um resultado".
+      Alta é jade (matiz 163°), baixa é tijolo (matiz 4°), a marca é aço (matiz 209°): três
+      famílias separadas por mais de 40°. E a cor nunca informa sozinha — o triângulo de direção
+      e o sinal de mais ou menos carregam o mesmo dado para quem não distingue matiz.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Tipo</span>
+      <h2>Tipografia</h2>
+    </div>
+    <p class="sec__intro">
+      Duas famílias, as duas nativas do sistema operacional. Nenhuma webfont, nenhum CDN:
+      painel financeiro abre atrás de VPN, em rede de escritório e em máquina antiga — fonte que
+      não carrega é número que não aparece. A sans carrega rótulo e texto; a mono carrega
+      <b>todo</b> valor numérico.
+    </p>
+
+    <div class="split">
+      <div>
+        <div class="spec">
+          <p class="spec__meta">--fs-display · 36px / 700 / mono tabular / tracking −0.02em</p>
+          <p class="spec__sample s-display">R$ 4.182.930,00</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-h1 · 28px / 700 / sans</p>
+          <p class="spec__sample s-h1">Fechamento de julho de 2026</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-h2 · 22px / 600</p>
+          <p class="spec__sample s-h2">Demonstração de resultado consolidada</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-h3 · 18px / 600</p>
+          <p class="spec__sample s-h3">Conciliação bancária — Itaú 0350</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-lead · 17px / 400 / --fg-muted</p>
+          <p class="spec__sample s-lead">Doze lançamentos aguardam classificação antes do encerramento da competência.</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-body · 16px / 400 · medida de 60 a 75 caracteres</p>
+          <p class="spec__sample s-body">A margem EBITDA subiu 1,9 ponto percentual sobre junho, puxada pela queda do custo de nuvem depois da renegociação do contrato.</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-sm · 14px / 400 · célula de tabela, botão, input</p>
+          <p class="spec__sample s-sm">Despesas comerciais — centro de custo 2.03</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-xs · 13px / 500 · rótulo de coluna e de campo</p>
+          <p class="spec__sample s-xs">Competência</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--fs-micro · 12px · piso absoluto: unidade e nota de rodapé</p>
+          <p class="spec__sample s-micro">Valores em reais, sem correção monetária. Fonte: razão contábil.</p>
+        </div>
+        <div class="spec">
+          <p class="spec__meta">--font-mono · valor em célula · 15px / 500 / tabular</p>
+          <p class="spec__sample s-body ctj-num" style="text-align:left;white-space:normal">1.204.887,43 · (98.320,10) · +6,84% · 31/07/2026</p>
+        </div>
+      </div>
+
+      <aside>
+        <h3 class="sub" style="margin-top:0">Regras não negociáveis</h3>
+        <ul class="reglist">
+          <li><b>Todo número é mono e tabular.</b> <span class="mono">font-variant-numeric: tabular-nums</span> em qualquer coluna de dado.</li>
+          <li><b>Todo número alinha à direita.</b> Rótulo à esquerda, valor à direita, vírgula decimal no mesmo eixo em toda a coluna.</li>
+          <li><b>Negativo entre parênteses</b> no razão e no DRE, como manda a convenção contábil. O sinal de menos fica para variação.</li>
+          <li><b>Tracking negativo</b> só a partir de 22 px. Corpo e célula em zero.</li>
+          <li><b>Caixa-alta pequena</b> sempre com 0,14em de tracking. Sem isso o rótulo amassa.</li>
+          <li><b>Nada abaixo de 12 px</b> em tela. Nunca.</li>
+        </ul>
+
+        <h3 class="sub">Tabular contra proporcional</h3>
+        <div class="numdemo">
+          <div>
+            <p class="ctj-overline">Proporcional</p>
+            <ul class="bad">
+              <li>1.204.887,43</li>
+              <li>98.320,10</li>
+              <li>7.115,09</li>
+              <li>442.001,88</li>
+            </ul>
+          </div>
+          <div>
+            <p class="ctj-overline">Tabular</p>
+            <ul class="good">
+              <li>1.204.887,43</li>
+              <li>98.320,10</li>
+              <li>7.115,09</li>
+              <li>442.001,88</li>
+            </ul>
+          </div>
+        </div>
+        <p class="tilecap">
+          À esquerda o "1" ocupa menos largura que o "8" e as casas decimais dançam. À direita
+          todo dígito tem a mesma largura: dá para comparar magnitude pelo olho, sem ler.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Componente</span>
+      <h2>Card de métrica com sparkline</h2>
+    </div>
+    <p class="sec__intro">
+      Um dos dois componentes-assinatura do Cotejo. Rótulo em cima, valor grande em mono tabular,
+      sparkline desenhado à mão em SVG (onze competências) e rodapé com a variação. A linha
+      tracejada marca o valor de abertura do período. Sem eixo, sem legenda, sem grade: o
+      sparkline responde "está subindo?" em um quarto de segundo, e nada mais.
+    </p>
+
+    <div class="grid-4">
+
+      <article class="ctj-metric">
+        <div class="ctj-metric__label"><span>Receita líquida</span><span class="ctj-overline">jul/26</span></div>
+        <div class="ctj-metric__value"><span class="ctj-num__unit">R$</span>4.182.930</div>
+        <svg class="ctj-spark" viewBox="0 0 120 34" preserveAspectRatio="none" role="img" aria-label="Receita líquida em alta nas últimas onze competências">
+          <path class="ctj-spark__area" d="M0,27 L12,25 L24,26 L36,21 L48,22 L60,17 L72,15 L84,16 L96,10 L108,8 L120,5 L120,34 L0,34 Z"/>
+          <path class="ctj-spark__base" d="M0,27 L120,27"/>
+          <polyline class="ctj-spark__line" points="0,27 12,25 24,26 36,21 48,22 60,17 72,15 84,16 96,10 108,8 120,5"/>
+          <path class="ctj-spark__dot" d="M120,5 L120,5"/>
+        </svg>
+        <div class="ctj-metric__foot">
+          <span>contra jun/26</span>
+          <span class="ctj-delta ctj-delta--up">+6,80%</span>
+        </div>
+      </article>
+
+      <article class="ctj-metric">
+        <div class="ctj-metric__label"><span>Margem EBITDA</span><span class="ctj-overline">jul/26</span></div>
+        <div class="ctj-metric__value">14,04<span class="ctj-num__unit">%</span></div>
+        <svg class="ctj-spark" viewBox="0 0 120 34" preserveAspectRatio="none" role="img" aria-label="Margem EBITDA em alta leve nas últimas onze competências">
+          <path class="ctj-spark__area" d="M0,22 L12,19 L24,24 L36,20 L48,21 L60,16 L72,19 L84,14 L96,17 L108,12 L120,11 L120,34 L0,34 Z"/>
+          <path class="ctj-spark__base" d="M0,22 L120,22"/>
+          <polyline class="ctj-spark__line" points="0,22 12,19 24,24 36,20 48,21 60,16 72,19 84,14 96,17 108,12 120,11"/>
+          <path class="ctj-spark__dot" d="M120,11 L120,11"/>
+        </svg>
+        <div class="ctj-metric__foot">
+          <span>contra jun/26</span>
+          <span class="ctj-delta ctj-delta--up">+1,90 p.p.</span>
+        </div>
+      </article>
+
+      <article class="ctj-metric">
+        <div class="ctj-metric__label"><span>Inadimplência 30 d</span><span class="ctj-overline">jul/26</span></div>
+        <div class="ctj-metric__value">2,84<span class="ctj-num__unit">%</span></div>
+        <svg class="ctj-spark ctj-spark--neg" viewBox="0 0 120 34" preserveAspectRatio="none" role="img" aria-label="Inadimplência de trinta dias em alta nas últimas onze competências">
+          <path class="ctj-spark__area" d="M0,26 L12,24 L24,25 L36,21 L48,22 L60,18 L72,19 L84,14 L96,13 L108,11 L120,8 L120,34 L0,34 Z"/>
+          <path class="ctj-spark__base" d="M0,26 L120,26"/>
+          <polyline class="ctj-spark__line" points="0,26 12,24 24,25 36,21 48,22 60,18 72,19 84,14 96,13 108,11 120,8"/>
+          <path class="ctj-spark__dot" d="M120,8 L120,8"/>
+        </svg>
+        <div class="ctj-metric__foot">
+          <span>contra jun/26</span>
+          <span class="ctj-delta ctj-delta--up ctj-delta--inverse">+0,42 p.p.</span>
+        </div>
+      </article>
+
+      <article class="ctj-metric">
+        <div class="ctj-metric__label"><span>Caixa livre</span><span class="ctj-overline">31/07</span></div>
+        <div class="ctj-metric__value"><span class="ctj-num__unit">R$</span>1.947.500</div>
+        <svg class="ctj-spark ctj-spark--neg" viewBox="0 0 120 34" preserveAspectRatio="none" role="img" aria-label="Caixa livre em queda nas últimas onze competências">
+          <path class="ctj-spark__area" d="M0,12 L12,11 L24,15 L36,13 L48,17 L60,15 L72,19 L84,17 L96,21 L108,20 L120,24 L120,34 L0,34 Z"/>
+          <path class="ctj-spark__base" d="M0,12 L120,12"/>
+          <polyline class="ctj-spark__line" points="0,12 12,11 24,15 36,13 48,17 60,15 72,19 84,17 96,21 108,20 120,24"/>
+          <path class="ctj-spark__dot" d="M120,24 L120,24"/>
+        </svg>
+        <div class="ctj-metric__foot">
+          <span>contra 30/06</span>
+          <span class="ctj-delta ctj-delta--down">−3,25%</span>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="note">
+      <b>A regra da polaridade.</b> O triângulo aponta para onde o número foi; a cor diz se isso
+      é bom. Inadimplência subiu: triângulo para cima, cor de baixa — a classe
+      <span class="mono">.ctj-delta--inverse</span> existe exatamente para custo, despesa e
+      atraso. Painel que pinta de verde a despesa estourada está mentindo com CSS.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Componente</span>
+      <h2>Tabela de dados com coluna de variação</h2>
+    </div>
+    <p class="sec__intro">
+      A tela onde o Cotejo passa 90% do tempo. Linha de 34 px, hairline de 1 px, cabeçalho fixo,
+      valores em mono tabular alinhados à direita, negativo entre parênteses e duas colunas de
+      variação: mês contra mês e doze meses móveis. A linha da receita líquida está selecionada.
+    </p>
+
+    <div class="ctj-tablewrap">
+      <table class="ctj-table">
+        <caption class="ctj-overline" style="text-align:left;padding:var(--sp-3) var(--sp-3) var(--sp-2)">
+          DRE consolidada · competência 07/2026 · valores em reais
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Conta</th>
+            <th scope="col" class="ctj-num">Jul/26</th>
+            <th scope="col" class="ctj-num">Jun/26</th>
+            <th scope="col" class="ctj-num">Δ mês</th>
+            <th scope="col" class="ctj-num">Δ 12 m</th>
+            <th scope="col">Cotejo</th>
+            <th scope="col">Situação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ctj-table__group"><td colspan="6">Receita</td></tr>
+          <tr>
+            <td>Receita bruta de serviços <span class="ctj-table__sub">3.1.01</span></td>
+            <td class="ctj-num">4.612.480,00</td>
+            <td class="ctj-num">4.318.905,00</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+6,80%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+21,40%</span></td>
+            <td><span class="ctj-badge ctj-badge--pos">Conciliado</span></td>
+          </tr>
+          <tr>
+            <td>Deduções e impostos <span class="ctj-table__sub">3.1.09</span></td>
+            <td class="ctj-num">(429.550,00)</td>
+            <td class="ctj-num">(402.117,00)</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+6,82%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+19,93%</span></td>
+            <td><span class="ctj-badge ctj-badge--pos">Conciliado</span></td>
+          </tr>
+          <tr aria-selected="true">
+            <td><b>Receita líquida</b> <span class="ctj-table__sub">3.1.99</span></td>
+            <td class="ctj-num">4.182.930,00</td>
+            <td class="ctj-num">3.916.788,00</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+6,79%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+21,58%</span></td>
+            <td><span class="ctj-badge ctj-badge--pos">Conciliado</span></td>
+          </tr>
+
+          <tr class="ctj-table__group"><td colspan="6">Custos e despesas</td></tr>
+          <tr>
+            <td>Custo dos serviços prestados <span class="ctj-table__sub">4.1.01</span></td>
+            <td class="ctj-num">(2.585.050,00)</td>
+            <td class="ctj-num">(2.451.302,00)</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+5,46%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+18,20%</span></td>
+            <td><span class="ctj-badge ctj-badge--pos">Conciliado</span></td>
+          </tr>
+          <tr>
+            <td>Despesas comerciais <span class="ctj-table__sub">4.2.03</span></td>
+            <td class="ctj-num">(612.340,00)</td>
+            <td class="ctj-num">(588.910,00)</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+3,98%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+9,74%</span></td>
+            <td><span class="ctj-badge ctj-badge--warn">Em revisão</span></td>
+          </tr>
+          <tr>
+            <td>Despesas administrativas <span class="ctj-table__sub">4.2.07</span></td>
+            <td class="ctj-num">(398.220,00)</td>
+            <td class="ctj-num">(401.775,00)</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--down ctj-delta--inverse">−0,88%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+3,12%</span></td>
+            <td><span class="ctj-badge ctj-badge--pos">Conciliado</span></td>
+          </tr>
+          <tr>
+            <td>Provisão para perdas <span class="ctj-table__sub">4.3.01</span></td>
+            <td class="ctj-num">(84.610,00)</td>
+            <td class="ctj-num">(84.610,00)</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--flat">0,00%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up ctj-delta--inverse">+42,60%</span></td>
+            <td><span class="ctj-badge ctj-badge--neg">Atrasada 12 d</span></td>
+          </tr>
+
+          <tr class="ctj-table__group"><td colspan="6">Resultado</td></tr>
+          <tr>
+            <td><b>EBITDA</b> <span class="ctj-table__sub">5.1.01</span></td>
+            <td class="ctj-num">587.320,00</td>
+            <td class="ctj-num">474.801,00</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+23,70%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+48,91%</span></td>
+            <td><span class="ctj-badge">Rascunho</span></td>
+          </tr>
+          <tr>
+            <td>Resultado líquido do período <span class="ctj-table__sub">5.9.99</span></td>
+            <td class="ctj-num">341.905,00</td>
+            <td class="ctj-num">262.044,00</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+30,48%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+61,22%</span></td>
+            <td><span class="ctj-badge ctj-badge--info">Provisionado</span></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Caixa livre em 31/07</td>
+            <td class="ctj-num">1.947.500,00</td>
+            <td class="ctj-num">2.012.880,00</td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--down">−3,25%</span></td>
+            <td class="ctj-num"><span class="ctj-delta ctj-delta--up">+11,08%</span></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>Densidade é decisão de marca.</b> Linha de 34 px, 12 px de recuo lateral na célula e
+      hairline de 1 px cabem 24 contas numa tela de notebook sem rolar. Um card de canto 16 px
+      com respiro de 32 px cabe seis — e o analista rola quatro vezes para bater um total.
+      Aqui o espaço serve ao número.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Ação</span>
+      <h2>Botões e estados</h2>
+    </div>
+    <p class="sec__intro">
+      Quatro variantes, cinco estados. Altura de 32 px, raio de 4 px, peso 500. No tema claro o
+      hover escurece; no escuro, clareia — não é simetria de valor, é o que mantém contraste em
+      cada fundo. Os botões da coluna "repouso" são reais: passe o mouse e navegue por Tab.
+    </p>
+
+    <div class="matrixwrap">
+      <div class="matrix">
+        <div class="matrix__row matrix__row--head">
+          <span>Variante</span><span>Repouso</span><span>Hover</span><span>Foco</span><span>Pressionado</span><span>Desabilitado</span>
+        </div>
+        <div class="matrix__row">
+          <span class="matrix__k">Primário</span>
+          <span><button type="button" class="ctj-btn">Fechar competência</button></span>
+          <span><button type="button" class="ctj-btn is-hover" tabindex="-1">Fechar competência</button></span>
+          <span><button type="button" class="ctj-btn is-focus" tabindex="-1">Fechar competência</button></span>
+          <span><button type="button" class="ctj-btn is-active" tabindex="-1">Fechar competência</button></span>
+          <span><button type="button" class="ctj-btn" disabled>Fechar competência</button></span>
+        </div>
+        <div class="matrix__row">
+          <span class="matrix__k">Secundário</span>
+          <span><button type="button" class="ctj-btn ctj-btn--secondary">Exportar CSV</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--secondary is-hover" tabindex="-1">Exportar CSV</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--secondary is-focus" tabindex="-1">Exportar CSV</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--secondary is-active" tabindex="-1">Exportar CSV</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--secondary" disabled>Exportar CSV</button></span>
+        </div>
+        <div class="matrix__row">
+          <span class="matrix__k">Discreto</span>
+          <span><button type="button" class="ctj-btn ctj-btn--ghost">Ver razão</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--ghost is-hover" tabindex="-1">Ver razão</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--ghost is-focus" tabindex="-1">Ver razão</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--ghost is-active" tabindex="-1">Ver razão</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--ghost" disabled>Ver razão</button></span>
+        </div>
+        <div class="matrix__row">
+          <span class="matrix__k">Destrutivo</span>
+          <span><button type="button" class="ctj-btn ctj-btn--danger">Estornar</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--danger is-hover" tabindex="-1">Estornar</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--danger is-focus" tabindex="-1">Estornar</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--danger is-active" tabindex="-1">Estornar</button></span>
+          <span><button type="button" class="ctj-btn ctj-btn--danger" disabled>Estornar</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Um botão primário por tela.</b> Fechar competência é irreversível e é o único ato azul
+      da página. Estornar é destrutivo e por isso vem em contorno tijolo, não em preenchimento:
+      preencher botão perigoso convida ao clique. O anel de foco é obrigatório —
+      <span class="mono">outline: none</span> sem substituto é o bug de acessibilidade mais
+      comum que existe, e aqui metade da operação anda por teclado.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Formulário</span>
+      <h2>Campos, badges e controles</h2>
+    </div>
+
+    <h3 class="sub" style="margin-top:0">Entrada de lançamento</h3>
+    <div class="fieldgrid">
+      <div class="ctj-field">
+        <label class="ctj-field__label" for="f-cc">Centro de custo</label>
+        <input class="ctj-input" id="f-cc" type="text" placeholder="2.03 — Comercial">
+        <p class="ctj-field__hint">Busque por código ou por nome.</p>
+      </div>
+      <div class="ctj-field">
+        <label class="ctj-field__label" for="f-val">Valor lançado</label>
+        <div class="ctj-inputgroup">
+          <span class="ctj-inputgroup__prefix">R$</span>
+          <input class="ctj-input ctj-input--num" id="f-val" type="text" value="12.480,00">
+        </div>
+        <p class="ctj-field__hint">Débito na conta 4.2.03.</p>
+      </div>
+      <div class="ctj-field">
+        <label class="ctj-field__label" for="f-doc">CNPJ do fornecedor</label>
+        <input class="ctj-input ctj-input--error ctj-input--num" id="f-doc" type="text" value="11.222.333/0001-4" aria-invalid="true" aria-describedby="f-doc-err">
+        <p class="ctj-field__error" id="f-doc-err">Dígito verificador inválido.</p>
+      </div>
+      <div class="ctj-field">
+        <label class="ctj-field__label" for="f-comp">Competência</label>
+        <input class="ctj-input ctj-input--num" id="f-comp" type="text" value="07/2026" disabled>
+        <p class="ctj-field__hint">Travada pelo fechamento em andamento.</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:var(--sp-8)">
+      <div>
+        <h3 class="sub" style="margin-top:0">Situação do lançamento</h3>
+        <div class="badgerow">
+          <span class="ctj-badge ctj-badge--pos">Conciliado</span>
+          <span class="ctj-badge ctj-badge--warn">Em revisão</span>
+          <span class="ctj-badge ctj-badge--neg">Atrasada 12 d</span>
+          <span class="ctj-badge ctj-badge--info">Provisionado</span>
+          <span class="ctj-badge">Rascunho</span>
+        </div>
+        <p class="tilecap">
+          O ponto à esquerda repete a informação da cor em forma: quem não distingue
+          matiz lê a posição no rótulo, não o tom.
+        </p>
+
+        <h3 class="sub">Recorte de período</h3>
+        <div class="ctj-seg" role="group" aria-label="Recorte de período">
+          <button type="button" class="ctj-seg__item" aria-pressed="false">Dia</button>
+          <button type="button" class="ctj-seg__item" aria-pressed="false">Semana</button>
+          <button type="button" class="ctj-seg__item" aria-pressed="true">Mês</button>
+          <button type="button" class="ctj-seg__item" aria-pressed="false">Trimestre</button>
+          <button type="button" class="ctj-seg__item" aria-pressed="false">Ano</button>
+        </div>
+        <p class="tilecap">O controle é funcional: clique para trocar o recorte.</p>
+      </div>
+
+      <div>
+        <h3 class="sub" style="margin-top:0">Ficha da conta</h3>
+        <div class="ctj-card">
+          <div class="ctj-card__head">
+            <h4 class="ctj-card__title">4.1.02 — Serviços recorrentes</h4>
+            <span class="ctj-badge ctj-badge--pos">Conciliado</span>
+          </div>
+          <div class="ctj-card__body" style="padding-top:var(--sp-1);padding-bottom:var(--sp-2)">
+            <div class="ctj-kv"><span class="ctj-kv__k">Saldo anterior</span><span class="ctj-kv__v">1.204.887,43</span></div>
+            <div class="ctj-kv"><span class="ctj-kv__k">Créditos no período</span><span class="ctj-kv__v">318.240,00</span></div>
+            <div class="ctj-kv"><span class="ctj-kv__k">Débitos no período</span><span class="ctj-kv__v">(98.320,10)</span></div>
+            <div class="ctj-kv"><span class="ctj-kv__k">Saldo atual</span><span class="ctj-kv__v" style="font-weight:var(--fw-bold)">1.424.807,33</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Forma</span>
+      <h2>Raio e elevação</h2>
+    </div>
+    <p class="sec__intro">
+      O sistema inteiro vive entre 3 e 6 px. Raio grande arredonda a autoridade do número — e
+      numa tela com duzentos cantos, cada pixel de raio vira ruído somado. O raio total existe
+      só para indicador circular e avatar.
+    </p>
+
+    <div class="radiogrid">
+      <div class="radiotile" style="border-radius:var(--radius-xs)">3 px · badge, chip</div>
+      <div class="radiotile" style="border-radius:var(--radius-sm)">4 px · botão, input</div>
+      <div class="radiotile" style="border-radius:var(--radius-md)">5 px · card, painel</div>
+      <div class="radiotile" style="border-radius:var(--radius-lg)">6 px · tabela, modal</div>
+      <div class="radiotile" style="border-radius:var(--radius-full)">full · só avatar</div>
+    </div>
+
+    <h3 class="sub">Elevação</h3>
+    <div class="grid-3">
+      <div class="elevtile" style="box-shadow:var(--shadow-1)">
+        <p class="ctj-overline">shadow-1</p>
+        <p class="s-xs" style="margin:var(--sp-2) 0 0">Repouso de card e de linha. É quase só a borda.</p>
+      </div>
+      <div class="elevtile" style="box-shadow:var(--shadow-2)">
+        <p class="ctj-overline">shadow-2</p>
+        <p class="s-xs" style="margin:var(--sp-2) 0 0">Hover de card, popover de filtro, menu de conta.</p>
+      </div>
+      <div class="elevtile" style="box-shadow:var(--shadow-3)">
+        <p class="ctj-overline">shadow-3</p>
+        <p class="s-xs" style="margin:var(--sp-2) 0 0">Modal e toast. Nada mais chega a este nível.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Sombra ou borda, conforme o tema.</b> No claro a sombra é difusa, com Y maior que
+      metade do blur e alfa baixo. No escuro, sombra preta sobre marinho não existe: lá quem
+      separa plano é a borda mais clara, e por isso as sombras do tema escuro trazem um
+      <span class="mono">0 0 0 1px</span> branco a 3%. Os dois temas foram desenhados; nenhum é
+      o outro invertido.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="ctj-overline">Disciplina</span>
+      <h2>Regras de uso</h2>
+    </div>
+
+    <div class="rules">
+      <div>
+        <h4 class="ok">Sempre</h4>
+        <ul class="reglist">
+          <li><b>Mono tabular em toda coluna de dado</b>, alinhada à direita, com a vírgula no mesmo eixo.</li>
+          <li><b>Negativo entre parênteses</b> em valor contábil; sinal de menos só em variação percentual.</li>
+          <li><b>Direção e cor juntas</b> na variação: triângulo, sinal e cor. Cor sozinha não informa quem não distingue matiz.</li>
+          <li><b>Um botão primário por tela</b> — o ato irreversível do fluxo.</li>
+          <li><b>Hairline de 1 px</b> como separador. Peso maior só no cabeçalho e no rodapé de total.</li>
+          <li><b>Unidade grudada no número</b>: R$, % e p.p. sempre visíveis, nunca só no cabeçalho.</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="no">Nunca</h4>
+        <ul class="reglist">
+          <li><b>Azul-aço como cor de resultado.</b> A marca é ação; alta e baixa têm cor própria.</li>
+          <li><b>Verde em despesa que subiu.</b> Use <span class="mono">.ctj-delta--inverse</span>.</li>
+          <li><b>Raio acima de 6 px</b> em qualquer superfície que carregue número.</li>
+          <li><b>Webfont por CDN.</b> A pilha é nativa, e é nativa porque a rede do cliente cai.</li>
+          <li><b>Número em face proporcional.</b> Nem em card, nem em tooltip, nem em e-mail.</li>
+          <li><b>Emoji, gradiente decorativo ou ilustração</b> em superfície de dado. O gráfico já é a imagem.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <footer class="foot">
+    <span class="ctj-wordmark">
+      <svg class="ctj-mark" width="18" height="13" viewBox="0 0 18 13" aria-hidden="true">
+        <rect x="0" y="1.4" width="18" height="2.4" fill="currentColor"/>
+        <rect x="0" y="9.2" width="18" height="2.4" fill="currentColor"/>
+      </svg>
+      <span class="ctj-wordmark__name">Cotejo</span>
+      <span class="ctj-wordmark__rule" aria-hidden="true"></span>
+      <span class="ctj-wordmark__desc">Design system v1.0</span>
+    </span>
+    <p>
+      Fonte da verdade em <span class="mono">tokens.css</span>; manual de marca e voz em
+      <span class="mono">README.md</span>. Esta página é standalone: nenhuma requisição sai dela,
+      nenhuma fonte é baixada, todo desenho é SVG escrito à mão dentro do arquivo. Os números
+      são fictícios e servem só de demonstração.
+    </p>
+  </footer>
+
+</main>
+
+<div class="ctj-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+
+  /* ---------- Tema ------------------------------------------------- */
+  function systemPrefersDark() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function currentTheme() {
+    return root.getAttribute("data-theme") || (systemPrefersDark() ? "dark" : "light");
+  }
+  function syncToggle() {
+    var dark = currentTheme() === "dark";
+    document.getElementById("theme-label").textContent = dark ? "Tema claro" : "Tema escuro";
+    document.getElementById("theme-toggle").setAttribute("aria-pressed", dark ? "true" : "false");
+  }
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    try { localStorage.setItem("cotejo-theme", theme); } catch (e) {}
+    syncToggle();
+    paintSwatches();
+  }
+
+  /* O <html> já nasce com data-theme="light" (a face canônica). Aqui só a
+     escolha explícita do leitor, guardada de uma visita anterior, sobrescreve. */
+  try {
+    var saved = localStorage.getItem("cotejo-theme");
+    if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+  } catch (e) {}
+
+  document.getElementById("theme-toggle").addEventListener("click", function () {
+    applyTheme(currentTheme() === "dark" ? "light" : "dark");
+  });
+
+  /* ---------- Paleta ------------------------------------------------ */
+  var PALETTE = {
+    "sw-steel": [
+      ["Ponta clara",   "--steel-300", "#7FA8D1", "#7FA8D1"],
+      ["Hover escuro",  "--steel-400", "#4E86BE", "#4E86BE"],
+      ["Assinatura",    "--steel-500", "#2E6DA4", "#2E6DA4"],
+      ["Hover claro",   "--steel-600", "#245685", "#245685"],
+      ["Pressionado",   "--steel-700", "#1B4468", "#1B4468"]
+    ],
+    "sw-surface": [
+      ["Página",     "--bg-base",     "#F4F6FA", "#0A0F1A"],
+      ["Superfície", "--bg-surface",  "#FFFFFF", "#101827"],
+      ["Elevada",    "--bg-elevated", "#EAEEF5", "#17202F"],
+      ["Rebaixada",  "--bg-sunken",   "#E3E9F1", "#080D16"]
+    ],
+    "sw-text": [
+      ["Texto",          "--fg",            "#0D1522", "#E8EDF4"],
+      ["Texto de apoio", "--fg-muted",      "#4A5A6E", "#9BA9BC"],
+      ["Texto discreto", "--fg-subtle",     "#5D6C7E", "#78889C"],
+      ["Borda",          "--border",        "#D5DDE8", "#223046"],
+      ["Borda forte",    "--border-strong", "#B9C6D6", "#33445E"]
+    ],
+    "sw-sem": [
+      ["Alta · jade",    "--pos",  "#0E6F53", "#3FB98A"],
+      ["Baixa · tijolo", "--neg",  "#A03027", "#E0705F"],
+      ["Pendência",      "--warn", "#9A6407", "#E0A33A"]
+    ]
+  };
+
+  function buildSwatches() {
+    Object.keys(PALETTE).forEach(function (id) {
+      var host = document.getElementById(id);
+      if (!host) return;
+      PALETTE[id].forEach(function (row) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "sw";
+        btn.setAttribute("data-light", row[2]);
+        btn.setAttribute("data-dark", row[3]);
+        btn.innerHTML =
+          '<span class="sw__chip"></span>' +
+          '<span class="sw__meta"><span class="sw__role">' + row[0] + '</span>' +
+          '<span class="sw__hex"></span></span>' +
+          '<span class="sw__token">' + row[1] + '</span>';
+        btn.addEventListener("click", function () {
+          copy(btn.querySelector(".sw__hex").textContent, row[0]);
+        });
+        host.appendChild(btn);
+      });
+    });
+  }
+
+  function paintSwatches() {
+    var dark = currentTheme() === "dark";
+    var list = document.querySelectorAll(".sw");
+    for (var i = 0; i < list.length; i++) {
+      var hex = list[i].getAttribute(dark ? "data-dark" : "data-light");
+      list[i].querySelector(".sw__chip").style.background = hex;
+      list[i].querySelector(".sw__hex").textContent = hex;
+      list[i].setAttribute("aria-label", "Copiar o hex " + hex);
+    }
+  }
+
+  /* ---------- Copiar ------------------------------------------------ */
+  function copy(text, role) {
+    var done = function () { toast(text + " copiado — " + role); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  }
+  function fallback(text, done) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); }
+    catch (e) { toast("Copie manualmente: " + text); }
+    document.body.removeChild(ta);
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    var el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove("is-visible"); }, 2200);
+  }
+
+  /* ---------- Controle segmentado ----------------------------------- */
+  var seg = document.querySelectorAll(".ctj-seg__item");
+  for (var s = 0; s < seg.length; s++) {
+    seg[s].addEventListener("click", function () {
+      for (var k = 0; k < seg.length; k++) seg[k].setAttribute("aria-pressed", "false");
+      this.setAttribute("aria-pressed", "true");
+    });
+  }
+
+  /* ---------- Início ------------------------------------------------- */
+  buildSwatches();
+  paintSwatches();
+  syncToggle();
+
+  /* Este documento não segue o modo do sistema — data-theme está sempre
+     presente no <html>, e quem manda é o alternador. O @media
+     (prefers-color-scheme: dark) do tokens.css continua valendo em PRODUTO,
+     que é onde ele deve valer; aqui ele é sobrescrito de propósito. */
+})();
+</script>
+
+</body>
+</html>

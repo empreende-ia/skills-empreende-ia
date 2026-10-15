@@ -1,0 +1,542 @@
+/* =====================================================================
+   AMPARO — Clínica Integrada
+   tokens.css · fonte da verdade do design system
+
+   Nenhum valor visual nasce fora deste arquivo. Componente que precisa de
+   um hex novo está pedindo um token novo — declare aqui primeiro.
+
+   Uso em produção:   @import "tokens.css";  (ou <link rel="stylesheet">)
+   Uso em artefato:   copie o bloco :root inteiro pra dentro do <style>.
+   ===================================================================== */
+
+:root {
+
+  /* ===================================================================
+     1. ASSINATURA — verde-sálvia profundo e dessaturado
+     A cor da marca. Cinco passos, cada um com um trabalho definido.
+     Sálvia é verde de erva, não verde de farmácia: saturação baixa (26%)
+     e luminosidade média-baixa. Ele acalma porque não pede atenção.
+     REGRA: a assinatura é acento. Mire em menos de 10% da tela.
+     =================================================================== */
+  --primary-300: #9DBEB2;  /* fundo de gráfico, ilustração, estado desabilitado */
+  --primary-400: #5F9582;  /* hover de superfície tingida, traço de ilustração */
+  --primary-500: #406D5D;  /* A ASSINATURA — botão, ícone, link, foco, wordmark */
+  --primary-600: #31594A;  /* hover e pressed de botão preenchido */
+  --primary-700: #234337;  /* texto pequeno sobre tint, cauda de gradiente */
+
+  --primary-rgb: 64, 109, 93;   /* pra montar rgba() sem repetir hex */
+
+  /* Superfície tingida — o fundo do círculo do ícone (componente-assinatura).
+     Sólida, não alpha: alpha sobre card e sobre página dá dois verdes
+     diferentes na mesma tela. */
+  --primary-wash: #E3EEEA;
+
+  /* Alfas nomeados. Nunca use `opacity` no elemento — opacity apaga o filho
+     junto e o texto dentro do card desbota sem ninguém entender por quê. */
+  --primary-a08: rgba(64, 109, 93, 0.08);   /* fundo de badge, linha zebrada */
+  --primary-a16: rgba(64, 109, 93, 0.16);   /* anel de foco, borda de tint */
+  --primary-a28: rgba(64, 109, 93, 0.28);   /* borda de card em hover */
+
+  /* ===================================================================
+     2. SECUNDÁRIA — azul-névoa frio
+     Existe pra separar categorias (especialidade, tipo de consulta, série
+     de gráfico) sem convocar a assinatura. NUNCA em botão: secundária em
+     botão são duas marcas brigando na mesma tela.
+     =================================================================== */
+  --mist-200: #D8E1E8;   /* fundo de tag, faixa de seção alternada */
+  --mist-400: #839CAF;   /* traço de ilustração, ícone decorativo */
+  --mist-600: #445F74;   /* texto de tag, rótulo de categoria (AA em claro) */
+
+  /* ===================================================================
+     3. NEUTROS E SUPERFÍCIES — off-white FRIO
+     Viés azul-esverdeado (hue 162). Nunca bege, nunca creme: papel quente
+     ao lado de sálvia deixa a marca com aparência encardida.
+     Base nunca é branco puro — #FFF estoura em brilho alto e cansa quem lê
+     resultado de exame na sala de espera.
+     A hierarquia sobe: página (mais escura) → card → elevado (branco).
+     =================================================================== */
+  --bg-base:     #F0F4F3;   /* a página */
+  --bg-card:     #F9FBFA;   /* card, seção alternada */
+  --bg-elevated: #FFFFFF;   /* input, popover, menu, card em hover */
+  --bg-overlay:  rgba(31, 46, 41, 0.45);   /* fundo de modal */
+
+  --border:        #C1D1CC;              /* padrão — visível, nunca dura */
+  --border-muted:  #E0E6E4;              /* divisória de lista, separador */
+  --border-active: var(--primary-500);   /* foco, seleção, card ativo */
+
+  /* ===================================================================
+     4. TEXTO — três níveis, não mais
+     Todos passam 4.5:1 sobre --bg-base. Um quarto nível ou vira ilegível
+     ou vira igual ao terceiro.
+     =================================================================== */
+  --fg:        #1F2E29;   /* corpo e títulos          — 12.8:1 */
+  --fg-muted:  #4C625B;   /* parágrafo longo, apoio   —  5.9:1 */
+  --fg-subtle: #5A726B;   /* label, caption, placeholder — 4.7:1 */
+  --fg-on-primary: #FFFFFF;  /* texto sobre botão sálvia preenchido — 5.9:1 */
+
+  /* ===================================================================
+     5. SEMÂNTICAS — estado, não marca
+     ARMADILHA EVITADA: a assinatura é verde, então o SUCESSO não pode ser
+     o mesmo verde — o paciente perderia a diferença entre "ação da clínica"
+     e "deu certo". O sucesso está 34° de hue longe e com o dobro da
+     saturação: lê como verde-folha, não como sálvia.
+     =================================================================== */
+  --success:     #2C6D31;   --success-wash: #DDEEDE;   /* exame liberado, pago */
+  --warning:     #8C5717;   --warning-wash: #F5EAD6;   /* jejum, prazo, pendência */
+  --destructive: #943844;   --destructive-wash: #F5E5E7; /* cancelar, excluir */
+  --info:        #315672;   --info-wash: #DFE9F1;      /* orientação, aviso neutro */
+
+  /* ===================================================================
+     6. TIPOGRAFIA — famílias
+     Duas famílias, ambas em pilha NATIVA do sistema. Zero webfont: a
+     página abre já composta, sem piscar em Times, e funciona offline no
+     tablet da recepção.
+     Sans humanista de traço aberto (Avenir Next → Segoe UI → system-ui):
+     as terminações arredondadas e o "a" de dois andares fazem o texto
+     soar falado, não impresso. É o oposto de uma grotesca geométrica.
+     Mono só onde o alinhamento importa: horário, dose, código do paciente.
+     --font-display é apelido de --font-sans de propósito — a marca fala
+     com uma voz só, mudando peso e tamanho, nunca família.
+     =================================================================== */
+  --font-sans: "Avenir Next", Avenir, "Segoe UI", system-ui, -apple-system,
+               "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+               "Liberation Mono", monospace;
+  --font-display: var(--font-sans);
+
+  /* ===================================================================
+     7. TIPOGRAFIA — escala, pesos, tracking, entrelinha
+     Dez degraus. Piso absoluto em 12px; corpo em 16px porque abaixo disso
+     o celular dá zoom sozinho e o layout quebra na mão do paciente.
+     PESOS: título em 500 (médio). A marca não grita — 700 só em número de
+     destaque, 800 nunca. Peso preto em clínica lê como propaganda.
+     =================================================================== */
+  --fs-display-xl: 4rem;      /* 64px — capa, hero */
+  --fs-display-lg: 3rem;      /* 48px — abertura de página */
+  --fs-display-md: 2.25rem;   /* 36px — título de seção */
+  --fs-heading-lg: 1.75rem;   /* 28px */
+  --fs-heading-md: 1.375rem;  /* 22px — título de card */
+  --fs-heading-sm: 1.125rem;  /* 18px */
+  --fs-body-lg:    1.125rem;  /* 18px — parágrafo de destaque */
+  --fs-body:       1rem;      /* 16px — corpo, piso do texto corrido */
+  --fs-body-sm:    0.875rem;  /* 14px — apoio, tabela */
+  --fs-caption:    0.75rem;   /* 12px — overline, legenda. Piso absoluto. */
+
+  --fw-regular:  400;
+  --fw-medium:   500;   /* títulos — o peso padrão da marca */
+  --fw-semibold: 600;   /* ênfase, botão, rótulo */
+  --fw-bold:     700;   /* só número de destaque e wordmark */
+
+  /* Quanto maior o texto, mais negativo o tracking. Quanto menor e mais
+     caixa-alta, mais positivo. Sem isso, título grande parece frouxo e
+     caixa-alta pequena parece amassada. */
+  --tracking-display:  -0.025em;
+  --tracking-heading:  -0.012em;
+  --tracking-body:      0;
+  --tracking-overline:  0.16em;
+
+  --lh-display: 1.08;
+  --lh-heading: 1.25;
+  --lh-tight:   1.35;
+  --lh-body:    1.7;   /* alto de propósito: texto de saúde é lido devagar */
+
+  /* ===================================================================
+     8. ESPAÇO — base 4px
+     Espaço é o que comunica calma. Denso = pronto-socorro. Arejado =
+     consultório com hora marcada. Amparo é arejada: --section-y de 96px
+     e respiro interno de card em 32px são parte da identidade, não sobra.
+     =================================================================== */
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  --section-y:         var(--space-24);
+  --container-prose:   44rem;   /* 704px — texto corrido, 65ch de medida */
+  --container-content: 72rem;   /* 1152px — grade de cards */
+  --container-wide:    80rem;   /* 1280px — teto absoluto */
+
+  /* ===================================================================
+     9. RAIO — grande e proporcional
+     A marca não tem canto reto em lugar nenhum. O raio cresce com o
+     elemento: um card de 400px com raio 8px parece caixa de diálogo do
+     Windows; um botão de 44px com raio 24px parece comprimido.
+     Botão é PÍLULA (raio full) — decisão de marca, ver README.
+     =================================================================== */
+  --radius-sm:   0.625rem;  /* 10px — tag, chip pequeno */
+  --radius-md:   0.875rem;  /* 14px — input, select, textarea */
+  --radius-lg:   1.25rem;   /* 20px — card padrão */
+  --radius-xl:   1.5rem;    /* 24px — card de destaque, painel */
+  --radius-2xl:  1.75rem;   /* 28px — container grande, modal */
+  --radius-full: 9999px;    /* botão, pílula, avatar, círculo de ícone */
+
+  /* ===================================================================
+     10. ELEVAÇÃO — sombra difusa, tingida de tinta, quase invisível
+     Decisão declarada: a marca usa SOMBRA, não glow. Interface clara
+     comporta sombra desde que o Y seja maior que blur/2 e o alpha seja
+     baixo. E a sombra não é preta: é a própria tinta da marca (#1F2E29)
+     em alpha mínimo — sombra preta pura sobre off-white frio deixa um
+     halo cinza-sujo na borda do card.
+     Sombra dura (0 4px 4px rgba(0,0,0,.5)) é proibida. Parece 2009.
+     =================================================================== */
+  --shadow-sm:  0 2px 6px -2px rgba(31, 46, 41, 0.06);
+  --shadow-md:  0 14px 30px -18px rgba(31, 46, 41, 0.16);
+  --shadow-lg:  0 28px 56px -28px rgba(31, 46, 41, 0.20);
+  --shadow-xl:  0 40px 80px -40px rgba(31, 46, 41, 0.24);
+  --shadow-inset: none;   /* declarado só pra dizer: a marca não usa. */
+
+  /* Halo — a elevação afetiva da marca. Não é sombra e não é glow: é um
+     anel de sálvia translúcida, sem blur, ao redor do elemento em foco ou
+     em destaque. Lê como "colo", não como "alerta". */
+  --halo:        0 0 0 6px var(--primary-a08);
+  --halo-strong: 0 0 0 8px var(--primary-a16);
+  --ring:        0 0 0 3px var(--primary-a28);   /* foco de teclado */
+  --ring-offset: 2px;
+
+  /* ===================================================================
+     11. MOTION
+     Personalidade: séria e calma. Entrada e mudança de estado, nada de
+     bounce, nada de spring. Duração um pouco mais longa que o padrão de
+     produto (240ms em vez de 150ms) — a marca não tem pressa.
+     =================================================================== */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:    cubic-bezier(0, 0, 0.2, 1);
+  --dur-fast:     160ms;   /* foco, cor de link */
+  --dur-base:     240ms;   /* hover, mudança de estado */
+  --dur-slow:     420ms;   /* abertura de painel, transição de layout */
+  --dur-entrance: 640ms;
+
+  /* ===================================================================
+     12. Z-INDEX E BREAKPOINTS
+     =================================================================== */
+  --z-dropdown: 1000; --z-sticky: 1020; --z-overlay: 1040;
+  --z-modal:    1050; --z-toast:  1070;
+
+  --bp-sm: 640px; --bp-md: 768px; --bp-lg: 1024px; --bp-xl: 1280px;
+
+  /* ===================================================================
+     13. AS ASSINATURAS DA MARCA — como token, não como adjetivo
+     Se a assinatura não vira token ou classe, ela não é reproduzível.
+     =================================================================== */
+  --arco-stroke: 2.5px;                 /* espessura do arco do wordmark */
+  --icon-orb: 3.5rem;                   /* 56px — o círculo tint do ícone */
+  --icon-orb-sm: 2.5rem;                /* 40px — versão compacta */
+  --gradient-wash: linear-gradient(160deg, #E3EEEA 0%, #F0F4F3 55%, #DFE9F1 100%);
+}
+
+/* =====================================================================
+   PREFERÊNCIA DE MOVIMENTO — sempre respeitada
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================================
+   CLASSES UTILITÁRIAS — prefixo .amp-
+   Copie estas classes junto com o :root quando for montar um artefato
+   solto. Em produção, prefira compor com as variáveis.
+   ===================================================================== */
+
+html { -webkit-text-size-adjust: 100%; }
+
+body.amp-body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Tipografia ---------- */
+.amp-display-xl { font-size: var(--fs-display-xl); font-weight: var(--fw-medium); letter-spacing: var(--tracking-display); line-height: var(--lh-display); margin: 0; }
+.amp-display-lg { font-size: var(--fs-display-lg); font-weight: var(--fw-medium); letter-spacing: var(--tracking-display); line-height: var(--lh-display); margin: 0; }
+.amp-display-md { font-size: var(--fs-display-md); font-weight: var(--fw-medium); letter-spacing: var(--tracking-heading); line-height: var(--lh-heading); margin: 0; }
+.amp-heading-lg { font-size: var(--fs-heading-lg); font-weight: var(--fw-medium); letter-spacing: var(--tracking-heading); line-height: var(--lh-heading); margin: 0; }
+.amp-heading-md { font-size: var(--fs-heading-md); font-weight: var(--fw-medium); line-height: var(--lh-tight); margin: 0; }
+.amp-heading-sm { font-size: var(--fs-heading-sm); font-weight: var(--fw-semibold); line-height: var(--lh-tight); margin: 0; }
+.amp-body-lg    { font-size: var(--fs-body-lg); line-height: var(--lh-body); color: var(--fg-muted); }
+.amp-body       { font-size: var(--fs-body); line-height: var(--lh-body); color: var(--fg-muted); }
+.amp-body-sm    { font-size: var(--fs-body-sm); line-height: 1.6; color: var(--fg-muted); }
+.amp-caption    { font-size: var(--fs-caption); line-height: 1.5; color: var(--fg-subtle); }
+
+.amp-overline {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--primary-500);
+  margin: 0;
+}
+
+/* Número de dado clínico — o único lugar onde peso 700 é permitido.
+   Mono pra tabular: 14h30 e 09h00 têm que ter a mesma largura. */
+.amp-figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--fw-bold);
+  color: var(--primary-500);
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Wordmark ---------- */
+/* RECEITA: arco aberto pra cima (colo) + "amparo" minúsculo peso 500.
+   O arco é sempre 1em de largura, traço --arco-stroke, ponta arredondada. */
+.amp-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  text-transform: lowercase;
+  line-height: 1;
+}
+.amp-wordmark .arco { flex: none; width: 1.15em; height: 1.15em; color: var(--primary-500); }
+.amp-wordmark .tipo { display: inline-block; }
+.amp-wordmark--invertido { color: #FFFFFF; }
+.amp-wordmark--invertido .arco { color: var(--primary-300); }
+
+/* ---------- Botões ---------- */
+/* Pílula. Sempre. É o formato mais amistoso que existe e nenhum
+   concorrente do setor usa pílula com sálvia. */
+.amp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: inherit;
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.005em;
+  line-height: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--dur-base) var(--ease-smooth),
+              border-color var(--dur-base) var(--ease-smooth),
+              box-shadow var(--dur-base) var(--ease-smooth),
+              color var(--dur-base) var(--ease-smooth);
+}
+.amp-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+.amp-btn:disabled, .amp-btn[aria-disabled="true"] { cursor: not-allowed; opacity: 1; }
+
+.amp-btn--primario {
+  background: var(--primary-500);
+  color: var(--fg-on-primary);
+  box-shadow: var(--shadow-sm);
+}
+.amp-btn--primario:hover { background: var(--primary-600); box-shadow: var(--shadow-md); }
+.amp-btn--primario:active { background: var(--primary-700); box-shadow: none; }
+.amp-btn--primario:disabled { background: var(--primary-300); color: #F0F4F3; box-shadow: none; }
+
+.amp-btn--secundario {
+  background: var(--bg-elevated);
+  color: var(--primary-600);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.amp-btn--secundario:hover { border-color: var(--primary-400); color: var(--primary-700); }
+.amp-btn--secundario:active { background: var(--primary-wash); }
+.amp-btn--secundario:disabled { color: var(--fg-subtle); border-color: var(--border-muted); background: var(--bg-card); box-shadow: none; }
+
+.amp-btn--sutil {
+  background: transparent;
+  color: var(--primary-600);
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+.amp-btn--sutil:hover { background: var(--primary-a08); }
+.amp-btn--sutil:active { background: var(--primary-a16); }
+.amp-btn--sutil:disabled { color: var(--fg-subtle); background: transparent; }
+
+.amp-btn--perigo { background: var(--destructive); color: #FFFFFF; box-shadow: var(--shadow-sm); }
+.amp-btn--perigo:hover { background: #7C2E38; }
+.amp-btn--perigo:focus-visible { box-shadow: 0 0 0 3px rgba(148, 56, 68, 0.30); }
+
+/* ---------- Campo de formulário ---------- */
+.amp-field { display: block; }
+.amp-label {
+  display: block;
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg);
+  margin-bottom: var(--space-2);
+}
+.amp-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: var(--fs-body);
+  color: var(--fg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.8125rem var(--space-4);
+  transition: border-color var(--dur-fast) var(--ease-smooth),
+              box-shadow var(--dur-fast) var(--ease-smooth);
+}
+.amp-input::placeholder { color: var(--fg-subtle); }
+.amp-input:hover { border-color: var(--primary-300); }
+.amp-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: var(--halo);
+}
+.amp-input:disabled { background: var(--bg-card); color: var(--fg-subtle); border-color: var(--border-muted); cursor: not-allowed; }
+.amp-input[aria-invalid="true"] { border-color: var(--destructive); }
+.amp-input[aria-invalid="true"]:focus { box-shadow: 0 0 0 6px rgba(148, 56, 68, 0.10); }
+.amp-hint { font-size: var(--fs-caption); color: var(--fg-subtle); margin: var(--space-2) 0 0; }
+.amp-erro { font-size: var(--fs-caption); color: var(--destructive); margin: var(--space-2) 0 0; }
+
+/* ---------- Badge ---------- */
+.amp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.4375rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: var(--primary-wash);
+  color: var(--primary-700);
+}
+.amp-badge::before {
+  content: "";
+  width: 0.4375rem; height: 0.4375rem;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex: none;
+}
+.amp-badge--sucesso  { background: var(--success-wash);     color: var(--success); }
+.amp-badge--atencao  { background: var(--warning-wash);     color: var(--warning); }
+.amp-badge--erro     { background: var(--destructive-wash); color: var(--destructive); }
+.amp-badge--neutro   { background: var(--mist-200);         color: var(--mist-600); }
+
+/* ---------- Card ---------- */
+.amp-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur-base) var(--ease-smooth),
+              box-shadow var(--dur-base) var(--ease-smooth);
+}
+.amp-card:hover { border-color: var(--primary-a28); box-shadow: var(--shadow-md); }
+.amp-card--destaque { background: var(--bg-elevated); border-radius: var(--radius-xl); padding: var(--space-10); box-shadow: var(--shadow-lg); }
+
+/* ---------- COMPONENTE-ASSINATURA: card de informação com orbe ---------- */
+/* RECEITA: círculo sólido de 56px em --primary-wash, ícone de linha de
+   24px em --primary-500 centralizado, título 22px peso 500 e texto de
+   apoio em --fg-muted. O orbe NUNCA tem borda, NUNCA tem gradiente e
+   NUNCA vira quadrado arredondado. É o detalhe que identifica a marca a
+   três metros de distância. */
+.amp-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  background: var(--bg-card);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur-base) var(--ease-smooth),
+              box-shadow var(--dur-base) var(--ease-smooth);
+}
+.amp-info:hover { border-color: var(--primary-a28); box-shadow: var(--shadow-md); }
+.amp-orbe {
+  flex: none;
+  width: var(--icon-orb);
+  height: var(--icon-orb);
+  border-radius: var(--radius-full);
+  background: var(--primary-wash);
+  color: var(--primary-500);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.amp-orbe svg { width: 1.5rem; height: 1.5rem; display: block; }
+.amp-orbe--sm { width: var(--icon-orb-sm); height: var(--icon-orb-sm); }
+.amp-orbe--sm svg { width: 1.125rem; height: 1.125rem; }
+.amp-orbe--nevoa   { background: var(--mist-200);         color: var(--mist-600); }
+.amp-orbe--sucesso { background: var(--success-wash);     color: var(--success); }
+.amp-orbe--atencao { background: var(--warning-wash);     color: var(--warning); }
+.amp-info h3 { font-size: var(--fs-heading-md); font-weight: var(--fw-medium); line-height: var(--lh-tight); margin: 0 0 var(--space-2); color: var(--fg); }
+.amp-info p  { margin: 0; color: var(--fg-muted); font-size: var(--fs-body); line-height: var(--lh-body); }
+
+/* ---------- Cartão de horário — o segundo componente da direção ---------- */
+.amp-horario {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur-base) var(--ease-smooth), box-shadow var(--dur-base) var(--ease-smooth);
+}
+.amp-horario:hover { border-color: var(--primary-a28); box-shadow: var(--shadow-md); }
+.amp-horario__hora {
+  flex: none;
+  min-width: 5.25rem;
+  padding-right: var(--space-5);
+  border-right: 1px solid var(--border-muted);
+}
+.amp-horario__hora .h { display: block; font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-heading-md); font-weight: var(--fw-bold); color: var(--primary-500); line-height: 1.2; }
+.amp-horario__hora .d { display: block; font-size: var(--fs-caption); color: var(--fg-subtle); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.125rem; }
+.amp-horario__corpo { min-width: 0; }
+.amp-horario__corpo strong { display: block; font-weight: var(--fw-medium); font-size: var(--fs-body-lg); color: var(--fg); }
+.amp-horario__corpo span { display: block; font-size: var(--fs-body-sm); color: var(--fg-muted); }
+
+/* ---------- Nota / aviso ---------- */
+.amp-nota {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  background: var(--info-wash);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  color: var(--info);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body);
+}
+.amp-nota--atencao { background: var(--warning-wash); color: var(--warning); }
+.amp-nota--sucesso { background: var(--success-wash); color: var(--success); }
+.amp-nota svg { flex: none; width: 1.25rem; height: 1.25rem; margin-top: 0.1875rem; }
+
+/* ---------- Link ---------- */
+.amp-link {
+  color: var(--primary-600);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--primary-a28);
+  transition: color var(--dur-fast) var(--ease-smooth), text-decoration-color var(--dur-fast) var(--ease-smooth);
+}
+.amp-link:hover { color: var(--primary-700); text-decoration-color: currentColor; }
+.amp-link:focus-visible { outline: none; border-radius: var(--radius-sm); box-shadow: var(--ring); }
+
+/* ---------- Divisória ---------- */
+.amp-divisoria { height: 1px; background: var(--border-muted); border: 0; margin: var(--space-12) 0; }

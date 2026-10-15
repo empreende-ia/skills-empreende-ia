@@ -1,0 +1,596 @@
+/* =====================================================================
+   NOGUEIRA PRUMO — Design System
+   Consultoria de estratégia e governança · São Paulo
+   "Parecer que sustenta decisão."
+
+   Fonte de verdade dos tokens. Importe assim:
+     <link rel="stylesheet" href="tokens.css">
+
+   Princípio do sistema: a hierarquia nasce do FIO (1px), do ESPAÇO e da
+   TENSÃO SERIF/SANS. Não nasce de sombra, de cor de fundo nem de raio.
+   Se você precisou de uma sombra pra separar dois blocos, o espaço
+   entre eles está errado.
+   ===================================================================== */
+
+:root {
+
+  /* ==================================================================
+     1. VINHO — a cor de assinatura
+     ------------------------------------------------------------------
+     Bordô profundo e dessaturado. É a única cor da marca e existe pra
+     MARCAR, não pra preencher: fios, sublinhas, um número que importa,
+     o marcador de seção, o botão de ação única da tela.
+     Regra dura: vinho nunca ocupa mais que ~5% da área visível. Nada de
+     hero vinho, faixa vinho, seção inteira vinho.
+     A rampa vai do lavado (fundo de badge) ao profundo (estado pressionado).
+     ================================================================== */
+  --vinho-100: #F4EAEC;  /* lavado — fundo de badge, marca-texto, linha zebrada */
+  --vinho-300: #D7B3BB;  /* fio tinto — bordas de destaque, régua sob número */
+  --vinho-500: #8C3549;  /* claro — hover de link, ícone sobre fundo escuro */
+  --vinho-700: #6B2436;  /* ASSINATURA — texto de marca, fio-prumo, botão de ação */
+  --vinho-900: #431722;  /* profundo — estado pressionado, texto sobre lavado */
+
+  /* ==================================================================
+     2. NEUTROS — o papel
+     ------------------------------------------------------------------
+     Fundo branco puro. As superfícies acima dele são quase-brancas com
+     um viés quente mínimo (R > G > B por 1–3 pontos) — é o que faz a
+     página parecer papel caro e não tela de aplicativo. Não é creme,
+     não é bege: se der pra dizer "é amarelado", passou do ponto.
+     ================================================================== */
+  --papel:      #FFFFFF;  /* base — a página, o card padrão */
+  --superficie: #FAF9F8;  /* superfície — seção alternada, linha de tabela em hover */
+  --elevado:    #F2F0EE;  /* elevado — input em repouso, bloco de código, swatch neutro */
+  --tinta-fundo:#17120F;  /* inversão — rodapé, aplicação de marca sobre escuro */
+
+  /* Fios: toda a estrutura do sistema. 1px, nunca mais grosso. */
+  --fio:        #E5E1DE;  /* fio padrão — divisórias, bordas de card e tabela */
+  --fio-forte:  #C9C3BF;  /* fio forte — borda de input, moldura de swatch claro */
+  --fio-tinta:  #17120F;  /* fio de tinta — régua sob título de seção, topo de tabela */
+
+  /* ==================================================================
+     3. TEXTO — três níveis, só três
+     ------------------------------------------------------------------
+     Quase-preto com viés quente (nunca #000: preto puro vibra no branco).
+     Se você sentiu falta de um quarto nível, o que falta é espaço.
+     ================================================================== */
+  --texto:        #17120F;  /* nível 1 — títulos e corpo. 18,3:1 no branco */
+  --texto-medio:  #4A4340;  /* nível 2 — apoio, legenda longa, texto de tabela. 9,7:1 */
+  --texto-fraco:  #7A716C;  /* nível 3 — rótulo, crédito, placeholder. 4,8:1 */
+  --texto-invertido: #FAF9F8; /* sobre --tinta-fundo */
+
+  /* ==================================================================
+     4. SEMÂNTICAS — sóbrias, nunca neon
+     ------------------------------------------------------------------
+     São de LEITURA (parecer favorável, ressalva, impedimento), não de
+     alerta de aplicativo. Cada uma tem o par texto/lavado pra badge.
+     Erro é vermelho-tijolo escuro e NÃO se confunde com o vinho: vinho
+     é marca, erro é estado.
+     ================================================================== */
+  --sucesso:       #1F5D45;  /* favorável, concluído, aprovado */
+  --sucesso-lavado:#E8F0EC;
+  --atencao:       #8A6116;  /* ressalva, pendente, prazo curto */
+  --atencao-lavado:#F6F0E4;
+  --erro:          #A32323;  /* impedimento, dado inválido, bloqueio */
+  --erro-lavado:   #F7E9E9;
+
+  /* ==================================================================
+     5. TIPOGRAFIA — duas famílias, uma tensão
+     ------------------------------------------------------------------
+     A ideia central do sistema: uma SERIF DE ALTO CONTRASTE (didone)
+     carrega os títulos e as citações — é a personalidade da página;
+     uma SANS NEUTRA carrega tudo que se lê em quantidade e tudo que é
+     rótulo — ela some de propósito.
+     Stacks 100% nativas: nenhum @import, nenhuma fonte remota. A página
+     abre igual em avião, em intranet e em PDF.
+     REGRA: a serif nunca desce abaixo de 19px (o alto contraste quebra
+     em corpo pequeno). Abaixo disso, sempre sans.
+     ================================================================== */
+  --fonte-titulo: Didot, "Bodoni 72", "Bodoni MT", "Iowan Old Style",
+                  "Palatino Linotype", Palatino, "Book Antiqua",
+                  Georgia, "Times New Roman", serif;
+  --fonte-texto:  "Helvetica Neue", -apple-system, BlinkMacSystemFont,
+                  "Segoe UI", Roboto, "Liberation Sans", Arial, sans-serif;
+
+  /* Escala de tipo — razão ~1,25 no texto, saltos largos no display.
+     Corpo em 17px porque isso é material de leitura, não painel. */
+  --ts-display: 4.25rem;   /* 68px — capa, número-manchete */
+  --ts-1:       3rem;      /* 48px — título de página */
+  --ts-2:       2.125rem;  /* 34px — título de seção */
+  --ts-3:       1.5rem;    /* 24px — título de bloco, pull-quote */
+  --ts-4:       1.1875rem; /* 19px — menor tamanho permitido pra serif */
+  --ts-lead:    1.25rem;   /* 20px — linha de abertura, sans */
+  --ts-corpo:   1.0625rem; /* 17px — corpo padrão */
+  --ts-peq:     0.9375rem; /* 15px — apoio, tabela densa */
+  --ts-legenda: 0.8125rem; /* 13px — legenda, nota de rodapé */
+  --ts-micro:   0.6875rem; /* 11px — versalete, rótulo, olho de seção */
+
+  /* Pesos — a serif só usa 400 e 700; a sans vive em 400/500/600 */
+  --peso-normal:  400;
+  --peso-medio:   500;
+  --peso-forte:   600;
+  --peso-titulo:  700;
+
+  /* Entrelinha — generosa, é ela que dá o ar de relatório caro */
+  --lh-display: 1.02;
+  --lh-titulo:  1.12;
+  --lh-corpo:   1.65;
+  --lh-apoio:   1.55;
+
+  /* Tracking — o didone pede aperto no display e folga no versalete */
+  --track-display: -0.02em;
+  --track-titulo:  -0.012em;
+  --track-corpo:   0;
+  --track-versalete: 0.18em;
+
+  /* Medida de leitura — inegociável. Linha longa demais mata a leitura. */
+  --medida:      65ch;  /* corpo corrido */
+  --medida-curta:46ch;  /* coluna de apoio, nota lateral */
+
+  /* ==================================================================
+     6. ESPAÇO — a outra metade da hierarquia
+     ------------------------------------------------------------------
+     Escala de 4px. Os degraus grandes (--e-10 a --e-14) são os que
+     separam seções: quando em dúvida, aumente o espaço antes de
+     adicionar um fio, uma caixa ou uma cor.
+     ================================================================== */
+  --e-1:  0.25rem;  /*  4px */
+  --e-2:  0.5rem;   /*  8px */
+  --e-3:  0.75rem;  /* 12px */
+  --e-4:  1rem;     /* 16px */
+  --e-5:  1.25rem;  /* 20px */
+  --e-6:  1.5rem;   /* 24px */
+  --e-8:  2rem;     /* 32px */
+  --e-10: 2.5rem;   /* 40px */
+  --e-12: 3rem;     /* 48px */
+  --e-14: 4rem;     /* 64px */
+  --e-16: 6rem;     /* 96px — respiro entre seções */
+  --e-20: 8rem;     /* 128px — respiro de capa */
+
+  /* Grade */
+  --largura-pagina: 1120px;
+  --coluna-rotulo:  190px;  /* coluna fixa do rótulo lateral (layout de duas colunas) */
+
+  /* ==================================================================
+     7. RAIOS — praticamente retos
+     ------------------------------------------------------------------
+     0 é o padrão. 2px é o máximo do sistema e serve só pra tirar o
+     aspecto de tabela de planilha de botões e campos. Não existe
+     "pill", não existe círculo, exceto o ponto do fio-prumo.
+     ================================================================== */
+  --raio-0: 0;
+  --raio-1: 1px;
+  --raio-2: 2px;
+
+  /* ==================================================================
+     8. ELEVAÇÃO — quase inexistente
+     ------------------------------------------------------------------
+     Nível 0 é o padrão de TUDO que é estático. As sombras existem só
+     pra coisas que flutuam de verdade sobre a página (toast, menu).
+     Elevação nesta marca é fio + espaço, não borrão.
+     ================================================================== */
+  --elev-0: none;
+  --elev-1: 0 1px 1px rgba(23, 18, 15, 0.04);
+  --elev-2: 0 2px 4px rgba(23, 18, 15, 0.05), 0 1px 1px rgba(23, 18, 15, 0.04);
+  --elev-3: 0 12px 28px -18px rgba(23, 18, 15, 0.28);  /* só flutuante */
+
+  /* Foco — visível, quadrado, vinho. Nunca remover sem substituir. */
+  --anel-foco: 0 0 0 2px var(--papel), 0 0 0 4px var(--vinho-700);
+
+  /* ==================================================================
+     9. MOVIMENTO — discreto
+     ------------------------------------------------------------------
+     Nada entra deslizando, nada quica. O movimento serve pra confirmar
+     um estado (hover, foco, cópia), não pra chamar atenção.
+     ================================================================== */
+  --ease:      cubic-bezier(0.2, 0, 0, 1);
+  --dur-rapida: 120ms;
+  --dur-base:   200ms;
+  --dur-lenta:  320ms;
+}
+
+/* =====================================================================
+   UTILITÁRIAS — prefixo np- (Nogueira Prumo)
+   Classes prontas pra montar telas sem religar variável por variável.
+   ===================================================================== */
+
+/* ---------- Base ---------- */
+.np-base,
+body.np-base {
+  background: var(--papel);
+  color: var(--texto);
+  font-family: var(--fonte-texto);
+  font-size: var(--ts-corpo);
+  line-height: var(--lh-corpo);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.np-pagina {
+  max-width: var(--largura-pagina);
+  margin-inline: auto;
+  padding-inline: var(--e-8);
+}
+
+/* ---------- Tipografia ---------- */
+.np-display {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-display);
+  font-weight: var(--peso-normal);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
+  color: var(--texto);
+}
+
+.np-t1 {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-1);
+  font-weight: var(--peso-normal);
+  line-height: var(--lh-titulo);
+  letter-spacing: var(--track-titulo);
+  color: var(--texto);
+}
+
+.np-t2 {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-2);
+  font-weight: var(--peso-normal);
+  line-height: var(--lh-titulo);
+  letter-spacing: var(--track-titulo);
+  color: var(--texto);
+}
+
+.np-t3 {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-3);
+  font-weight: var(--peso-normal);
+  line-height: 1.25;
+  color: var(--texto);
+}
+
+.np-t4 {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-4);
+  font-weight: var(--peso-titulo);
+  line-height: 1.3;
+  color: var(--texto);
+}
+
+.np-lead {
+  font-family: var(--fonte-texto);
+  font-size: var(--ts-lead);
+  line-height: 1.5;
+  color: var(--texto-medio);
+  max-width: var(--medida);
+}
+
+.np-corpo {
+  font-size: var(--ts-corpo);
+  line-height: var(--lh-corpo);
+  color: var(--texto-medio);
+  max-width: var(--medida);
+}
+
+.np-apoio {
+  font-size: var(--ts-peq);
+  line-height: var(--lh-apoio);
+  color: var(--texto-medio);
+  max-width: var(--medida-curta);
+}
+
+.np-legenda {
+  font-size: var(--ts-legenda);
+  line-height: 1.5;
+  color: var(--texto-fraco);
+}
+
+/* Versalete: o rótulo do sistema. Sempre sans, sempre espaçado. */
+.np-versalete {
+  font-family: var(--fonte-texto);
+  font-size: var(--ts-micro);
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete);
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+}
+.np-versalete--vinho { color: var(--vinho-700); }
+
+/* Números: sempre tabulares, sempre alinhados. Um número que importa
+   ganha a serif e o fio vinho embaixo — é o único lugar onde a marca
+   deixa a cor "grande". */
+.np-num {
+  font-variant-numeric: tabular-nums lining;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: 0;
+}
+.np-num--destaque {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-2);
+  line-height: 1;
+  color: var(--texto);
+  display: inline-block;
+  padding-bottom: var(--e-2);
+  border-bottom: 1px solid var(--vinho-700);
+  font-variant-numeric: tabular-nums lining;
+}
+
+/* ---------- Fio-prumo: a assinatura visual ----------
+   Fio vertical de 1px com um ponto no pé. É o marcador de seção,
+   o eixo do wordmark e o sinal de "isto foi verificado". */
+.np-prumo {
+  position: relative;
+  padding-left: var(--e-5);
+}
+.np-prumo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  bottom: 0.9em;
+  width: 1px;
+  background: var(--vinho-700);
+}
+.np-prumo::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  bottom: 0.35em;
+  width: 5px;
+  height: 5px;
+  background: var(--vinho-700);
+  transform: rotate(45deg);
+}
+
+/* Fios horizontais */
+.np-fio      { border: 0; border-top: 1px solid var(--fio); margin: var(--e-8) 0; }
+.np-fio--tinta { border-top-color: var(--fio-tinta); }
+.np-fio--vinho { border-top-color: var(--vinho-700); }
+
+/* ---------- Wordmark ---------- */
+.np-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--e-3);
+  line-height: 1;
+  white-space: nowrap;
+}
+.np-wordmark .np-wordmark__nome {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-normal);
+  font-size: 1.5em;
+  letter-spacing: -0.01em;
+  color: var(--texto);
+}
+.np-wordmark .np-wordmark__eixo {
+  align-self: stretch;
+  width: 1px;
+  background: var(--vinho-700);
+  transform: translateY(0.12em);
+}
+.np-wordmark .np-wordmark__palavra {
+  font-family: var(--fonte-texto);
+  font-size: 0.72em;
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete);
+  text-transform: uppercase;
+  color: var(--texto-medio);
+}
+.np-wordmark--invertido .np-wordmark__nome { color: var(--texto-invertido); }
+.np-wordmark--invertido .np-wordmark__palavra { color: #B7ADA8; }
+.np-wordmark--invertido .np-wordmark__eixo { background: var(--vinho-500); }
+
+/* ---------- Botões ----------
+   Hierarquia: tinta (ação principal) > vinho (a ÚNICA ação de conversão
+   da tela) > contorno (secundária) > texto (terciária).
+   Cantos retos, sem sombra, transição só de cor. */
+.np-btn {
+  --_bg: transparent;
+  --_fg: var(--texto);
+  --_borda: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  padding: 0.72rem 1.35rem;
+  font-family: var(--fonte-texto);
+  font-size: var(--ts-peq);
+  font-weight: var(--peso-forte);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--_fg);
+  background: var(--_bg);
+  border: 1px solid var(--_borda);
+  border-radius: var(--raio-2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--dur-base) var(--ease),
+              border-color var(--dur-base) var(--ease),
+              color var(--dur-base) var(--ease);
+}
+.np-btn:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+
+.np-btn--tinta   { --_bg: var(--texto); --_fg: var(--texto-invertido); --_borda: var(--texto); }
+.np-btn--tinta:hover  { --_bg: #2F2724; --_borda: #2F2724; }
+.np-btn--tinta:active { --_bg: #000000; --_borda: #000000; }
+
+.np-btn--vinho   { --_bg: var(--vinho-700); --_fg: #FFFFFF; --_borda: var(--vinho-700); }
+.np-btn--vinho:hover  { --_bg: var(--vinho-900); --_borda: var(--vinho-900); }
+.np-btn--vinho:active { --_bg: #35111B; --_borda: #35111B; }
+
+.np-btn--contorno { --_bg: var(--papel); --_fg: var(--texto); --_borda: var(--fio-forte); }
+.np-btn--contorno:hover  { --_bg: var(--superficie); --_borda: var(--texto); }
+.np-btn--contorno:active { --_bg: var(--elevado); }
+
+.np-btn--texto {
+  --_fg: var(--vinho-700);
+  padding-inline: 0;
+  border-color: transparent;
+  border-bottom: 1px solid var(--vinho-300);
+  border-radius: 0;
+}
+.np-btn--texto:hover  { --_fg: var(--vinho-900); border-bottom-color: var(--vinho-700); }
+
+.np-btn[disabled],
+.np-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  --_bg: var(--elevado);
+  --_fg: var(--texto-fraco);
+  --_borda: var(--fio);
+  border-bottom-color: var(--fio);
+}
+/* o botão de texto não vira caixa quando desabilitado — só apaga */
+.np-btn--texto[disabled],
+.np-btn--texto[aria-disabled="true"] {
+  --_bg: transparent;
+  --_borda: transparent;
+  border-bottom-color: var(--fio);
+}
+
+/* ---------- Card ----------
+   Superfície branca sobre branco, definida só pelo fio. No hover,
+   um fio vinho cresce no topo — é o único movimento do componente. */
+.np-card {
+  position: relative;
+  background: var(--papel);
+  border: 1px solid var(--fio);
+  border-radius: var(--raio-2);
+  padding: var(--e-8);
+  box-shadow: var(--elev-0);
+  transition: border-color var(--dur-base) var(--ease);
+}
+.np-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 2px;
+  background: var(--vinho-700);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-lenta) var(--ease);
+}
+.np-card:hover { border-color: var(--fio-forte); }
+.np-card:hover::before { transform: scaleX(1); }
+.np-card--fixo::before { transform: scaleX(1); }  /* card em destaque permanente */
+
+/* ---------- Campo de formulário ---------- */
+.np-campo { display: flex; flex-direction: column; gap: var(--e-2); }
+.np-rotulo {
+  font-size: var(--ts-micro);
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete);
+  text-transform: uppercase;
+  color: var(--texto-medio);
+}
+.np-input {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  font-family: var(--fonte-texto);
+  font-size: var(--ts-corpo);
+  color: var(--texto);
+  background: var(--papel);
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-1);
+  transition: border-color var(--dur-rapida) var(--ease),
+              box-shadow var(--dur-rapida) var(--ease);
+}
+.np-input::placeholder { color: var(--texto-fraco); }
+.np-input:hover { border-color: var(--texto-fraco); }
+.np-input:focus {
+  outline: none;
+  border-color: var(--texto);
+  box-shadow: inset 0 -2px 0 0 var(--vinho-700);
+}
+.np-input[disabled] { background: var(--elevado); color: var(--texto-fraco); cursor: not-allowed; }
+.np-input[aria-invalid="true"] { border-color: var(--erro); }
+.np-ajuda { font-size: var(--ts-legenda); color: var(--texto-fraco); }
+.np-ajuda--erro { color: var(--erro); }
+
+/* ---------- Badge ---------- */
+.np-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  padding: 0.28rem 0.5rem;
+  font-size: var(--ts-micro);
+  font-weight: var(--peso-forte);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-2);
+  color: var(--texto-medio);
+  background: var(--papel);
+  white-space: nowrap;
+}
+.np-badge--marca   { color: var(--vinho-900); background: var(--vinho-100);    border-color: var(--vinho-300); }
+.np-badge--sucesso { color: var(--sucesso);   background: var(--sucesso-lavado); border-color: #C3D6CD; }
+.np-badge--atencao { color: var(--atencao);   background: var(--atencao-lavado); border-color: #E0D2B4; }
+.np-badge--erro    { color: var(--erro);      background: var(--erro-lavado);    border-color: #E6C6C6; }
+
+/* ---------- Citação / pull-quote ----------
+   Serif, corpo grande, fio vinho vertical. É a voz do sócio na página. */
+.np-citacao {
+  margin: 0;
+  padding-left: var(--e-6);
+  border-left: 1px solid var(--vinho-700);
+  max-width: 34ch;
+}
+.np-citacao p {
+  font-family: var(--fonte-titulo);
+  font-size: var(--ts-3);
+  line-height: 1.35;
+  color: var(--texto);
+  margin: 0;
+}
+.np-citacao footer {
+  margin-top: var(--e-4);
+  font-size: var(--ts-micro);
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete);
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+}
+
+/* ---------- Tabela ----------
+   Sem borda externa, sem zebra colorida. Régua de tinta no topo,
+   fio claro entre linhas, números à direita e tabulares. */
+.np-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ts-peq);
+  color: var(--texto-medio);
+}
+.np-tabela thead th {
+  text-align: left;
+  padding: 0 var(--e-4) var(--e-3) 0;
+  font-size: var(--ts-micro);
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete);
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+  border-bottom: 1px solid var(--fio-tinta);
+}
+.np-tabela tbody td {
+  padding: var(--e-3) var(--e-4) var(--e-3) 0;
+  border-bottom: 1px solid var(--fio);
+  vertical-align: baseline;
+}
+.np-tabela tbody tr:hover { background: var(--superficie); }
+.np-tabela .np-col-num {
+  text-align: right;
+  padding-right: 0;
+  font-variant-numeric: tabular-nums lining;
+  color: var(--texto);
+}
+.np-tabela th.np-col-num { text-align: right; padding-right: 0; }
+
+/* ---------- Movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

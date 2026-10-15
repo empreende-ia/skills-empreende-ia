@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!--
+  =====================================================================
+  TEMPLATE DE SHOWCASE — esqueleto comentado (Rodada 3)
+  =====================================================================
+  COMO USAR
+  1. Substitua todo {{PLACEHOLDER}} pelos valores reais do DS.
+  2. Os tokens abaixo são um ESPELHO do tokens.css. Duas opções:
+     (a) <link rel="stylesheet" href="tokens.css"> e apague o :root daqui  [preferido]
+     (b) cole o :root inteiro aqui, pra o arquivo ser 100% standalone
+     Nunca as duas — dois :root divergentes é bug garantido.
+  3. Não remova seções. Se uma não se aplica, escreva por que na própria seção.
+     ("Esta marca não usa sombra — a elevação é por borda. Ver README.")
+  4. VERIFIQUE POR SCREENSHOT antes de mostrar (1440px e 375px). Régua no SKILL.md.
+
+  REGRAS DO ARQUIVO
+  - Arquivo único, abre com duplo clique. Sem build, sem framework.
+  - Fonte: <link> do Google Fonts/Fontshare é aceitável aqui (showcase é pra humano
+    com internet). Mas a pilha SEMPRE termina em fallback de sistema.
+  - Nada de "Lorem ipsum": use texto real da marca em todos os exemplos.
+  =====================================================================
+-->
+<html lang="pt-BR" data-theme="dark"><!-- ou "light", conforme o tema padrão da marca -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{MARCA}} — Design System</title>
+
+<!-- FONTES: troque pelas faces decididas na Rodada 1 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family={{FONT_DISPLAY}}&family={{FONT_SANS}}&family={{FONT_MONO}}&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   1. TOKENS — espelho de tokens.css (ver anatomia-de-tokens.md)
+      ATENÇÃO: todo token declarado no tema escuro precisa existir no claro.
+   ===================================================================== */
+:root {
+  /* assinatura */
+  --primary-300:{{HEX}}; --primary-400:{{HEX}}; --primary-500:{{HEX}};
+  --primary-600:{{HEX}}; --primary-700:{{HEX}};
+  --primary-rgb: {{R}},{{G}},{{B}};        /* pra rgba() dinâmico */
+  --primary-on-light: {{HEX}};             /* tom escuro que passa AA em texto */
+
+  /* superfícies e texto — TEMA CLARO como base */
+  --bg-base:{{HEX}}; --bg-card:{{HEX}}; --bg-elevated:{{HEX}};
+  --fg:{{HEX}}; --fg-muted:{{HEX}}; --fg-subtle:{{HEX}};
+  --border:{{HEX}}; --border-muted:{{HEX}}; --border-active: var(--primary-500);
+
+  /* semântica — sucesso NUNCA igual à assinatura verde */
+  --success:{{HEX}}; --warning:{{HEX}}; --destructive:{{HEX}}; --info:{{HEX}};
+
+  /* tipo */
+  --font-display: "{{FONT_DISPLAY}}", system-ui, sans-serif;
+  --font-sans:    "{{FONT_SANS}}", system-ui, -apple-system, sans-serif;
+  --font-mono:    "{{FONT_MONO}}", ui-monospace, Menlo, monospace;
+  /* display FLUIDO — clamp(mínimo, fluido, máximo). Tamanho fixo em rem estoura
+     a viewport de 375px e reprova na própria régua de screenshot do SKILL.md. */
+  --fs-display-xl:clamp(2.5rem, 11vw, 4.5rem);
+  --fs-display-lg:clamp(2rem, 8vw, 3.5rem);
+  --fs-display-md:clamp(1.75rem, 6vw, 2.5rem);
+  --fs-heading-lg:2rem;   --fs-heading-md:1.5rem; --fs-heading-sm:1.25rem;
+  --fs-body-lg:1.125rem;  --fs-body:1rem; --fs-body-sm:.875rem; --fs-caption:.75rem;
+  --tracking-display:-0.04em; --tracking-heading:-0.02em; --tracking-overline:.15em;
+
+  /* espaço */
+  --space-1:.25rem; --space-2:.5rem; --space-3:.75rem; --space-4:1rem;
+  --space-6:1.5rem; --space-8:2rem; --space-12:3rem; --space-16:4rem; --space-24:6rem;
+  --section-y: var(--space-24);
+  --container-prose:48rem; --container-content:72rem;
+
+  /* raio — proporcional, nunca um valor só */
+  --radius-sm:.5rem; --radius-md:.75rem; --radius-lg:1rem;
+  --radius-xl:1.25rem; --radius-2xl:1.5rem; --radius-full:9999px;
+
+  /* elevação — decida: sombra OU glow. Documente a escolha. */
+  --shadow-sm:{{VALOR}}; --shadow-md:{{VALOR}}; --shadow-lg:{{VALOR}};
+  --glow-primary: 0 0 40px rgba(var(--primary-rgb), .30);
+  --ring: 0 0 0 3px rgba(var(--primary-rgb), .35);
+
+  /* motion */
+  --ease-smooth: cubic-bezier(.4,0,.2,1);
+  --dur-fast:150ms; --dur-base:300ms; --dur-slow:500ms;
+
+  /* assinaturas da marca — as 2 ou 3 da Rodada 1, como token */
+  --gradient-number: linear-gradient(135deg, var(--primary-500), var(--primary-400));
+}
+
+/* TEMA ESCURO — só o que MUDA. Nenhum token novo nasce aqui. */
+:root[data-theme="dark"] {
+  --bg-base:{{HEX}}; --bg-card:{{HEX}}; --bg-elevated:{{HEX}};
+  --fg:{{HEX}}; --fg-muted:{{HEX}}; --fg-subtle:{{HEX}};
+  --border:{{HEX}}; --border-muted:{{HEX}};
+  --shadow-sm:{{VALOR}}; --shadow-md:{{VALOR}}; --shadow-lg:{{VALOR}};
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+
+/* =====================================================================
+   2. BASE + UTILIDADES DO PRÓPRIO SHOWCASE
+   ===================================================================== */
+*,*::before,*::after { box-sizing:border-box; }
+/* NÃO ponha overflow-x:hidden aqui: isso ESCONDE o estouro lateral em vez de
+   corrigir, e a régua de screenshot de 375px deixa de pegar o erro. */
+body {
+  margin:0; background:var(--bg-base); color:var(--fg);
+  overflow-wrap:break-word;        /* palavra longa (hex, token, URL) quebra em vez de empurrar */
+  font-family:var(--font-sans); font-size:var(--fs-body); line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  transition: background var(--dur-base) var(--ease-smooth), color var(--dur-base) var(--ease-smooth);
+}
+.wrap { max-width:var(--container-content); margin:0 auto; padding:0 var(--space-4); }
+section { padding:var(--space-16) 0; border-top:1px solid var(--border); }
+.sec-title { font-size:var(--fs-heading-lg); font-weight:700; letter-spacing:var(--tracking-heading); margin:0 0 var(--space-2); }
+.sec-note  { color:var(--fg-muted); max-width:60ch; margin:0 0 var(--space-8); }
+.overline  { font-size:var(--fs-caption); text-transform:uppercase; letter-spacing:var(--tracking-overline);
+             font-weight:600; color:var(--primary-500); }
+.grid { display:grid; gap:var(--space-4); }
+/* Toda grade e toda tabela precisam sobreviver a 375px — a régua do screenshot mobile. */
+.g-auto { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+.scroll-x { overflow-x:auto; }
+
+/* =====================================================================
+   3. CLASSES SEMÂNTICAS DA MARCA (prefixo {{PFX}}) — copie de tokens.css
+   ===================================================================== */
+.{{PFX}}-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:var(--space-8); transition:border-color var(--dur-base) var(--ease-smooth), box-shadow var(--dur-base) var(--ease-smooth); }
+.{{PFX}}-card:hover { border-color:var(--border-active); box-shadow:var(--glow-primary); }
+.{{PFX}}-btn { display:inline-flex; align-items:center; gap:.5rem; background:var(--primary-500);
+  color:var(--bg-base); font-weight:600; padding:.75rem 1.5rem; border:none;
+  border-radius:var(--radius-md); cursor:pointer; transition:all var(--dur-base) var(--ease-smooth); }
+.{{PFX}}-btn:hover { background:var(--primary-400); }
+.{{PFX}}-btn:focus-visible { outline:none; box-shadow:var(--ring); }
+.{{PFX}}-btn-outline { background:transparent; color:var(--fg); border:1px solid var(--border-muted); }
+.{{PFX}}-input { width:100%; height:2.75rem; padding:0 var(--space-4); background:var(--bg-card);
+  color:var(--fg); border:1px solid var(--border-muted); border-radius:var(--radius-md); font:inherit; }
+.{{PFX}}-input:focus { outline:none; border-color:var(--primary-500); box-shadow:var(--ring); }
+.{{PFX}}-pill { display:inline-flex; align-items:center; gap:.5rem; padding:.4rem .875rem;
+  border:1px solid rgba(var(--primary-rgb),.30); background:rgba(var(--primary-rgb),.06);
+  color:var(--primary-500); border-radius:var(--radius-full); font-size:var(--fs-caption);
+  font-weight:600; letter-spacing:var(--tracking-overline); text-transform:uppercase; }
+.{{PFX}}-number { font-weight:800; letter-spacing:-.02em; background:var(--gradient-number);
+  -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+/* paleta */
+.sw { border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; cursor:pointer;
+      background:var(--bg-card); text-align:left; padding:0; font:inherit; color:inherit; }
+.sw:focus-visible { outline:none; box-shadow:var(--ring); }
+.sw i { display:block; height:72px; }
+.sw b { display:block; padding:.5rem .75rem 0; font-size:var(--fs-body-sm); font-weight:600; }
+.sw code { display:block; padding:0 .75rem .625rem; font-family:var(--font-mono);
+           font-size:var(--fs-caption); color:var(--fg-muted); }
+
+table { width:100%; border-collapse:collapse; font-size:var(--fs-body-sm); }
+th,td { text-align:left; padding:.625rem .75rem; border-bottom:1px solid var(--border); vertical-align:top; }
+th { color:var(--fg-subtle); font-weight:600; text-transform:uppercase;
+     font-size:var(--fs-caption); letter-spacing:var(--tracking-overline); }
+
+#toast { position:fixed; bottom:var(--space-6); left:50%; transform:translateX(-50%) translateY(120%);
+  background:var(--primary-500); color:var(--bg-base); padding:.6rem 1.1rem; border-radius:var(--radius-full);
+  font-size:var(--fs-body-sm); font-weight:600; transition:transform var(--dur-base) var(--ease-smooth); z-index:1070; }
+#toast.on { transform:translateX(-50%) translateY(0); }
+#themeBtn { position:fixed; top:var(--space-4); right:var(--space-4); z-index:1070; }
+</style>
+</head>
+<body>
+
+<button id="themeBtn" class="{{PFX}}-btn {{PFX}}-btn-outline" onclick="toggleTheme()">claro / escuro</button>
+
+<!-- =====================================================================
+     SEÇÃO 1 — CAPA: o wordmark renderizado + posicionamento em 1 frase
+     É aqui que a marca se apresenta. Use o wordmark REAL (SVG ou a classe
+     tipográfica), nunca só o nome em texto solto.
+     ===================================================================== -->
+<header class="wrap" style="padding-top:var(--space-24); padding-bottom:var(--space-16)">
+  <span class="overline">Design System</span>
+  <h1 style="font-family:var(--font-display); font-size:var(--fs-display-xl); font-weight:800;
+             letter-spacing:var(--tracking-display); line-height:1.05; margin:var(--space-4) 0">{{WORDMARK}}</h1>
+  <p style="font-size:var(--fs-body-lg); color:var(--fg-muted); max-width:56ch">{{POSICIONAMENTO_EM_UMA_FRASE}}</p>
+  <p style="color:var(--fg-subtle); font-size:var(--fs-body-sm)">v{{VERSAO}} · {{DATA}} · tokens: <code>tokens.css</code></p>
+</header>
+
+<!-- =====================================================================
+     SEÇÃO 2 — PALETA (com copiar-hex)
+     Ordem: assinatura → superfícies → texto → bordas → semântica.
+     Toda amostra diz para que serve. Amostra sem papel é decoração.
+     ===================================================================== -->
+<section class="wrap">
+  <h2 class="sec-title">Cor</h2>
+  <p class="sec-note">Uma cor de assinatura e neutros bem escolhidos. Clique em qualquer amostra pra copiar o hex.</p>
+
+  <h3 class="overline">Assinatura</h3>
+  <div class="grid g-auto" style="margin:var(--space-3) 0 var(--space-8)">
+    <!-- repita para 300/400/500/600/700; marque qual é A assinatura -->
+    <button class="sw" data-hex="{{HEX}}"><i style="background:var(--primary-500)"></i><b>primary-500 · assinatura</b><code>{{HEX}}</code></button>
+  </div>
+
+  <h3 class="overline">Superfícies e texto</h3>
+  <div class="grid g-auto" style="margin:var(--space-3) 0 var(--space-8)">
+    <button class="sw" data-hex="{{HEX}}"><i style="background:var(--bg-card)"></i><b>bg-card</b><code>{{HEX}}</code></button>
+  </div>
+
+  <!-- Tabela de contraste: OBRIGATÓRIA. Números calculados, não estimados. -->
+  <div class="scroll-x">
+    <table>
+      <thead><tr><th>Par</th><th>Contraste</th><th>AA</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td>fg / bg-base</td><td>{{X}}:1</td><td>{{ok}}</td><td>corpo</td></tr>
+        <tr><td>fg-muted / bg-card</td><td>{{X}}:1</td><td>{{ok}}</td><td>parágrafo secundário</td></tr>
+        <tr><td>primary-on-light / bg-base (claro)</td><td>{{X}}:1</td><td>{{ok}}</td><td>link e texto na cor da marca</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SEÇÃO 3 — TIPOGRAFIA
+     Mostre a escala com texto REAL da marca em cada degrau, e declare
+     tracking e line-height de cada um. É o que ninguém documenta e todo
+     mundo erra depois.
+     ===================================================================== -->
+<section class="wrap">
+  <h2 class="sec-title">Tipografia</h2>
+  <p class="sec-note">{{FONT_DISPLAY}} no display · {{FONT_SANS}} no texto · {{FONT_MONO}} em número e código.</p>
+  <!-- um bloco por degrau: display-xl → caption, com o nome do token ao lado -->
+</section>
+
+<!-- =====================================================================
+     SEÇÃO 4 — ESPAÇO E RAIO
+     Barras proporcionais pra espaço; quadrados com raio crescente.
+     Inclua --section-y e as larguras de container.
+     ===================================================================== -->
+<section class="wrap"><h2 class="sec-title">Espaço e raio</h2></section>
+
+<!-- =====================================================================
+     SEÇÃO 5 — ELEVAÇÃO E MOTION
+     Mostre a decisão de marca por escrito: sombra ou glow.
+     Motion: um botão/card demonstrável, com easing e duração declarados.
+     ===================================================================== -->
+<section class="wrap"><h2 class="sec-title">Elevação e movimento</h2></section>
+
+<!-- =====================================================================
+     SEÇÃO 6 — COMPONENTES
+     Mínimo: botão (3 variantes + foco + desabilitado), card, input,
+     pill/badge, tabela. Mostre os ESTADOS, não só o repouso.
+     ===================================================================== -->
+<section class="wrap">
+  <h2 class="sec-title">Componentes</h2>
+  <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; margin-bottom:var(--space-8)">
+    <button class="{{PFX}}-btn">{{CTA_REAL}} →</button>
+    <button class="{{PFX}}-btn {{PFX}}-btn-outline">Secundário</button>
+    <span class="{{PFX}}-pill">{{OVERLINE}}</span>
+  </div>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+    <div class="{{PFX}}-card">
+      <h3 style="margin:0 0 var(--space-2); font-size:var(--fs-heading-sm)">{{TITULO_REAL}}</h3>
+      <p style="margin:0; color:var(--fg-muted)">{{TEXTO_REAL_DA_MARCA}}</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SEÇÃO 7 — AS ASSINATURAS DA MARCA  [a seção que faz o DS ser lembrado]
+     As 2 ou 3 decididas na Rodada 1, cada uma com: o nome, a demonstração
+     ao vivo e a RECEITA (o CSS/token que reproduz). Adjetivo não serve.
+     ===================================================================== -->
+<section class="wrap">
+  <h2 class="sec-title">Assinaturas da marca</h2>
+  <p class="sec-note">Os detalhes que fazem alguém reconhecer {{MARCA}} sem ler o nome.</p>
+  <div class="{{PFX}}-card">
+    <!-- Sem "01 ·": lista de 2-3 itens não é sequência. Ver antipadrão 9. -->
+    <span class="overline">{{NOME_DA_ASSINATURA}}</span>
+    <p class="{{PFX}}-number" style="font-size:var(--fs-display-md); margin:var(--space-2) 0">{{DEMO}}</p>
+    <pre style="font-family:var(--font-mono); font-size:var(--fs-caption); color:var(--fg-muted);
+                overflow-x:auto; margin:0">{{RECEITA_CSS}}</pre>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SEÇÃO 8 — VOZ: a tabela FALAR / NÃO FALAR  [obrigatória]
+     Mínimo 5 pares. Sem isso o DS resolve metade do trabalho.
+     Inclua também: idioma, pessoa verbal, caixa, pontuação, emoji sim/não.
+     ===================================================================== -->
+<section class="wrap">
+  <h2 class="sec-title">Voz</h2>
+  <p class="sec-note">{{IDIOMA}} · {{PESSOA_VERBAL}} · {{REGRA_DE_CAIXA}} · emoji: {{SIM_OU_NAO}}</p>
+  <div class="scroll-x">
+    <table>
+      <thead><tr><th>Falar</th><th>Não falar</th></tr></thead>
+      <tbody>
+        <tr><td>{{CERTO}}</td><td>{{ERRADO}}</td></tr>
+        <!-- mínimo 5 linhas -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SEÇÃO 9 — CERTO / ERRADO
+     Dois cards lado a lado mostrando o mesmo elemento aplicado bem e mal.
+     Escolha os erros mais prováveis DESTA marca (ver antipadroes.md).
+     ===================================================================== -->
+<section class="wrap"><h2 class="sec-title">Certo e errado</h2></section>
+
+<!-- =====================================================================
+     SEÇÃO 10 — COMO USAR
+     Como importar tokens.css · como apontar o CLAUDE.md · onde a skill
+     está instalada · o que é proibido (hex solto, fonte fora da lista).
+     ===================================================================== -->
+<section class="wrap" style="padding-bottom:var(--space-24)"><h2 class="sec-title">Como usar</h2></section>
+
+<div id="toast">hex copiado</div>
+
+<script>
+/* copiar-hex: clique em qualquer .sw[data-hex] */
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-hex]');
+  if (!el) return;
+  var hex = el.getAttribute('data-hex');
+  var done = function () {
+    var t = document.getElementById('toast');
+    t.textContent = hex + ' copiado';
+    t.classList.add('on');
+    clearTimeout(window.__tt); window.__tt = setTimeout(function(){ t.classList.remove('on'); }, 1400);
+  };
+  /* file:// bloqueia clipboard em alguns navegadores — fallback sempre presente */
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(hex).then(done, fallback);
+  } else { fallback(); }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = hex; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (_) {}
+    document.body.removeChild(ta); done();
+  }
+});
+
+/* toggle de tema — grava a escolha */
+function toggleTheme() {
+  var r = document.documentElement;
+  var next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('{{PFX}}-theme', next); } catch (_) {}
+}
+try {
+  var saved = localStorage.getItem('{{PFX}}-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+} catch (_) {}
+</script>
+</body>
+</html>

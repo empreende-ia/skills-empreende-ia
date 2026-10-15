@@ -1,0 +1,705 @@
+/* =====================================================================
+   FERVO — Design System · tokens.css
+   Fonte da verdade da marca. Nenhum valor visual nasce fora deste arquivo.
+
+   Marca:  Fervo — comida de rua, delivery e loja de esquina.
+   Ideia:  fundo claro quente + BLOCOS grandes de tomate saturado.
+           A cor não é detalhe, é estrutura: ela carrega seção inteira.
+
+   Uso em produção:
+     <link rel="stylesheet" href="tokens.css">
+   Uso em artefato descartável (slide, mock, post):
+     copie o bloco :root inteiro pra dentro do <style> do HTML.
+   ===================================================================== */
+
+:root {
+  /* ===================================================================
+     1. ASSINATURA — TOMATE
+     Papel: é a estrutura da marca. Pinta bloco inteiro, hero, faixa,
+     selo e botão de comprar. O -500 é A assinatura; os claros só
+     existem SOBRE tomate ou sobre tinta; os escuros existem pra texto
+     pequeno em fundo claro (onde o -500 não passa contraste).
+     =================================================================== */
+  --primary-300: #ff8a66;  /* highlight sobre bloco tomate / sobre tinta */
+  --primary-400: #ff5c33;  /* hover de superfície escura, ponta de gradiente */
+  --primary-500: #d92d0b;  /* A ASSINATURA — bloco, botão, selo, faixa */
+  --primary-600: #b32209;  /* pressed + TEXTO/link sobre fundo claro (6.6:1) */
+  --primary-700: #8a1907;  /* cauda de gradiente, texto miúdo, borda forte */
+
+  /* Atalho de intenção: use este em TEXTO, nunca o -500. */
+  --primary-on-light: var(--primary-600);
+
+  /* Alfas — sempre como rgba nomeado. Nunca `opacity` no elemento
+     (opacity apaga o filho junto e ninguém entende por que o texto some). */
+  --primary-alpha-06:  rgba(217, 45, 11, 0.06);  /* fundo de chip, linha zebrada */
+  --primary-alpha-14:  rgba(217, 45, 11, 0.14);  /* fundo de badge, hover leve */
+  --primary-alpha-32:  rgba(217, 45, 11, 0.32);  /* anel de foco */
+  --primary-alpha-45:  rgba(217, 45, 11, 0.45);  /* sombra tingida */
+
+  /* ===================================================================
+     2. SECUNDÁRIAS
+     Papel: existem no token, quase nunca na tela. Servem pra categoria
+     de cardápio, ilustração e gráfico. Se aparecerem num botão,
+     a marca passa a ter duas cores brigando — é erro, não variação.
+     =================================================================== */
+  --accent-mostarda: #e8a33d;  /* fritura, pão, categoria "porções" */
+  --accent-limao:    #7fb800;  /* bebida, salada, categoria "leve" */
+  --accent-uva:      #6b2d5c;  /* sobremesa, categoria "doce" */
+
+  /* ===================================================================
+     3. NEUTROS E SUPERFÍCIES
+     Papel: o palco. A temperatura segue a assinatura — assinatura
+     quente pede cinza quente. Cinza neutro puro ao lado de tomate
+     deixa a marca com aparência suja.
+     Base não é branco puro: #fff estoura ao lado de bloco saturado.
+     =================================================================== */
+  --bg-base:     #fff6f1;  /* a página — papel quente */
+  --bg-surface:  #ffffff;  /* card, painel, linha de cardápio */
+  --bg-elevated: #ffe9de;  /* input, chip, superfície levantada */
+  --bg-ink:      #241512;  /* bloco escuro quente — inversão de seção */
+  --bg-ink-soft: #3a221c;  /* card dentro do bloco escuro */
+  --bg-overlay:  rgba(36, 21, 18, 0.62);  /* fundo de modal */
+
+  /* ===================================================================
+     4. TEXTO — 3 níveis, não mais.
+     Tinta é marrom-preto quente, nunca #000 (halação ao lado do tomate).
+     =================================================================== */
+  --fg:        #241512;  /* títulos e corpo */
+  --fg-muted:  #6b4a40;  /* parágrafo longo, descrição de produto */
+  --fg-subtle: #8a6553;  /* label, caption, placeholder, preço antigo */
+
+  /* Texto SOBRE bloco tomate */
+  --fg-on-primary:      #ffffff;  /* corpo e título — 4.8:1, passa AA */
+  --fg-on-primary-soft: #ffe0d4;  /* SÓ em ≥24px ou ≥18.66px bold */
+
+  /* Texto SOBRE bloco tinta */
+  --fg-on-ink:       #fff6f1;
+  --fg-on-ink-muted: #d9bdb2;
+
+  /* ===================================================================
+     5. BORDAS
+     =================================================================== */
+  --border:        #ebd5c9;  /* padrão */
+  --border-muted:  #f6e5dc;  /* divisória de lista, separador sutil */
+  --border-active: var(--primary-500);  /* foco, seleção, card em hover */
+  --border-ink:    #241512;  /* contorno grosso de selo e etiqueta */
+
+  /* ===================================================================
+     6. SEMÂNTICAS
+     Armadilha desta marca: a assinatura JÁ é vermelha. Se o erro fosse
+     o mesmo vermelho, ninguém distinguiria "compre" de "deu ruim".
+     Por isso o erro é carmim escuro (hue ~340°, ~30° longe do tomate)
+     e SEMPRE vem acompanhado de ícone e texto — nunca só de cor.
+     =================================================================== */
+  --success: #0f7b3f;  /* pedido confirmado, em rota */
+  --warning: #b26a00;  /* estoque baixo, atraso na cozinha */
+  --danger:  #a11043;  /* erro, cancelamento, pagamento recusado */
+  --info:    #1b6aa8;  /* aviso neutro, horário, informação */
+
+  --success-wash: #e6f4ec;
+  --warning-wash: #fdf0dc;
+  --danger-wash:  #fce8ef;
+  --info-wash:    #e7f1fa;
+
+  /* ===================================================================
+     7. TIPOGRAFIA — duas famílias, só pilhas nativas.
+     Sem @import, sem CDN, sem webfont. O DS tem que abrir com duplo
+     clique, offline, num notebook de aluno.
+     Display = condensada pesada: é o letreiro, o que se lê da calçada.
+     Texto  = sans neutra do sistema: não disputa com o produto.
+     =================================================================== */
+  --font-display: 'Arial Narrow', 'Helvetica Neue Condensed', 'Liberation Sans Narrow',
+                  'Nimbus Sans Narrow', 'Roboto Condensed', 'Franklin Gothic Medium',
+                  Impact, system-ui, sans-serif;
+  --font-sans:    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue',
+                  Helvetica, 'Liberation Sans', Arial, sans-serif;
+
+  /* Escala de tipo — nada abaixo de 12px, corpo em 16px */
+  --fs-display-2xl: 5.5rem;   /* 88px — letreiro de hero */
+  --fs-display-xl:  4.25rem;  /* 68px — preço gigante, número de oferta */
+  --fs-display-lg:  3.25rem;  /* 52px — título de seção */
+  --fs-display-md:  2.5rem;   /* 40px — título de bloco */
+  --fs-heading-lg:  2rem;     /* 32px */
+  --fs-heading-md:  1.5rem;   /* 24px — nome de produto */
+  --fs-heading-sm:  1.25rem;  /* 20px */
+  --fs-body-lg:     1.125rem; /* 18px — parágrafo de destaque */
+  --fs-body:        1rem;     /* 16px — piso do corpo */
+  --fs-body-sm:     0.875rem; /* 14px */
+  --fs-caption:     0.75rem;  /* 12px — piso absoluto */
+
+  /* Pesos */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-black:    900;
+
+  /* Tracking — quanto maior o texto, mais negativo.
+     Quanto menor e mais caixa-alta, mais positivo. */
+  --tracking-display:  -0.035em;
+  --tracking-heading:  -0.02em;
+  --tracking-body:      0;
+  --tracking-overline:  0.16em;
+
+  /* Line-height */
+  --lh-display: 0.92;  /* condensada aguenta linha colada — é parte do letreiro */
+  --lh-heading: 1.12;
+  --lh-tight:   1.3;
+  --lh-body:    1.6;
+
+  /* ===================================================================
+     8. ESPAÇO — base 4px. Valor fora da escala é o que deixa a tela
+     "quase certa" sem ninguém saber apontar.
+     Densidade da marca: MÉDIA. Grade de produto junta (dá vontade de
+     rolar), página de produto arejada (dá vontade de comprar).
+     =================================================================== */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  --section-y:         var(--space-20);  /* respiro entre blocos */
+  --container-prose:   44rem;  /* 704px — texto corrido */
+  --container-content: 72rem;  /* 1152px — grade de produto */
+  --container-wide:    82rem;  /* 1312px — teto */
+
+  /* ===================================================================
+     9. RAIO — generosos, e ASSIMÉTRICOS onde a marca assina.
+     Raio proporcional ao elemento: chip pequeno, card grande.
+     Um valor só em tudo achata a hierarquia.
+     =================================================================== */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   14px;   /* botão, input */
+  --radius-lg:   22px;   /* card, painel */
+  --radius-xl:   32px;   /* bloco de seção, container */
+  --radius-full: 999px;  /* pill, selo, avatar */
+
+  /* A ASSINATURA GEOMÉTRICA: canto assimétrico. Só em card de produto
+     e em bloco de hero. Fora daí, é ruído. */
+  --radius-asym:     32px 8px 32px 8px;
+  --radius-asym-alt: 8px 32px 8px 32px;
+
+  /* ===================================================================
+     10. ELEVAÇÃO — decisão de marca: SOMBRA (fundo claro pede sombra),
+     difusa, com Y maior que blur/2, alpha baixo e TINGIDA de tomate
+     quando o elemento é de compra. Sombra preta dura = 2009.
+     =================================================================== */
+  --shadow-sm:  0 2px 6px -2px rgba(60, 20, 10, 0.12);
+  --shadow-md:  0 12px 22px -14px rgba(60, 20, 10, 0.26);
+  --shadow-lg:  0 26px 46px -26px rgba(60, 20, 10, 0.34);
+  --shadow-pop: 0 16px 30px -14px var(--primary-alpha-45); /* botão/card de compra */
+  --shadow-inset: inset 0 2px 0 rgba(255, 255, 255, 0.5); /* declarado: SÓ em bloco
+                    escuro pra marcar a quina. Nunca em card claro. */
+
+  /* ===================================================================
+     11. MOTION — a marca é enérgica, então overshoot é permitido,
+     mas curto. Nada acima de 420ms, nada que atrapalhe clicar.
+     =================================================================== */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:    cubic-bezier(0, 0, 0.2, 1);
+  --ease-pop:    cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 120ms;   /* hover, foco */
+  --dur-base: 220ms;   /* mudança de estado */
+  --dur-slow: 420ms;   /* transição de layout */
+
+  /* ===================================================================
+     12. FOCO, Z-INDEX, BREAKPOINTS
+     =================================================================== */
+  --ring:            0 0 0 3px var(--primary-alpha-32);
+  --ring-on-primary: 0 0 0 3px rgba(255, 255, 255, 0.72);
+  --ring-offset:     2px;
+
+  --z-sticky:   1020;
+  --z-overlay:  1040;
+  --z-modal:    1050;
+  --z-toast:    1070;
+
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+
+  /* ===================================================================
+     13. ASSINATURAS DA MARCA — como token, não como prosa.
+     Se a assinatura não vira token ou classe, ela não é reproduzível.
+     =================================================================== */
+  --bloco-tomate:  var(--primary-500);                                    /* bloco cheio */
+  --faixa-tomate:  repeating-linear-gradient(-45deg,
+                     #d92d0b 0 22px, #c02708 22px 44px);                  /* faixa de oferta */
+  --grifo-preco:   linear-gradient(180deg, transparent 54%,
+                     var(--primary-alpha-14) 54% 90%, transparent 90%);   /* grifo atrás do preço */
+  --selo-borda:    2px dashed rgba(255, 255, 255, 0.6);                   /* anel do selo */
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+
+html {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* =====================================================================
+   UTILITÁRIAS — prefixo .fv- (Fervo)
+   Use estas classes em artefato descartável. Em produção, aponte o
+   Tailwind/CSS pras variáveis e componha do seu jeito.
+   ===================================================================== */
+
+/* ---------- Tipografia ---------- */
+.fv-display-2xl,
+.fv-display-xl,
+.fv-display-lg,
+.fv-display-md {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-display);
+  margin: 0;
+}
+.fv-display-2xl { font-size: var(--fs-display-2xl); text-transform: uppercase; }
+.fv-display-xl  { font-size: var(--fs-display-xl); }
+.fv-display-lg  { font-size: var(--fs-display-lg); text-transform: uppercase; }
+.fv-display-md  { font-size: var(--fs-display-md); }
+
+.fv-heading-lg {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--lh-heading);
+  margin: 0;
+}
+.fv-heading-md {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+.fv-heading-sm {
+  font-size: var(--fs-heading-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+
+.fv-body-lg { font-size: var(--fs-body-lg); line-height: var(--lh-body); color: var(--fg-muted); }
+.fv-body    { font-size: var(--fs-body);    line-height: var(--lh-body); color: var(--fg-muted); }
+.fv-body-sm { font-size: var(--fs-body-sm); line-height: 1.5;            color: var(--fg-muted); }
+.fv-caption { font-size: var(--fs-caption); line-height: 1.4;            color: var(--fg-subtle); }
+
+/* Overline em caixa-alta — o que hierarquiza seção nesta marca */
+.fv-overline {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--primary-on-light);
+}
+
+/* ---------- Wordmark ---------- */
+/* Receita: FERV em condensada 900, caixa alta, tracking -0.03em,
+   + o "O" substituído por um disco tomate com anel interno
+   (lê como chapa quente / boca de fogão vista de cima). */
+.fv-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.06em;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--fg);
+  font-size: 2rem;
+}
+.fv-wordmark__o {
+  position: relative;
+  display: inline-block;
+  width: 0.74em;
+  height: 0.74em;
+  border-radius: 50%;
+  background: var(--primary-500);
+  margin-left: 0.04em;
+}
+/* o miolo — 40% do diâmetro, na cor do papel em que a marca pousa */
+.fv-wordmark__o::after {
+  content: '';
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: var(--bg-base);
+}
+.fv-wordmark--on-primary { color: var(--fg-on-primary); }
+.fv-wordmark--on-primary .fv-wordmark__o { background: var(--fg-on-primary); }
+.fv-wordmark--on-primary .fv-wordmark__o::after { background: var(--primary-500); }
+.fv-wordmark--on-ink { color: var(--fg-on-ink); }
+.fv-wordmark--on-ink .fv-wordmark__o::after { background: var(--bg-ink); }
+.fv-wordmark--mono { color: currentColor; }
+.fv-wordmark--mono .fv-wordmark__o { background: currentColor; }
+.fv-wordmark--mono .fv-wordmark__o::after { background: var(--bg-base); }
+
+/* ---------- Botões ---------- */
+.fv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  padding: 0.875rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-smooth),
+              border-color var(--dur-fast) var(--ease-smooth),
+              box-shadow var(--dur-base) var(--ease-pop),
+              transform var(--dur-base) var(--ease-pop);
+}
+.fv-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+.fv-btn[disabled],
+.fv-btn.is-disabled {
+  cursor: not-allowed;
+  opacity: 1;
+  background: var(--bg-elevated);
+  color: var(--fg-subtle);
+  border-color: var(--border);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Primário — o botão de comprar. Uma cor por tela. */
+.fv-btn--primary {
+  background: var(--primary-500);
+  color: var(--fg-on-primary);
+  box-shadow: var(--shadow-pop);
+}
+.fv-btn--primary:hover,
+.fv-btn--primary.is-hover { background: var(--primary-600); transform: translateY(-2px); }
+.fv-btn--primary:active,
+.fv-btn--primary.is-pressed { background: var(--primary-700); transform: translateY(0); box-shadow: var(--shadow-sm); }
+.fv-btn--primary.is-focus { box-shadow: var(--ring); }
+
+/* Secundário — tinta. Ação importante que não é comprar. */
+.fv-btn--ink {
+  background: var(--bg-ink);
+  color: var(--fg-on-ink);
+}
+.fv-btn--ink:hover,
+.fv-btn--ink.is-hover { background: #3a221c; transform: translateY(-2px); }
+.fv-btn--ink:active,
+.fv-btn--ink.is-pressed { background: #150b09; transform: translateY(0); }
+
+/* Contorno — ação terciária */
+.fv-btn--outline {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--border-ink);
+}
+.fv-btn--outline:hover,
+.fv-btn--outline.is-hover { background: var(--primary-alpha-06); border-color: var(--primary-500); color: var(--primary-on-light); }
+.fv-btn--outline:active,
+.fv-btn--outline.is-pressed { background: var(--primary-alpha-14); }
+
+/* Fantasma — dentro de bloco tomate */
+.fv-btn--ghost-on-primary {
+  background: transparent;
+  color: var(--fg-on-primary);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.fv-btn--ghost-on-primary:hover { background: rgba(255, 255, 255, 0.16); border-color: #fff; }
+.fv-btn--ghost-on-primary:focus-visible { box-shadow: var(--ring-on-primary); }
+
+.fv-btn--lg { font-size: var(--fs-body-lg); padding: 1.0625rem 2rem; }
+.fv-btn--sm { font-size: var(--fs-body-sm); padding: 0.625rem 1rem; border-radius: var(--radius-sm); }
+.fv-btn--block { display: flex; width: 100%; }
+
+/* ---------- Input ---------- */
+.fv-field { display: block; }
+.fv-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+.fv-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: var(--bg-surface);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-fast) var(--ease-smooth),
+              box-shadow var(--dur-fast) var(--ease-smooth);
+}
+.fv-input::placeholder { color: var(--fg-subtle); }
+.fv-input:hover { border-color: #dcbdae; }
+.fv-input:focus,
+.fv-input.is-focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: var(--ring);
+}
+.fv-input.is-invalid { border-color: var(--danger); }
+.fv-input:disabled { background: var(--bg-elevated); color: var(--fg-subtle); cursor: not-allowed; }
+.fv-hint  { margin: var(--space-2) 0 0; font-size: var(--fs-body-sm); color: var(--fg-subtle); }
+.fv-error { margin: var(--space-2) 0 0; font-size: var(--fs-body-sm); color: var(--danger); font-weight: var(--fw-semibold); }
+
+/* ---------- Badge ---------- */
+.fv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.3125rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.fv-badge--primary { background: var(--primary-500);   color: var(--fg-on-primary); }
+.fv-badge--soft    { background: var(--primary-alpha-14); color: var(--primary-700); }
+.fv-badge--ink     { background: var(--bg-ink);        color: var(--fg-on-ink); }
+.fv-badge--success { background: var(--success-wash);  color: var(--success); }
+.fv-badge--warning { background: var(--warning-wash);  color: var(--warning); }
+.fv-badge--danger  { background: var(--danger-wash);   color: var(--danger); }
+.fv-badge--info    { background: var(--info-wash);     color: var(--info); }
+
+/* ---------- Selo circular — assinatura da marca ---------- */
+/* Redondo, girado, com anel tracejado por dentro. Carrega promessa
+   curta: GRÁTIS, NOVO, -30%. Nunca frase, nunca mais de 2 linhas. */
+.fv-selo {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  background: var(--primary-500);
+  color: var(--fg-on-primary);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  transform: rotate(-8deg);
+  box-shadow: var(--shadow-md);
+}
+.fv-selo::after {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: var(--selo-borda);
+  border-radius: 50%;
+}
+.fv-selo__valor { font-size: 1.5rem; }
+.fv-selo__nota  { font-size: 0.625rem; letter-spacing: 0.08em; font-weight: var(--fw-bold); padding: 0 0.4rem; }
+.fv-selo--ink   { background: var(--bg-ink); color: var(--fg-on-ink); }
+.fv-selo--mostarda { background: var(--accent-mostarda); color: var(--fg); }
+.fv-selo--mostarda::after { border-color: rgba(36, 21, 18, 0.45); }
+
+/* Variante estrela — só pra oferta de verdade, no máximo uma por tela */
+.fv-selo--estrela {
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0%, 62.36% 11.96%, 79.39% 9.55%, 82.36% 26.49%, 97.55% 34.55%,
+    90% 50%, 97.55% 65.45%, 82.36% 73.51%, 79.39% 90.45%, 62.36% 88.04%,
+    50% 100%, 37.64% 88.04%, 20.61% 90.45%, 17.64% 73.51%, 2.45% 65.45%,
+    10% 50%, 2.45% 34.55%, 17.64% 26.49%, 20.61% 9.55%, 37.64% 11.96%
+  );
+  box-shadow: none;
+  width: 6.25rem;
+  height: 6.25rem;
+}
+.fv-selo--estrela::after { display: none; }
+
+/* ---------- Preço — elemento gráfico, não texto ---------- */
+/* Receita: R$ pequeno alinhado ao topo · inteiro em condensada 900
+   gigante · centavos pequenos elevados · preço antigo riscado ao lado. */
+.fv-preco {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.15em;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  color: var(--fg);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.fv-preco__moeda {
+  font-size: 0.34em;
+  font-weight: var(--fw-bold);
+  padding-top: 0.28em;
+  letter-spacing: 0;
+}
+.fv-preco__int { font-size: 1em; }
+.fv-preco__cent {
+  font-size: 0.4em;
+  padding-top: 0.18em;
+  letter-spacing: 0;
+}
+.fv-preco--xl  { font-size: var(--fs-display-xl); }
+.fv-preco--lg  { font-size: var(--fs-display-md); }
+.fv-preco--md  { font-size: var(--fs-heading-lg); }
+.fv-preco--tomate { color: var(--primary-on-light); }
+.fv-preco--on-primary { color: var(--fg-on-primary); }
+/* grifo: a faixa fica ATRÁS do inteiro, nunca atrás do grupo todo —
+   senão ela escorrega pra baixo dos centavos e vira uma barra solta. */
+.fv-preco--grifado .fv-preco__int { background: var(--grifo-preco); padding: 0 0.06em; }
+
+.fv-preco-de {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-subtle);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Card de produto — o componente característico ---------- */
+.fv-produto {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-asym);
+  overflow: hidden;
+  transition: border-color var(--dur-base) var(--ease-smooth),
+              box-shadow var(--dur-base) var(--ease-smooth),
+              transform var(--dur-base) var(--ease-pop);
+}
+.fv-produto:hover,
+.fv-produto.is-hover {
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-pop);
+  transform: translateY(-4px);
+}
+.fv-produto:focus-within { border-color: var(--primary-500); box-shadow: var(--ring); }
+.fv-produto__midia {
+  position: relative;
+  background: var(--bg-elevated);
+  padding: var(--space-5) var(--space-5) 0;
+  min-height: 168px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.fv-produto__midia svg { width: 100%; max-width: 220px; height: auto; display: block; }
+.fv-produto__selo { position: absolute; top: 0.75rem; right: 0.75rem; }
+.fv-produto__corpo { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+/* badge é pill: não pode esticar na largura do card */
+.fv-produto__corpo > .fv-badge { align-self: flex-start; }
+.fv-produto__nome  { font-family: var(--font-display); font-size: var(--fs-heading-md);
+                     font-weight: var(--fw-bold); letter-spacing: var(--tracking-heading);
+                     line-height: 1.05; margin: 0; text-transform: uppercase; }
+.fv-produto__desc  { margin: 0; font-size: var(--fs-body-sm); color: var(--fg-muted); line-height: 1.5; }
+.fv-produto__rodape { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+
+/* ---------- Faixa de oferta — assinatura da marca ---------- */
+.fv-faixa {
+  background: var(--faixa-tomate);
+  color: var(--fg-on-primary);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--fs-heading-sm);
+  padding: var(--space-3) var(--space-4);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.fv-faixa__trilho { display: inline-flex; gap: var(--space-8); align-items: center; }
+.fv-faixa__sep { color: var(--fg-on-primary-soft); }
+
+/* ---------- Bloco de cor — a estrutura da marca ---------- */
+.fv-bloco {
+  border-radius: var(--radius-xl);
+  padding: var(--space-12);
+}
+.fv-bloco--tomate { background: var(--bloco-tomate); color: var(--fg-on-primary); }
+.fv-bloco--tomate .fv-body,
+.fv-bloco--tomate .fv-body-lg { color: var(--fg-on-primary); }
+.fv-bloco--ink    { background: var(--bg-ink); color: var(--fg-on-ink); }
+.fv-bloco--ink .fv-body,
+.fv-bloco--ink .fv-body-lg { color: var(--fg-on-ink-muted); }
+.fv-bloco--papel  { background: var(--bg-surface); border: 2px solid var(--border); }
+
+/* ---------- Item de cardápio ---------- */
+.fv-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-muted);
+  transition: background-color var(--dur-fast) var(--ease-smooth);
+}
+.fv-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.fv-item:last-child  { border-bottom: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.fv-item:hover { background: var(--primary-alpha-06); }
+.fv-item__texto { flex: 1; min-width: 0; }
+
+/* ---------- Card genérico ---------- */
+.fv-card {
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+/* =====================================================================
+   MOVIMENTO REDUZIDO — obrigatório
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fv-btn:hover, .fv-produto:hover { transform: none !important; }
+}

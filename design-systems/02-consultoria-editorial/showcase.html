@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Design system da Nogueira Prumo — consultoria de estratégia e governança. Paleta, tipografia, componentes e regras de uso da marca.">
+<meta name="theme-color" content="#ffffff">
+<title>Nogueira Prumo — Design System</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjRkZGRkZGIi8+PHBhdGggZD0iTTcgNi41aDE4IiBzdHJva2U9IiMxNzEyMEYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDYuNXYxNC41IiBzdHJva2U9IiM2QjI0MzYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDIxbDQuMyA0LjNMMTYgMjkuNmwtNC4zLTQuM3oiIGZpbGw9IiM2QjI0MzYiLz48L3N2Zz4=">
+
+<style>
+/* =====================================================================
+   NOGUEIRA PRUMO — tokens (espelho de tokens.css, embutido para que
+   esta página abra sozinha, sem nenhuma dependência externa)
+   ===================================================================== */
+:root {
+  /* Vinho — cor de assinatura */
+  --vinho-100: #F4EAEC;
+  --vinho-300: #D7B3BB;
+  --vinho-500: #8C3549;
+  --vinho-700: #6B2436;
+  --vinho-900: #431722;
+
+  /* Neutros */
+  --papel:      #FFFFFF;
+  --superficie: #FAF9F8;
+  --elevado:    #F2F0EE;
+  --tinta-fundo:#17120F;
+  --fio:        #E5E1DE;
+  --fio-forte:  #C9C3BF;
+  --fio-tinta:  #17120F;
+
+  /* Texto */
+  --texto:        #17120F;
+  --texto-medio:  #4A4340;
+  --texto-fraco:  #7A716C;
+  --texto-invertido: #FAF9F8;
+
+  /* Semânticas */
+  --sucesso:       #1F5D45;  --sucesso-lavado:#E8F0EC;
+  --atencao:       #8A6116;  --atencao-lavado:#F6F0E4;
+  --erro:          #A32323;  --erro-lavado:   #F7E9E9;
+
+  /* Tipografia */
+  --fonte-titulo: Didot, "Bodoni 72", "Bodoni MT", "Iowan Old Style",
+                  "Palatino Linotype", Palatino, "Book Antiqua",
+                  Georgia, "Times New Roman", serif;
+  --fonte-texto:  "Helvetica Neue", -apple-system, BlinkMacSystemFont,
+                  "Segoe UI", Roboto, "Liberation Sans", Arial, sans-serif;
+
+  --ts-display: 4.25rem;
+  --ts-1:       3rem;
+  --ts-2:       2.125rem;
+  --ts-3:       1.5rem;
+  --ts-4:       1.1875rem;
+  --ts-lead:    1.25rem;
+  --ts-corpo:   1.0625rem;
+  --ts-peq:     0.9375rem;
+  --ts-legenda: 0.8125rem;
+  --ts-micro:   0.6875rem;
+
+  --peso-normal:  400;
+  --peso-medio:   500;
+  --peso-forte:   600;
+  --peso-titulo:  700;
+
+  --lh-display: 1.02;
+  --lh-titulo:  1.12;
+  --lh-corpo:   1.65;
+  --lh-apoio:   1.55;
+
+  --track-display: -0.02em;
+  --track-titulo:  -0.012em;
+  --track-corpo:   0;
+  --track-versalete: 0.18em;
+
+  --medida:      65ch;
+  --medida-curta:46ch;
+
+  /* Espaço */
+  --e-1: 0.25rem; --e-2: 0.5rem;  --e-3: 0.75rem; --e-4: 1rem;
+  --e-5: 1.25rem; --e-6: 1.5rem;  --e-8: 2rem;    --e-10: 2.5rem;
+  --e-12: 3rem;   --e-14: 4rem;   --e-16: 6rem;   --e-20: 8rem;
+
+  --largura-pagina: 1120px;
+  --coluna-rotulo:  190px;
+
+  /* Raios */
+  --raio-0: 0; --raio-1: 1px; --raio-2: 2px;
+
+  /* Elevação */
+  --elev-0: none;
+  --elev-1: 0 1px 1px rgba(23,18,15,0.04);
+  --elev-2: 0 2px 4px rgba(23,18,15,0.05), 0 1px 1px rgba(23,18,15,0.04);
+  --elev-3: 0 12px 28px -18px rgba(23,18,15,0.28);
+  --anel-foco: 0 0 0 2px var(--papel), 0 0 0 4px var(--vinho-700);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-rapida: 120ms; --dur-base: 200ms; --dur-lenta: 320ms;
+}
+
+/* ---------- Reset curto ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--texto);
+  font-family: var(--fonte-texto);
+  font-size: var(--ts-corpo);
+  line-height: var(--lh-corpo);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4, p, figure, blockquote, ul, ol { margin: 0; }
+ul { padding: 0; list-style: none; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+::selection { background: var(--vinho-100); color: var(--vinho-900); }
+
+/* ---------- Tipografia base ---------- */
+.np-display { font-family: var(--fonte-titulo); font-size: var(--ts-display); font-weight: 400;
+  line-height: var(--lh-display); letter-spacing: var(--track-display); }
+.np-t1 { font-family: var(--fonte-titulo); font-size: var(--ts-1); font-weight: 400;
+  line-height: var(--lh-titulo); letter-spacing: var(--track-titulo); }
+.np-t2 { font-family: var(--fonte-titulo); font-size: var(--ts-2); font-weight: 400;
+  line-height: var(--lh-titulo); letter-spacing: var(--track-titulo); }
+.np-t3 { font-family: var(--fonte-titulo); font-size: var(--ts-3); font-weight: 400; line-height: 1.25; }
+.np-t4 { font-family: var(--fonte-titulo); font-size: var(--ts-4); font-weight: 700; line-height: 1.3; }
+.np-lead { font-size: var(--ts-lead); line-height: 1.5; color: var(--texto-medio); max-width: var(--medida); }
+.np-corpo { font-size: var(--ts-corpo); line-height: var(--lh-corpo); color: var(--texto-medio); max-width: var(--medida); }
+.np-apoio { font-size: var(--ts-peq); line-height: var(--lh-apoio); color: var(--texto-medio); max-width: var(--medida-curta); }
+.np-legenda { font-size: var(--ts-legenda); line-height: 1.5; color: var(--texto-fraco); }
+.np-versalete { font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto-fraco); }
+.np-versalete--vinho { color: var(--vinho-700); }
+.np-num { font-variant-numeric: tabular-nums lining; font-feature-settings: "tnum" 1, "lnum" 1; }
+.np-num--destaque {
+  font-family: var(--fonte-titulo); font-size: var(--ts-2); line-height: 1; color: var(--texto);
+  display: inline-block; padding-bottom: var(--e-2); border-bottom: 1px solid var(--vinho-700);
+  font-variant-numeric: tabular-nums lining;
+}
+
+/* ---------- Fio-prumo ---------- */
+.np-prumo { position: relative; padding-left: var(--e-5); }
+.np-prumo::before { content: ""; position: absolute; left: 0; top: 0.1em; bottom: 0.9em;
+  width: 1px; background: var(--vinho-700); }
+.np-prumo::after { content: ""; position: absolute; left: -2px; bottom: 0.35em;
+  width: 5px; height: 5px; background: var(--vinho-700); transform: rotate(45deg); }
+
+/* ---------- Wordmark ---------- */
+.np-wordmark { display: inline-flex; align-items: baseline; gap: var(--e-3); line-height: 1; white-space: nowrap; }
+.np-wordmark__nome { font-family: var(--fonte-titulo); font-weight: 400; font-size: 1.5em;
+  letter-spacing: -0.01em; color: var(--texto); }
+.np-wordmark__eixo { align-self: stretch; width: 1px; background: var(--vinho-700); transform: translateY(0.12em); }
+.np-wordmark__palavra { font-family: var(--fonte-texto); font-size: 0.72em; font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto-medio); }
+.np-wordmark--invertido .np-wordmark__nome { color: var(--texto-invertido); }
+.np-wordmark--invertido .np-wordmark__palavra { color: #B7ADA8; }
+.np-wordmark--invertido .np-wordmark__eixo { background: var(--vinho-500); }
+
+/* ---------- Botões ---------- */
+.np-btn {
+  --_bg: transparent; --_fg: var(--texto); --_borda: transparent;
+  display: inline-flex; align-items: center; gap: var(--e-2);
+  padding: 0.72rem 1.35rem;
+  font-size: var(--ts-peq); font-weight: var(--peso-forte); letter-spacing: 0.02em; line-height: 1;
+  color: var(--_fg); background: var(--_bg);
+  border: 1px solid var(--_borda); border-radius: var(--raio-2);
+  cursor: pointer; text-decoration: none;
+  transition: background-color var(--dur-base) var(--ease),
+              border-color var(--dur-base) var(--ease),
+              color var(--dur-base) var(--ease);
+}
+.np-btn:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+.np-btn--tinta { --_bg: var(--texto); --_fg: var(--texto-invertido); --_borda: var(--texto); }
+.np-btn--tinta:hover { --_bg: #2F2724; --_borda: #2F2724; }
+.np-btn--tinta:active { --_bg: #000000; --_borda: #000000; }
+.np-btn--vinho { --_bg: var(--vinho-700); --_fg: #FFFFFF; --_borda: var(--vinho-700); }
+.np-btn--vinho:hover { --_bg: var(--vinho-900); --_borda: var(--vinho-900); }
+.np-btn--vinho:active { --_bg: #35111B; --_borda: #35111B; }
+.np-btn--contorno { --_bg: var(--papel); --_fg: var(--texto); --_borda: var(--fio-forte); }
+.np-btn--contorno:hover { --_bg: var(--superficie); --_borda: var(--texto); }
+.np-btn--contorno:active { --_bg: var(--elevado); }
+.np-btn--texto { --_fg: var(--vinho-700); padding-inline: 0; border-color: transparent;
+  border-bottom: 1px solid var(--vinho-300); border-radius: 0; }
+.np-btn--texto:hover { --_fg: var(--vinho-900); border-bottom-color: var(--vinho-700); }
+.np-btn--texto:focus-visible { box-shadow: 0 0 0 2px var(--papel), 0 0 0 4px var(--vinho-700); }
+.np-btn[disabled], .np-btn[aria-disabled="true"] {
+  cursor: not-allowed; --_bg: var(--elevado); --_fg: var(--texto-fraco); --_borda: var(--fio);
+  border-bottom-color: var(--fio);
+}
+.np-btn--texto[disabled] { --_bg: transparent; --_borda: transparent; border-bottom-color: var(--fio); }
+/* estados congelados só para o mostruário */
+.demo-hover.np-btn--tinta { background: #2F2724; border-color: #2F2724; }
+.demo-hover.np-btn--vinho { background: var(--vinho-900); border-color: var(--vinho-900); }
+.demo-hover.np-btn--contorno { background: var(--superficie); border-color: var(--texto); }
+.demo-hover.np-btn--texto { color: var(--vinho-900); border-bottom-color: var(--vinho-700); }
+.demo-foco { box-shadow: var(--anel-foco); }
+
+/* ---------- Card ---------- */
+.np-card {
+  position: relative; background: var(--papel); border: 1px solid var(--fio);
+  border-radius: var(--raio-2); padding: var(--e-8); box-shadow: var(--elev-0);
+  transition: border-color var(--dur-base) var(--ease);
+}
+.np-card::before {
+  content: ""; position: absolute; inset: -1px -1px auto -1px; height: 2px;
+  background: var(--vinho-700); transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-lenta) var(--ease);
+}
+.np-card:hover { border-color: var(--fio-forte); }
+.np-card:hover::before { transform: scaleX(1); }
+.np-card--fixo::before { transform: scaleX(1); }
+
+/* ---------- Campo ---------- */
+.np-campo { display: flex; flex-direction: column; gap: var(--e-2); }
+.np-rotulo { font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto-medio); }
+.np-input {
+  width: 100%; padding: 0.7rem 0.85rem; font-family: var(--fonte-texto); font-size: var(--ts-corpo);
+  color: var(--texto); background: var(--papel); border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-1);
+  transition: border-color var(--dur-rapida) var(--ease), box-shadow var(--dur-rapida) var(--ease);
+}
+.np-input::placeholder { color: var(--texto-fraco); }
+.np-input:hover { border-color: var(--texto-fraco); }
+.np-input:focus { outline: none; border-color: var(--texto); box-shadow: inset 0 -2px 0 0 var(--vinho-700); }
+.np-input[disabled] { background: var(--elevado); color: var(--texto-fraco); cursor: not-allowed; }
+.np-input[aria-invalid="true"] { border-color: var(--erro); }
+.demo-input-foco { border-color: var(--texto); box-shadow: inset 0 -2px 0 0 var(--vinho-700); }
+.np-ajuda { font-size: var(--ts-legenda); color: var(--texto-fraco); }
+.np-ajuda--erro { color: var(--erro); }
+
+/* ---------- Badge ---------- */
+.np-badge {
+  display: inline-flex; align-items: center; gap: var(--e-2); padding: 0.28rem 0.5rem;
+  font-size: var(--ts-micro); font-weight: var(--peso-forte); letter-spacing: 0.1em;
+  text-transform: uppercase; border: 1px solid var(--fio-forte); border-radius: var(--raio-2);
+  color: var(--texto-medio); background: var(--papel); white-space: nowrap;
+}
+.np-badge--marca { color: var(--vinho-900); background: var(--vinho-100); border-color: var(--vinho-300); }
+.np-badge--sucesso { color: var(--sucesso); background: var(--sucesso-lavado); border-color: #C3D6CD; }
+.np-badge--atencao { color: var(--atencao); background: var(--atencao-lavado); border-color: #E0D2B4; }
+.np-badge--erro { color: var(--erro); background: var(--erro-lavado); border-color: #E6C6C6; }
+
+/* ---------- Citação ---------- */
+.np-citacao { padding-left: var(--e-6); border-left: 1px solid var(--vinho-700); max-width: 34ch; }
+.np-citacao p { font-family: var(--fonte-titulo); font-size: var(--ts-3); line-height: 1.35; color: var(--texto); }
+.np-citacao footer { margin-top: var(--e-4); font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto-fraco); }
+
+/* ---------- Tabela ---------- */
+.np-tabela { width: 100%; border-collapse: collapse; font-size: var(--ts-peq); color: var(--texto-medio); }
+.np-tabela thead th {
+  text-align: left; padding: 0 var(--e-4) var(--e-3) 0;
+  font-size: var(--ts-micro); font-weight: var(--peso-forte); letter-spacing: var(--track-versalete);
+  text-transform: uppercase; color: var(--texto-fraco); border-bottom: 1px solid var(--fio-tinta);
+}
+.np-tabela tbody td { padding: var(--e-3) var(--e-4) var(--e-3) 0; border-bottom: 1px solid var(--fio); vertical-align: baseline; }
+.np-tabela tbody tr:hover { background: var(--superficie); }
+.np-tabela .np-col-num { text-align: right; padding-right: 0; font-variant-numeric: tabular-nums lining; color: var(--texto); }
+.np-tabela th.np-col-num { text-align: right; padding-right: 0; }
+.rolagem { overflow-x: auto; }
+.rolagem .np-tabela { min-width: 34rem; }
+
+/* =====================================================================
+   Estrutura desta página
+   ===================================================================== */
+.pagina { max-width: var(--largura-pagina); margin-inline: auto; padding-inline: var(--e-8); }
+
+.cabecalho {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--papel);
+  border-bottom: 1px solid var(--fio);
+}
+.cabecalho__linha { display: flex; align-items: center; justify-content: space-between; gap: var(--e-6); height: 66px; }
+.cabecalho .np-wordmark { font-size: 0.95rem; }
+.sumario { display: flex; gap: var(--e-6); }
+.sumario a {
+  font-size: var(--ts-micro); font-weight: var(--peso-forte); letter-spacing: var(--track-versalete);
+  text-transform: uppercase; color: var(--texto-fraco); text-decoration: none;
+  padding-bottom: 2px; border-bottom: 1px solid transparent;
+  transition: color var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease);
+}
+.sumario a:hover { color: var(--texto); border-bottom-color: var(--vinho-700); }
+.sumario a:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+
+/* Capa */
+.capa { padding-block: var(--e-16) var(--e-14); }
+.capa__olho { display: flex; align-items: center; gap: var(--e-3); margin-bottom: var(--e-8); }
+.capa__olho span { color: var(--texto-fraco); }
+.capa .np-display { max-width: 15ch; margin-bottom: var(--e-8); }
+.capa .np-display em { font-style: italic; color: var(--vinho-700); }
+.capa__grade { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--e-14); align-items: end; }
+.ficha { border-top: 1px solid var(--fio-tinta); padding-top: var(--e-4); display: grid; gap: var(--e-4); }
+.ficha__linha { display: flex; justify-content: space-between; gap: var(--e-4); align-items: baseline;
+  border-bottom: 1px solid var(--fio); padding-bottom: var(--e-3); }
+.ficha__linha:last-child { border-bottom: 0; }
+.ficha__valor { font-size: var(--ts-peq); color: var(--texto); font-variant-numeric: tabular-nums lining; }
+
+/* Seções */
+.secao { display: grid; grid-template-columns: var(--coluna-rotulo) minmax(0, 1fr); gap: var(--e-12);
+  padding-block: var(--e-16); border-top: 1px solid var(--fio-tinta); scroll-margin-top: 67px; }
+.secao__rotulo { position: sticky; top: 96px; align-self: start; }
+.secao__rotulo h2 { font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto); }
+.secao__rotulo p { margin-top: var(--e-3); font-size: var(--ts-legenda); line-height: 1.5; color: var(--texto-fraco); }
+.secao__conteudo { display: grid; gap: var(--e-12); min-width: 0; }
+
+.bloco { display: grid; gap: var(--e-5); }
+.bloco__titulo { display: flex; align-items: baseline; gap: var(--e-3); }
+.bloco__titulo h3 { font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto-medio); }
+.bloco__titulo::after { content: ""; flex: 1; height: 1px; background: var(--fio); }
+
+/* Marca */
+.marca-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--e-4); }
+.tile { border: 1px solid var(--fio); border-radius: var(--raio-2); padding: var(--e-6);
+  min-height: 148px; display: flex; flex-direction: column; justify-content: space-between; gap: var(--e-5); }
+.tile--tinta { background: var(--tinta-fundo); border-color: var(--tinta-fundo); }
+.tile--tinta .np-legenda { color: #A79E99; }
+.tile__pe { font-size: var(--ts-micro); letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto-fraco); }
+.marca-empilhada { display: inline-grid; gap: var(--e-2); justify-items: start; }
+.marca-empilhada .np-wordmark__nome { font-size: 1.75rem; }
+.marca-empilhada__fio { width: 100%; height: 1px; background: var(--vinho-700); }
+.favicons { display: flex; align-items: flex-end; gap: var(--e-5); }
+.favicons figure { display: grid; gap: var(--e-2); justify-items: center; }
+.favicons img { border: 1px solid var(--fio); }
+
+/* Paleta */
+.swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--e-3); }
+.swatch { display: grid; gap: var(--e-3); align-content: start; padding: 0;
+  background: none; border: 0; text-align: left; cursor: pointer; }
+.swatch__cor { height: 92px; border-radius: var(--raio-2); border: 1px solid transparent;
+  transition: transform var(--dur-base) var(--ease); }
+.swatch:hover .swatch__cor { transform: translateY(-2px); }
+.swatch:focus-visible { outline: none; }
+.swatch:focus-visible .swatch__cor { box-shadow: var(--anel-foco); }
+.swatch__nome { font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: var(--texto); }
+.swatch__hex { font-size: var(--ts-legenda); color: var(--texto-medio); font-variant-numeric: tabular-nums; }
+.swatch__papel { font-size: var(--ts-legenda); color: var(--texto-fraco); line-height: 1.4; }
+
+/* Tipografia */
+.specimen { display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: var(--e-6);
+  align-items: baseline; padding-block: var(--e-5); border-bottom: 1px solid var(--fio); }
+.specimen:last-child { border-bottom: 0; }
+.specimen__meta { font-size: var(--ts-micro); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--texto-fraco); font-variant-numeric: tabular-nums; line-height: 1.5; }
+.numeros { display: flex; flex-wrap: wrap; gap: var(--e-12); align-items: flex-end; }
+.numeros > div { display: grid; gap: var(--e-3); }
+
+/* Componentes */
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--e-8); align-items: start; }
+.estados { display: grid; grid-template-columns: 96px repeat(4, minmax(0, 1fr)); gap: var(--e-4);
+  align-items: center; }
+.estados__cabeca { font-size: var(--ts-micro); letter-spacing: var(--track-versalete);
+  text-transform: uppercase; color: var(--texto-fraco); padding-bottom: var(--e-3);
+  border-bottom: 1px solid var(--fio); }
+.estados__nome { font-size: var(--ts-micro); letter-spacing: var(--track-versalete);
+  text-transform: uppercase; color: var(--texto-medio); }
+.estados__celula { display: flex; }
+.linha-botoes { display: flex; flex-wrap: wrap; gap: var(--e-3); align-items: center; }
+.badges { display: flex; flex-wrap: wrap; gap: var(--e-3); }
+
+/* Superfície */
+.amostras { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--e-4); }
+.amostra { background: var(--papel); border: 1px solid var(--fio); padding: var(--e-5);
+  display: grid; gap: var(--e-2); min-height: 108px; align-content: end; }
+.amostra strong { font-size: var(--ts-legenda); font-weight: var(--peso-forte); color: var(--texto); }
+
+/* Regras */
+.regras { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--e-10); }
+.regras h3 { margin-bottom: var(--e-5); padding-bottom: var(--e-3); }
+.regras--faca h3 { border-bottom: 1px solid var(--vinho-700); }
+.regras--nao h3 { border-bottom: 1px solid var(--fio-forte); }
+.regras li { position: relative; padding-left: var(--e-6); margin-bottom: var(--e-4);
+  font-size: var(--ts-peq); line-height: var(--lh-apoio); color: var(--texto-medio); }
+.regras li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 1px; }
+.regras--faca li::before { background: var(--vinho-700); }
+.regras--nao li::before { background: var(--fio-forte); }
+.regras strong { color: var(--texto); font-weight: var(--peso-forte); }
+
+/* Rodapé */
+.rodape { background: var(--tinta-fundo); color: var(--texto-invertido); padding-block: var(--e-14); }
+.rodape__linha { display: flex; flex-wrap: wrap; gap: var(--e-8); justify-content: space-between; align-items: flex-end; }
+.rodape .np-legenda { color: #A79E99; }
+
+/* Toast */
+.toast {
+  position: fixed; left: var(--e-8); bottom: var(--e-8); z-index: 50;
+  display: flex; align-items: center; gap: var(--e-3);
+  background: var(--tinta-fundo); color: var(--texto-invertido);
+  border-radius: var(--raio-2); box-shadow: var(--elev-3);
+  padding: 0.7rem 1rem;
+  opacity: 0; transform: translateY(6px); pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.toast[data-visivel="true"] { opacity: 1; transform: translateY(0); }
+.toast__rotulo { font-size: var(--ts-micro); font-weight: var(--peso-forte);
+  letter-spacing: var(--track-versalete); text-transform: uppercase; color: #A79E99; }
+.toast__hex { font-size: var(--ts-peq); font-variant-numeric: tabular-nums; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 960px) {
+  :root { --ts-display: 3rem; --ts-1: 2.25rem; --ts-2: 1.75rem; }
+  .sumario { display: none; }
+  .capa__grade { grid-template-columns: minmax(0, 1fr); gap: var(--e-10); }
+  .secao { grid-template-columns: minmax(0, 1fr); gap: var(--e-8); padding-block: var(--e-12); }
+  .secao__rotulo { position: static; }
+  .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* a matriz de estados vira lista: nome da variante, depois um estado por linha */
+  .estados { display: block; }
+  .estados__cabeca, .estados > span:empty { display: none; }
+  .estados__nome { display: block; margin: var(--e-8) 0 var(--e-3);
+    padding-bottom: var(--e-2); border-bottom: 1px solid var(--fio); }
+  .estados__celula { display: flex; align-items: center; gap: var(--e-4); margin-bottom: var(--e-3); }
+  .estados__celula::after { content: attr(data-estado);
+    font-size: var(--ts-micro); letter-spacing: var(--track-versalete);
+    text-transform: uppercase; color: var(--texto-fraco); }
+}
+@media (max-width: 560px) {
+  .pagina { padding-inline: var(--e-5); }
+  .specimen { grid-template-columns: minmax(0, 1fr); gap: var(--e-2); }
+  .swatches { grid-template-columns: minmax(0, 1fr); }
+  .toast { left: var(--e-5); right: var(--e-5); bottom: var(--e-5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="cabecalho">
+  <div class="pagina cabecalho__linha">
+    <span class="np-wordmark">
+      <span class="np-wordmark__nome">Nogueira</span>
+      <span class="np-wordmark__eixo" aria-hidden="true"></span>
+      <span class="np-wordmark__palavra">Prumo</span>
+    </span>
+    <nav class="sumario" aria-label="Seções do documento">
+      <a href="#marca">Marca</a>
+      <a href="#paleta">Paleta</a>
+      <a href="#tipografia">Tipografia</a>
+      <a href="#componentes">Componentes</a>
+      <a href="#superficie">Superfície</a>
+      <a href="#uso">Uso</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= CAPA ================= -->
+  <section class="pagina capa">
+    <div class="capa__olho">
+      <svg width="14" height="34" viewBox="0 0 14 34" aria-hidden="true">
+        <path d="M7 0v24" stroke="#6B2436" stroke-width="1"/>
+        <path d="M7 24l3.4 3.4L7 30.8 3.6 27.4z" fill="#6B2436"/>
+      </svg>
+      <span class="np-versalete">Manual de marca · Edição 2026 · Uso interno e de fornecedores</span>
+    </div>
+
+    <div class="capa__grade">
+      <div>
+        <h1 class="np-display">Parecer que <em>sustenta</em> decisão.</h1>
+        <p class="np-lead">
+          A Nogueira Prumo é uma consultoria de estratégia e governança para empresas
+          familiares em transição. Este documento define como a firma se apresenta —
+          na proposta, no parecer, na apresentação ao conselho e na tela.
+        </p>
+      </div>
+
+      <div class="ficha">
+        <div class="ficha__linha">
+          <span class="np-versalete">Fundação</span>
+          <span class="ficha__valor np-num">2009, São Paulo</span>
+        </div>
+        <div class="ficha__linha">
+          <span class="np-versalete">Conselhos assessorados</span>
+          <span class="ficha__valor np-num">41</span>
+        </div>
+        <div class="ficha__linha">
+          <span class="np-versalete">Sócios</span>
+          <span class="ficha__valor np-num">6</span>
+        </div>
+        <div class="ficha__linha">
+          <span class="np-versalete">Versão do sistema</span>
+          <span class="ficha__valor np-num">1.0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MARCA ================= -->
+  <section class="pagina secao" id="marca">
+    <div class="secao__rotulo">
+      <h2>A marca</h2>
+      <p>Um sobrenome em serif, um fio de prumo e uma palavra em versalete. Nessa ordem, sempre.</p>
+    </div>
+
+    <div class="secao__conteudo">
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Assinatura principal</h3></div>
+        <div class="tile" style="min-height: 168px; justify-content: center; align-items: flex-start;">
+          <span class="np-wordmark" style="font-size: 1.65rem;">
+            <span class="np-wordmark__nome">Nogueira</span>
+            <span class="np-wordmark__eixo" aria-hidden="true"></span>
+            <span class="np-wordmark__palavra">Prumo</span>
+          </span>
+        </div>
+        <p class="np-apoio">
+          O fio vertical entre as duas palavras é o prumo — o instrumento que verifica se
+          algo está reto. Ele nunca é decorativo: é o eixo da assinatura e o marcador de
+          seção em todo o resto do sistema.
+        </p>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Aplicações</h3></div>
+        <div class="marca-grade">
+
+          <div class="tile">
+            <div class="marca-empilhada">
+              <span class="np-wordmark__nome" style="font-size: 1.75rem;">Nogueira</span>
+              <span class="marca-empilhada__fio" aria-hidden="true"></span>
+              <span class="np-wordmark__palavra">Prumo</span>
+            </div>
+            <span class="tile__pe">Empilhada · espaço estreito</span>
+          </div>
+
+          <div class="tile tile--tinta">
+            <span class="np-wordmark np-wordmark--invertido" style="font-size: 1.15rem;">
+              <span class="np-wordmark__nome">Nogueira</span>
+              <span class="np-wordmark__eixo" aria-hidden="true"></span>
+              <span class="np-wordmark__palavra">Prumo</span>
+            </span>
+            <span class="np-legenda">Sobre tinta · capa de parecer, rodapé</span>
+          </div>
+
+          <div class="tile">
+            <svg width="52" height="52" viewBox="0 0 52 52" role="img" aria-label="Símbolo Nogueira Prumo: fio de prumo">
+              <rect x="0.5" y="0.5" width="51" height="51" fill="none" stroke="#E5E1DE"/>
+              <path d="M13 13h26" stroke="#17120F" stroke-width="1.5"/>
+              <path d="M26 13v21" stroke="#6B2436" stroke-width="1.5"/>
+              <path d="M26 34l5.5 5.5L26 46l-5.5-6.5z" fill="#6B2436"/>
+            </svg>
+            <span class="tile__pe">Símbolo · avatar, selo, carimbo</span>
+          </div>
+
+          <div class="tile">
+            <div class="favicons">
+              <figure>
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjRkZGRkZGIi8+PHBhdGggZD0iTTcgNi41aDE4IiBzdHJva2U9IiMxNzEyMEYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDYuNXYxNC41IiBzdHJva2U9IiM2QjI0MzYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDIxbDQuMyA0LjNMMTYgMjkuNmwtNC4zLTQuM3oiIGZpbGw9IiM2QjI0MzYiLz48L3N2Zz4=" width="48" height="48" alt="Favicon da Nogueira Prumo em 48 pixels">
+                <figcaption class="np-legenda np-num">48px</figcaption>
+              </figure>
+              <figure>
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjRkZGRkZGIi8+PHBhdGggZD0iTTcgNi41aDE4IiBzdHJva2U9IiMxNzEyMEYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDYuNXYxNC41IiBzdHJva2U9IiM2QjI0MzYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDIxbDQuMyA0LjNMMTYgMjkuNmwtNC4zLTQuM3oiIGZpbGw9IiM2QjI0MzYiLz48L3N2Zz4=" width="32" height="32" alt="Favicon da Nogueira Prumo em 32 pixels">
+                <figcaption class="np-legenda np-num">32px</figcaption>
+              </figure>
+              <figure>
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjRkZGRkZGIi8+PHBhdGggZD0iTTcgNi41aDE4IiBzdHJva2U9IiMxNzEyMEYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDYuNXYxNC41IiBzdHJva2U9IiM2QjI0MzYiIHN0cm9rZS13aWR0aD0iMS42Ii8+PHBhdGggZD0iTTE2IDIxbDQuMyA0LjNMMTYgMjkuNmwtNC4zLTQuM3oiIGZpbGw9IiM2QjI0MzYiLz48L3N2Zz4=" width="20" height="20" alt="Favicon da Nogueira Prumo em 20 pixels">
+                <figcaption class="np-legenda np-num">20px</figcaption>
+              </figure>
+            </div>
+            <span class="tile__pe">Favicon · só o símbolo</span>
+          </div>
+
+        </div>
+        <p class="np-apoio">
+          Tamanho mínimo da assinatura horizontal: 96px de largura. Abaixo disso, use o
+          símbolo sozinho. A área de proteção é a altura do "N" em todos os lados.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= PALETA ================= -->
+  <section class="pagina secao" id="paleta">
+    <div class="secao__rotulo">
+      <h2>Paleta</h2>
+      <p>Branco, tinta e um vinho que aparece pouco. Clique em qualquer amostra para copiar o hex.</p>
+    </div>
+
+    <div class="secao__conteudo">
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Vinho — assinatura</h3></div>
+        <div class="swatches">
+          <button class="swatch" type="button" data-hex="#F4EAEC">
+            <span class="swatch__cor" style="background: #F4EAEC; border-color: #E5E1DE;"></span>
+            <span class="swatch__nome">Vinho 100</span>
+            <span class="swatch__hex">#F4EAEC</span>
+            <span class="swatch__papel">Fundo de badge, marca-texto</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#D7B3BB">
+            <span class="swatch__cor" style="background: #D7B3BB;"></span>
+            <span class="swatch__nome">Vinho 300</span>
+            <span class="swatch__hex">#D7B3BB</span>
+            <span class="swatch__papel">Fio tinto, sublinha em repouso</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#8C3549">
+            <span class="swatch__cor" style="background: #8C3549;"></span>
+            <span class="swatch__nome">Vinho 500</span>
+            <span class="swatch__hex">#8C3549</span>
+            <span class="swatch__papel">Marca sobre fundo escuro</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#6B2436">
+            <span class="swatch__cor" style="background: #6B2436;"></span>
+            <span class="swatch__nome">Vinho 700</span>
+            <span class="swatch__hex">#6B2436</span>
+            <span class="swatch__papel">Assinatura. Fio-prumo, botão único</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#431722">
+            <span class="swatch__cor" style="background: #431722;"></span>
+            <span class="swatch__nome">Vinho 900</span>
+            <span class="swatch__hex">#431722</span>
+            <span class="swatch__papel">Pressionado, texto sobre lavado</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Papel e fio</h3></div>
+        <div class="swatches">
+          <button class="swatch" type="button" data-hex="#FFFFFF">
+            <span class="swatch__cor" style="background: #FFFFFF; border-color: #C9C3BF;"></span>
+            <span class="swatch__nome">Papel</span>
+            <span class="swatch__hex">#FFFFFF</span>
+            <span class="swatch__papel">Fundo da página e do card</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#FAF9F8">
+            <span class="swatch__cor" style="background: #FAF9F8; border-color: #E5E1DE;"></span>
+            <span class="swatch__nome">Superfície</span>
+            <span class="swatch__hex">#FAF9F8</span>
+            <span class="swatch__papel">Seção alternada, linha em hover</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#F2F0EE">
+            <span class="swatch__cor" style="background: #F2F0EE; border-color: #E5E1DE;"></span>
+            <span class="swatch__nome">Elevado</span>
+            <span class="swatch__hex">#F2F0EE</span>
+            <span class="swatch__papel">Campo desabilitado, bloco de código</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#E5E1DE">
+            <span class="swatch__cor" style="background: #E5E1DE;"></span>
+            <span class="swatch__nome">Fio</span>
+            <span class="swatch__hex">#E5E1DE</span>
+            <span class="swatch__papel">Divisória padrão de 1px</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#C9C3BF">
+            <span class="swatch__cor" style="background: #C9C3BF;"></span>
+            <span class="swatch__nome">Fio forte</span>
+            <span class="swatch__hex">#C9C3BF</span>
+            <span class="swatch__papel">Borda de campo e de botão</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Tinta</h3></div>
+        <div class="swatches">
+          <button class="swatch" type="button" data-hex="#17120F">
+            <span class="swatch__cor" style="background: #17120F;"></span>
+            <span class="swatch__nome">Texto</span>
+            <span class="swatch__hex">#17120F</span>
+            <span class="swatch__papel">Título e corpo · 18,3:1</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#4A4340">
+            <span class="swatch__cor" style="background: #4A4340;"></span>
+            <span class="swatch__nome">Texto médio</span>
+            <span class="swatch__hex">#4A4340</span>
+            <span class="swatch__papel">Apoio e tabela · 9,7:1</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#7A716C">
+            <span class="swatch__cor" style="background: #7A716C;"></span>
+            <span class="swatch__nome">Texto fraco</span>
+            <span class="swatch__hex">#7A716C</span>
+            <span class="swatch__papel">Rótulo e legenda · 4,8:1</span>
+          </button>
+        </div>
+        <p class="np-apoio">
+          Três níveis, só três. Se você sentiu falta de um quarto, o que falta é espaço
+          entre os blocos — não mais um cinza.
+        </p>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Semânticas</h3></div>
+        <div class="swatches">
+          <button class="swatch" type="button" data-hex="#1F5D45">
+            <span class="swatch__cor" style="background: #1F5D45;"></span>
+            <span class="swatch__nome">Sucesso</span>
+            <span class="swatch__hex">#1F5D45</span>
+            <span class="swatch__papel">Favorável, concluído</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#8A6116">
+            <span class="swatch__cor" style="background: #8A6116;"></span>
+            <span class="swatch__nome">Atenção</span>
+            <span class="swatch__hex">#8A6116</span>
+            <span class="swatch__papel">Ressalva, prazo curto</span>
+          </button>
+          <button class="swatch" type="button" data-hex="#A32323">
+            <span class="swatch__cor" style="background: #A32323;"></span>
+            <span class="swatch__nome">Erro</span>
+            <span class="swatch__hex">#A32323</span>
+            <span class="swatch__papel">Impedimento, dado inválido</span>
+          </button>
+        </div>
+        <p class="np-apoio">
+          O vinho é marca; o vermelho é estado. Eles nunca dividem a mesma tela sem uma
+          razão — se um alerta de erro aparecer ao lado de um botão vinho, troque o botão
+          por tinta.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= TIPOGRAFIA ================= -->
+  <section class="pagina secao" id="tipografia">
+    <div class="secao__rotulo">
+      <h2>Tipografia</h2>
+      <p>Uma serif de alto contraste nos títulos, uma sans que some no corpo. A tensão entre as duas é o sistema.</p>
+    </div>
+
+    <div class="secao__conteudo">
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>As duas famílias</h3></div>
+        <div class="duas">
+          <div class="np-card np-card--fixo">
+            <span class="np-versalete">Títulos · didone</span>
+            <p class="np-t2" style="margin-top: var(--e-4);">Didot</p>
+            <p class="np-legenda" style="margin-top: var(--e-3);">
+              Didot → Bodoni 72 → Bodoni MT → Iowan Old Style → Palatino → Georgia
+            </p>
+            <p class="np-apoio" style="margin-top: var(--e-4);">
+              Alto contraste entre haste e filete. Nunca abaixo de 19px, nunca em bloco
+              corrido de texto, nunca em rótulo de interface.
+            </p>
+          </div>
+          <div class="np-card">
+            <span class="np-versalete">Corpo · grotesca neutra</span>
+            <p style="margin-top: var(--e-4); font-size: var(--ts-2); letter-spacing: -0.01em;">Helvetica Neue</p>
+            <p class="np-legenda" style="margin-top: var(--e-3);">
+              Helvetica Neue → system-ui → Segoe UI → Roboto → Arial
+            </p>
+            <p class="np-apoio" style="margin-top: var(--e-4);">
+              Carrega tudo que se lê em quantidade e tudo que é rótulo. Ela existe pra
+              não ser notada — o único protagonismo da página é da serif.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Escala</h3></div>
+
+        <div class="specimen">
+          <span class="specimen__meta">Display<br>68 / 69</span>
+          <p class="np-display">Herança não é plano.</p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Título 1<br>48 / 54</span>
+          <p class="np-t1">Sucessão em empresa familiar</p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Título 2<br>34 / 38</span>
+          <p class="np-t2">Diagnóstico de governança</p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Título 3<br>24 / 30</span>
+          <p class="np-t3">Conselho consultivo e sua pauta</p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Título 4<br>19 / 25</span>
+          <p class="np-t4">Acordo de sócios: o que travar antes</p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Abertura<br>20 / 30</span>
+          <p class="np-lead">
+            A terceira geração chega ao capital com uma pergunta que ninguém formulou
+            por escrito: quem decide o quê, e com base em qual critério.
+          </p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Corpo<br>17 / 28 · 65ch</span>
+          <p class="np-corpo">
+            Trabalhamos com companhias que cresceram antes de ter estrutura de decisão.
+            O primeiro entregável nunca é um organograma — é o mapa dos assuntos que
+            hoje passam por uma única pessoa e o custo estimado dessa dependência. Só
+            depois disso a conversa sobre conselho, comitê e mandato faz sentido. A
+            medida de leitura é fixada em 65 caracteres: a linha termina onde o olho
+            ainda sabe voltar para a próxima sem se perder.
+          </p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Legenda<br>13 / 20</span>
+          <p class="np-legenda">
+            Base: 41 processos de sucessão acompanhados entre 2009 e 2025. Amostra não
+            probabilística.
+          </p>
+        </div>
+        <div class="specimen">
+          <span class="specimen__meta">Versalete<br>11 · 0,18em</span>
+          <p class="np-versalete">Parecer reservado · circulação restrita ao conselho</p>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Números</h3></div>
+        <div class="numeros">
+          <div>
+            <span class="np-num--destaque">41</span>
+            <span class="np-versalete">Conselhos assessorados</span>
+          </div>
+          <div>
+            <span class="np-num--destaque">R$ 4,2 bi</span>
+            <span class="np-versalete">Em transações acompanhadas</span>
+          </div>
+          <div>
+            <span class="np-num--destaque">17</span>
+            <span class="np-versalete">Anos de operação</span>
+          </div>
+        </div>
+        <p class="np-apoio">
+          Números vivem em algarismos tabulares, alinhados à direita em tabela. O
+          destaque ganha a serif e um único fio vinho embaixo — é o único lugar do
+          sistema em que a cor de assinatura toca um elemento grande.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= COMPONENTES ================= -->
+  <section class="pagina secao" id="componentes">
+    <div class="secao__rotulo">
+      <h2>Componentes</h2>
+      <p>Poucos, retos e definidos por fio. Passe o mouse e navegue por tabulação: os estados são reais.</p>
+    </div>
+
+    <div class="secao__conteudo">
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Botões · hierarquia</h3></div>
+        <div class="linha-botoes">
+          <button class="np-btn np-btn--tinta" type="button">Solicitar proposta</button>
+          <button class="np-btn np-btn--vinho" type="button">Agendar conversa</button>
+          <button class="np-btn np-btn--contorno" type="button">Baixar parecer</button>
+          <button class="np-btn np-btn--texto" type="button">Ver metodologia</button>
+        </div>
+        <p class="np-apoio">
+          Tinta é a ação principal. Vinho é a <strong>única</strong> ação de conversão da
+          tela — se houver dois botões vinho, um deles está errado. Contorno é
+          secundária, texto é terciária.
+        </p>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Botões · estados</h3></div>
+        <div class="estados">
+          <span></span>
+          <span class="estados__cabeca">Repouso</span>
+          <span class="estados__cabeca">Hover</span>
+          <span class="estados__cabeca">Foco</span>
+          <span class="estados__cabeca">Desabilitado</span>
+
+          <span class="estados__nome">Tinta</span>
+          <span class="estados__celula" data-estado="Repouso"><button class="np-btn np-btn--tinta" type="button">Enviar</button></span>
+          <span class="estados__celula" data-estado="Hover"><button class="np-btn np-btn--tinta demo-hover" type="button">Enviar</button></span>
+          <span class="estados__celula" data-estado="Foco"><button class="np-btn np-btn--tinta demo-foco" type="button">Enviar</button></span>
+          <span class="estados__celula" data-estado="Desabilitado"><button class="np-btn np-btn--tinta" type="button" disabled>Enviar</button></span>
+
+          <span class="estados__nome">Vinho</span>
+          <span class="estados__celula" data-estado="Repouso"><button class="np-btn np-btn--vinho" type="button">Agendar</button></span>
+          <span class="estados__celula" data-estado="Hover"><button class="np-btn np-btn--vinho demo-hover" type="button">Agendar</button></span>
+          <span class="estados__celula" data-estado="Foco"><button class="np-btn np-btn--vinho demo-foco" type="button">Agendar</button></span>
+          <span class="estados__celula" data-estado="Desabilitado"><button class="np-btn np-btn--vinho" type="button" disabled>Agendar</button></span>
+
+          <span class="estados__nome">Contorno</span>
+          <span class="estados__celula" data-estado="Repouso"><button class="np-btn np-btn--contorno" type="button">Baixar</button></span>
+          <span class="estados__celula" data-estado="Hover"><button class="np-btn np-btn--contorno demo-hover" type="button">Baixar</button></span>
+          <span class="estados__celula" data-estado="Foco"><button class="np-btn np-btn--contorno demo-foco" type="button">Baixar</button></span>
+          <span class="estados__celula" data-estado="Desabilitado"><button class="np-btn np-btn--contorno" type="button" disabled>Baixar</button></span>
+
+          <span class="estados__nome">Texto</span>
+          <span class="estados__celula" data-estado="Repouso"><button class="np-btn np-btn--texto" type="button">Ver critérios</button></span>
+          <span class="estados__celula" data-estado="Hover"><button class="np-btn np-btn--texto demo-hover" type="button">Ver critérios</button></span>
+          <span class="estados__celula" data-estado="Foco"><button class="np-btn np-btn--texto demo-foco" type="button">Ver critérios</button></span>
+          <span class="estados__celula" data-estado="Desabilitado"><button class="np-btn np-btn--texto" type="button" disabled>Ver critérios</button></span>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Card e formulário</h3></div>
+        <div class="duas">
+
+          <article class="np-card">
+            <span class="np-versalete np-versalete--vinho">Frente de trabalho</span>
+            <h4 class="np-t3" style="margin-top: var(--e-4);">Desenho do conselho consultivo</h4>
+            <p class="np-corpo" style="margin-top: var(--e-3); font-size: var(--ts-peq);">
+              Definição de competências da mesa, calendário de pauta e o rito de decisão
+              que separa o que é do sócio do que é da companhia.
+            </p>
+            <div style="display:flex; gap: var(--e-3); align-items:center; margin-top: var(--e-6); padding-top: var(--e-5); border-top: 1px solid var(--fio);">
+              <span class="np-badge np-badge--marca">12 semanas</span>
+              <span class="np-badge">Sócio responsável</span>
+            </div>
+          </article>
+
+          <form class="np-card" style="display: grid; gap: var(--e-5);" onsubmit="return false;">
+            <div class="np-campo">
+              <label class="np-rotulo" for="campo-empresa">Empresa</label>
+              <input class="np-input" id="campo-empresa" type="text" placeholder="Razão social">
+              <span class="np-ajuda">Como consta no contrato social.</span>
+            </div>
+            <div class="np-campo">
+              <label class="np-rotulo" for="campo-email">E-mail do contato</label>
+              <input class="np-input demo-input-foco" id="campo-email" type="email" value="conselho@" aria-describedby="ajuda-email">
+              <span class="np-ajuda" id="ajuda-email">Estado de foco — sublinha vinho de 2px.</span>
+            </div>
+            <div class="np-campo">
+              <label class="np-rotulo" for="campo-cnpj">CNPJ</label>
+              <input class="np-input" id="campo-cnpj" type="text" value="12.345.678/0001-0" aria-invalid="true" aria-describedby="ajuda-cnpj">
+              <span class="np-ajuda np-ajuda--erro" id="ajuda-cnpj">CNPJ incompleto: faltam dígitos verificadores.</span>
+            </div>
+            <div class="np-campo">
+              <label class="np-rotulo" for="campo-plano">Contrato vigente</label>
+              <input class="np-input" id="campo-plano" type="text" value="Retainer trimestral" disabled>
+              <span class="np-ajuda">Campo bloqueado — definido em contrato.</span>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Marcadores</h3></div>
+        <div class="badges">
+          <span class="np-badge">Neutro</span>
+          <span class="np-badge np-badge--marca">Prioritário</span>
+          <span class="np-badge np-badge--sucesso">Aprovado em conselho</span>
+          <span class="np-badge np-badge--atencao">Com ressalva</span>
+          <span class="np-badge np-badge--erro">Impedimento</span>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Citação</h3></div>
+        <div class="duas">
+          <figure class="np-citacao">
+            <p>Nenhum conselho conserta um critério que a família nunca escreveu.</p>
+            <footer>Helena Nogueira · sócia-fundadora</footer>
+          </figure>
+          <p class="np-apoio">
+            A citação é a voz de um sócio, sempre atribuída e sempre curta — no máximo
+            duas linhas na serif. Ela não repete o que o parágrafo ao lado já disse:
+            entra quando há uma posição a assumir.
+          </p>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Tabela</h3></div>
+        <div class="rolagem">
+          <table class="np-tabela">
+            <caption class="np-legenda" style="text-align: left; margin-bottom: var(--e-4);">
+              Frentes contratadas — trimestre corrente
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Frente</th>
+                <th scope="col">Situação</th>
+                <th scope="col" class="np-col-num">Horas</th>
+                <th scope="col" class="np-col-num">Honorário</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Diagnóstico de governança</td>
+                <td><span class="np-badge np-badge--sucesso">Concluída</span></td>
+                <td class="np-col-num">124</td>
+                <td class="np-col-num">R$ 186.000</td>
+              </tr>
+              <tr>
+                <td>Acordo de sócios</td>
+                <td><span class="np-badge np-badge--atencao">Com ressalva</span></td>
+                <td class="np-col-num">88</td>
+                <td class="np-col-num">R$ 132.000</td>
+              </tr>
+              <tr>
+                <td>Conselho consultivo</td>
+                <td><span class="np-badge np-badge--marca">Em curso</span></td>
+                <td class="np-col-num">1.240</td>
+                <td class="np-col-num">R$ 1.860.000</td>
+              </tr>
+              <tr>
+                <td>Sucessão executiva</td>
+                <td><span class="np-badge np-badge--erro">Suspensa</span></td>
+                <td class="np-col-num">36</td>
+                <td class="np-col-num">R$ 54.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="np-apoio">
+          Sem borda externa, sem faixa zebrada colorida. Régua de tinta no cabeçalho,
+          fio claro entre as linhas, números à direita e tabulares para que as casas
+          decimais fiquem uma sobre a outra.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SUPERFÍCIE ================= -->
+  <section class="pagina secao" id="superficie">
+    <div class="secao__rotulo">
+      <h2>Superfície</h2>
+      <p>Cantos quase retos e sombra quase inexistente. Quem separa os blocos é o fio e o espaço.</p>
+    </div>
+
+    <div class="secao__conteudo">
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Raios</h3></div>
+        <div class="amostras">
+          <div class="amostra" style="border-radius: 0;">
+            <strong>0</strong>
+            <span class="np-legenda">Padrão: seção, tabela, faixa, imagem</span>
+          </div>
+          <div class="amostra" style="border-radius: 1px;">
+            <strong>1px</strong>
+            <span class="np-legenda">Campo de formulário</span>
+          </div>
+          <div class="amostra" style="border-radius: 2px;">
+            <strong>2px</strong>
+            <span class="np-legenda">Máximo do sistema: botão, card, badge</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Elevação</h3></div>
+        <div class="amostras">
+          <div class="amostra" style="box-shadow: none;">
+            <strong>Nível 0</strong>
+            <span class="np-legenda">Tudo que é estático. O padrão.</span>
+          </div>
+          <div class="amostra" style="box-shadow: var(--elev-1);">
+            <strong>Nível 1</strong>
+            <span class="np-legenda">Linha destacada dentro de lista longa</span>
+          </div>
+          <div class="amostra" style="box-shadow: var(--elev-2);">
+            <strong>Nível 2</strong>
+            <span class="np-legenda">Menu suspenso, seletor de data</span>
+          </div>
+          <div class="amostra" style="box-shadow: var(--elev-3);">
+            <strong>Nível 3</strong>
+            <span class="np-legenda">Só o que flutua: toast, diálogo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bloco">
+        <div class="bloco__titulo"><h3>Fios</h3></div>
+        <div style="display: grid; gap: var(--e-5);">
+          <div>
+            <div style="border-top: 1px solid var(--fio);"></div>
+            <p class="np-legenda" style="margin-top: var(--e-2);">Fio padrão · #E5E1DE · divide itens de uma mesma lista</p>
+          </div>
+          <div>
+            <div style="border-top: 1px solid var(--fio-forte);"></div>
+            <p class="np-legenda" style="margin-top: var(--e-2);">Fio forte · #C9C3BF · borda de campo e de botão de contorno</p>
+          </div>
+          <div>
+            <div style="border-top: 1px solid var(--fio-tinta);"></div>
+            <p class="np-legenda" style="margin-top: var(--e-2);">Fio de tinta · #17120F · abre seção e fecha cabeçalho de tabela</p>
+          </div>
+          <div>
+            <div style="border-top: 1px solid var(--vinho-700);"></div>
+            <p class="np-legenda" style="margin-top: var(--e-2);">Fio vinho · #6B2436 · marca o que é da firma. Um por bloco, no máximo</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= USO ================= -->
+  <section class="pagina secao" id="uso">
+    <div class="secao__rotulo">
+      <h2>Uso da marca</h2>
+      <p>O sistema é estreito de propósito. Quase todo erro aqui é excesso.</p>
+    </div>
+
+    <div class="secao__conteudo">
+      <div class="regras">
+        <div class="regras--faca">
+          <h3 class="np-versalete np-versalete--vinho">Faça</h3>
+          <ul>
+            <li>Deixe o <strong>branco fazer o trabalho</strong>: 96px entre seções, 65 caracteres por linha.</li>
+            <li>Use a serif <strong>só</strong> em título, citação e número de destaque.</li>
+            <li>Reserve o vinho para <strong>um</strong> elemento por bloco: o fio, o marcador ou o botão — nunca os três.</li>
+            <li>Separe conteúdo com <strong>fio de 1px</strong> antes de pensar em caixa, sombra ou fundo colorido.</li>
+            <li>Alinhe tudo à <strong>esquerda</strong>, inclusive títulos; números à direita, tabulares.</li>
+          </ul>
+        </div>
+        <div class="regras--nao">
+          <h3 class="np-versalete">Não faça</h3>
+          <ul>
+            <li>Fundo vinho em seção inteira, faixa ou capa. A cor <strong>marca</strong>, não preenche.</li>
+            <li>Serif em rótulo, botão, tabela ou qualquer coisa abaixo de 19px.</li>
+            <li>Cantos arredondados acima de 2px, sombra difusa, brilho, gradiente.</li>
+            <li>Título centralizado, texto justificado ou caixa-alta em frase inteira.</li>
+            <li>Emoji, ícone decorativo ou ilustração — o sistema não tem essa camada.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <div class="pagina rodape__linha">
+    <div>
+      <span class="np-wordmark np-wordmark--invertido" style="font-size: 1.1rem;">
+        <span class="np-wordmark__nome">Nogueira</span>
+        <span class="np-wordmark__eixo" aria-hidden="true"></span>
+        <span class="np-wordmark__palavra">Prumo</span>
+      </span>
+      <p class="np-legenda" style="margin-top: var(--e-4); max-width: 46ch;">
+        Estratégia e governança para empresas familiares em transição.
+        Rua Bela Cintra, 1.200 · São Paulo.
+      </p>
+    </div>
+    <p class="np-legenda np-num">Design system 1.0 · revisado em março de 2026</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="toast__rotulo">Copiado</span>
+  <span class="toast__hex" id="toast-hex">#6B2436</span>
+</div>
+
+<script>
+(function () {
+  var toast = document.getElementById('toast');
+  var toastHex = document.getElementById('toast-hex');
+  var timer = null;
+
+  function mostrarToast(hex) {
+    toastHex.textContent = hex;
+    toast.setAttribute('data-visivel', 'true');
+    if (timer) { clearTimeout(timer); }
+    timer = setTimeout(function () {
+      toast.setAttribute('data-visivel', 'false');
+    }, 1800);
+  }
+
+  function copiar(texto) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(texto);
+    }
+    return new Promise(function (resolve, reject) {
+      var campo = document.createElement('textarea');
+      campo.value = texto;
+      campo.setAttribute('readonly', '');
+      campo.style.position = 'fixed';
+      campo.style.opacity = '0';
+      document.body.appendChild(campo);
+      campo.select();
+      try {
+        document.execCommand('copy');
+        resolve();
+      } catch (e) {
+        reject(e);
+      } finally {
+        document.body.removeChild(campo);
+      }
+    });
+  }
+
+  var amostras = document.querySelectorAll('.swatch');
+  for (var i = 0; i < amostras.length; i++) {
+    (function (botao) {
+      var hex = botao.getAttribute('data-hex');
+      botao.setAttribute('title', 'Copiar ' + hex);
+      botao.setAttribute('aria-label', 'Copiar o código ' + hex);
+      botao.addEventListener('click', function () {
+        copiar(hex).then(function () {
+          mostrarToast(hex);
+        }, function () {
+          mostrarToast(hex);
+        });
+      });
+    })(amostras[i]);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,779 @@
+/* =====================================================================
+   KILN — Design System · tokens.css
+   Fonte de verdade. Tudo que é visual no produto sai daqui.
+
+   Uso:
+     <link rel="stylesheet" href="tokens.css">
+
+   Arquétipo: produto técnico / dev tool / infraestrutura.
+   Regra que governa o sistema: a interface informa, não impressiona.
+   Contraste de TEMPERATURA é a ideia central — âmbar de forja quente
+   contra neutros azulados frios. Nada de glow, nada de gradiente
+   decorativo. Elevação vem de borda e de valor de fundo.
+   ===================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------
+     1. ASSINATURA — âmbar de forja
+     Rampa de 5 passos da única cor de marca. É o calor do sistema:
+     aparece em ação primária, foco, seleção, valor em destaque e no
+     cursor do wordmark. NUNCA significa estado (isso é papel das
+     semânticas, grupo 4). Se tudo é âmbar, nada é âmbar — orçamento
+     prático: no máximo 2 elementos âmbar por tela cheia.
+     ------------------------------------------------------------------- */
+  --kl-ember-100: #FFE2BE;  /* tinta clara: texto sobre fundo âmbar sólido escuro */
+  --kl-ember-300: #FFB25C;  /* texto e ícone de acento sobre fundo escuro (10.8:1) */
+  --kl-ember-500: #F08519;  /* ASSINATURA — preenchimento, borda ativa, cursor */
+  --kl-ember-700: #A85310;  /* pressed, borda de repouso do botão primário */
+  --kl-ember-900: #3A2008;  /* fundo tingido: chip, linha de tabela selecionada */
+
+  /* Alfas do âmbar — usadas onde a cor precisa deixar o fundo passar.
+     Sempre derivadas de --kl-ember-500. */
+  --kl-ember-a08: rgba(240, 133, 25, 0.08);  /* hover de linha, fundo de chip */
+  --kl-ember-a16: rgba(240, 133, 25, 0.16);  /* borda de chip, trilho de meter */
+  --kl-ember-a55: rgba(240, 133, 25, 0.55);  /* anel de foco */
+
+  /* -------------------------------------------------------------------
+     2. NEUTROS — aço frio
+     Quatro valores de superfície, do mais fundo ao mais alto. A
+     hierarquia é por VALOR (o quão claro é o fundo) somada a 1px de
+     borda. Não existe sombra difusa carregando profundidade aqui.
+     ------------------------------------------------------------------- */
+  --kl-sunken:  #070910;  /* poço: bloco de código, corpo de terminal, well */
+  --kl-base:    #0B0E14;  /* página */
+  --kl-surface: #11151D;  /* card, painel, cabeçalho de tabela */
+  --kl-raised:  #171D27;  /* input, linha em hover, aba ativa */
+  --kl-overlay: #1D2531;  /* popover, menu, toast — o único que usa sombra */
+
+  /* Hairlines. Todas 1px. A borda é o elemento estrutural do sistema:
+     ela desenha a grade, separa densidade e devolve a sensação de
+     instrumento medido. */
+  --kl-line-soft: #171E29;  /* divisória interna, entre linhas de tabela */
+  --kl-line:      #212A38;  /* padrão: card, input, botão secundário */
+  --kl-line-loud: #334053;  /* hover, foco não-âmbar, borda de destaque */
+
+  /* -------------------------------------------------------------------
+     3. TEXTO — três níveis, e só três
+     Nível 1 é o dado. Nível 2 é a explicação. Nível 3 é o rótulo.
+     Todos passam AA (>=4.5:1) em qualquer superfície do grupo 2.
+     ------------------------------------------------------------------- */
+  --kl-text:      #E7EBF3;  /* primário: valor, título, conteúdo da célula */
+  --kl-text-2:    #9BA6BA;  /* secundário: parágrafo, descrição, ajuda */
+  --kl-text-3:    #828DA0;  /* terciário: label mono, metadado, unidade, timestamp */
+  --kl-text-on-ember: #1A1206;  /* texto sobre preenchimento âmbar (7.1:1) */
+
+  /* -------------------------------------------------------------------
+     4. SEMÂNTICAS — estado do sistema
+     Existem para dizer se algo está de pé, degradado ou caído. São
+     deliberadamente menos saturadas que a assinatura para não competir
+     com ela. Regra dura: cor de estado só aparece em par — quadrado de
+     6px + palavra. Cor sozinha nunca carrega significado.
+     ------------------------------------------------------------------- */
+  --kl-ok:    #46B67F;  /* operacional, healthy, 2xx, deploy concluído */
+  --kl-warn:  #E0B341;  /* degradado, próximo do limite, retry em curso */
+  --kl-err:   #E8564E;  /* caído, 5xx, job falhou, validação inválida */
+  --kl-info:  #5B8DEF;  /* neutro informativo, build em fila, nota do sistema */
+
+  --kl-ok-bg:   rgba(70, 182, 127, 0.12);
+  --kl-warn-bg: rgba(224, 179, 65, 0.12);
+  --kl-err-bg:  rgba(232, 86, 78, 0.12);
+  --kl-info-bg: rgba(91, 141, 239, 0.12);
+
+  /* -------------------------------------------------------------------
+     5. TIPOGRAFIA — duas faces, papéis separados
+     MONO é estrutural, não decorativa: label, número, metadado,
+     navegação, badge, cabeçalho de tabela, ID, caminho de rota.
+     SANS é só texto corrido — parágrafo, descrição, prosa de vazio.
+     Stacks nativas do sistema. Zero webfont, zero @import: a página
+     abre sem rede e sem reflow de fonte.
+     ------------------------------------------------------------------- */
+  --kl-font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+                  "Liberation Mono", "DejaVu Sans Mono", monospace;
+  --kl-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text",
+                  "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+
+  /* Escala de tipo. Densa de propósito: a UI opera em 13px, não em 16px.
+     16px é reservado para texto que a pessoa lê em sequência. */
+  --kl-fs-micro: 0.6875rem;  /* 11px — label mono, unidade, legenda de eixo */
+  --kl-fs-mini:  0.75rem;    /* 12px — badge, metadado, célula secundária */
+  --kl-fs-sm:    0.8125rem;  /* 13px — PADRÃO da UI: botão, input, tabela, nav */
+  --kl-fs-base:  0.875rem;   /* 14px — corpo denso, item de lista */
+  --kl-fs-md:    1rem;       /* 16px — texto corrido em sans */
+  --kl-fs-lg:    1.25rem;    /* 20px — título de card, número de KPI pequeno */
+  --kl-fs-xl:    1.625rem;   /* 26px — título de seção */
+  --kl-fs-2xl:   2.125rem;   /* 34px — título de página, KPI grande */
+  --kl-fs-3xl:   2.75rem;    /* 44px — display, só na abertura */
+
+  /* Pesos. Quatro, e nenhum a mais. Sem 200, sem 800: a face mono do
+     sistema não tem esses cortes e falsificar peso quebra a métrica. */
+  --kl-fw-regular:  400;
+  --kl-fw-medium:   500;  /* label mono, cabeçalho de tabela */
+  --kl-fw-semibold: 600;  /* botão, título */
+  --kl-fw-bold:     700;  /* número em destaque, wordmark */
+
+  /* Entrelinha */
+  --kl-lh-tight: 1.15;  /* display e números grandes */
+  --kl-lh-ui:    1.35;  /* controles, tabelas, listas */
+  --kl-lh-prose: 1.6;   /* parágrafo em sans */
+
+  /* Tracking. O label mono maiúsculo SEM tracking vira um bloco ilegível;
+     0.08em é o que o torna lido. Display negativo é discreto — este
+     sistema não é de manchete. */
+  --kl-tr-label:   0.08em;
+  --kl-tr-display: -0.015em;
+  --kl-tr-normal:  0;
+
+  /* -------------------------------------------------------------------
+     6. ESPAÇO — base 4, com meio-passo de 2 e 6
+     A régua é mais curta que o padrão de mercado. Densidade é
+     posicionamento: quem usa este produto quer ver mais linhas por tela,
+     não mais respiro. Gutter de página é 24px, não 64px.
+     ------------------------------------------------------------------- */
+  --kl-s-1:  2px;
+  --kl-s-2:  4px;
+  --kl-s-3:  6px;
+  --kl-s-4:  8px;
+  --kl-s-5:  12px;
+  --kl-s-6:  16px;
+  --kl-s-7:  20px;
+  --kl-s-8:  24px;   /* padding padrão de card e gutter de página */
+  --kl-s-9:  32px;
+  --kl-s-10: 48px;   /* separação entre seções */
+  --kl-s-11: 64px;   /* topo e base de página */
+
+  /* Altura de controle. Fixa, para tudo alinhar na mesma linha de base. */
+  --kl-ctrl-sm: 26px;
+  --kl-ctrl:    32px;
+  --kl-ctrl-lg: 38px;
+
+  /* -------------------------------------------------------------------
+     7. RAIOS — quase retos
+     Máximo 6px, em nada. Cantos grandes leem como consumidor; este
+     produto lê como instrumento. Não existe raio total (pílula): badge
+     é retângulo, indicador de status é quadrado.
+     ------------------------------------------------------------------- */
+  --kl-r-0: 0;      /* tabela colada na borda do painel, faixas de largura total */
+  --kl-r-1: 2px;    /* quadrado de status, tag inline, swatch pequeno */
+  --kl-r-2: 4px;    /* PADRÃO — botão, input, badge, chip */
+  --kl-r-3: 6px;    /* card, painel, popover, bloco de código */
+
+  /* -------------------------------------------------------------------
+     8. ELEVAÇÃO — por borda e valor, não por sombra
+     e-0 e e-1 são a regra. e-2 é a exceção e existe só para camada que
+     flutua de verdade sobre o conteúdo (menu, popover, toast).
+     Glow é proibido: nenhuma sombra colorida em nenhum nível.
+     ------------------------------------------------------------------- */
+  --kl-e-0: none;                                  /* superfície colada — card, painel */
+  --kl-e-1: 0 1px 2px rgba(0, 0, 0, 0.45);         /* controle apoiado — botão, input */
+  --kl-e-2: 0 12px 32px -16px rgba(0, 0, 0, 0.9);  /* camada flutuante — popover, toast */
+
+  /* Anel de foco. Um só, âmbar, visível em qualquer superfície. Nunca
+     remova outline sem devolver isto. */
+  --kl-ring: 0 0 0 1px var(--kl-base), 0 0 0 3px var(--kl-ember-a55);
+
+  /* -------------------------------------------------------------------
+     9. MOVIMENTO — curto e reto
+     Transição existe para confirmar que o clique registrou, não para
+     encenar. Nada acima de 220ms, nada com bounce, nada de entrada
+     animada em conteúdo de dado.
+     ------------------------------------------------------------------- */
+  --kl-dur-1: 90ms;   /* cor de hover, borda */
+  --kl-dur-2: 140ms;  /* estado de controle, abrir/fechar pequeno */
+  --kl-dur-3: 220ms;  /* toast, popover */
+  --kl-ease:     cubic-bezier(0.2, 0, 0, 1);
+  --kl-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* -------------------------------------------------------------------
+     10. LAYOUT
+     ------------------------------------------------------------------- */
+  --kl-max-w:      1280px;  /* largura máxima da aplicação */
+  --kl-max-w-prose: 62ch;   /* largura máxima de texto corrido */
+  --kl-header-h:   48px;
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body.kl,
+.kl-root {
+  margin: 0;
+  background: var(--kl-base);
+  color: var(--kl-text);
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-sm);
+  line-height: var(--kl-lh-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: none;   /* mono técnica não liga fi/fl nem => */
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--kl-ember-a16);
+  color: var(--kl-ember-100);
+}
+
+/* =====================================================================
+   TIPOGRAFIA — classes utilitárias
+   ===================================================================== */
+
+.kl-display {
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-3xl);
+  font-weight: var(--kl-fw-semibold);
+  line-height: var(--kl-lh-tight);
+  letter-spacing: var(--kl-tr-display);
+  margin: 0;
+}
+
+.kl-h1 { font-size: var(--kl-fs-2xl); font-weight: var(--kl-fw-semibold); line-height: var(--kl-lh-tight); letter-spacing: var(--kl-tr-display); margin: 0; }
+.kl-h2 { font-size: var(--kl-fs-xl);  font-weight: var(--kl-fw-semibold); line-height: 1.25; letter-spacing: var(--kl-tr-display); margin: 0; }
+.kl-h3 { font-size: var(--kl-fs-lg);  font-weight: var(--kl-fw-semibold); line-height: 1.3; margin: 0; }
+
+/* Texto corrido — a única coisa que usa sans em tamanho de leitura. */
+.kl-prose {
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-md);
+  line-height: var(--kl-lh-prose);
+  color: var(--kl-text-2);
+  max-width: var(--kl-max-w-prose);
+  margin: 0;
+}
+.kl-prose strong { color: var(--kl-text); font-weight: var(--kl-fw-semibold); }
+
+.kl-help {
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-mini);
+  line-height: 1.45;
+  color: var(--kl-text-3);
+  margin: 0;
+}
+
+/* Label mono — a assinatura tipográfica do sistema. Toda seção, todo
+   campo, todo cabeçalho de coluna começa com um destes. */
+.kl-label {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: var(--kl-tr-label);
+  text-transform: uppercase;
+  color: var(--kl-text-3);
+  /* 1.2 e não 1: maiúscula acentuada em pt-BR (Ú, Ã, Ó) tem o diacrítico
+     cortado quando a caixa é justa. */
+  line-height: 1.2;
+}
+.kl-label--ember { color: var(--kl-ember-500); }
+
+/* Metadado mono em caixa baixa: caminho, ID, hash, timestamp. */
+.kl-meta {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Número. Sempre mono, sempre tabular. Não existe número em sans
+   neste sistema. */
+.kl-num {
+  font-family: var(--kl-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: var(--kl-tr-normal);
+  color: var(--kl-text);
+}
+.kl-num--lg  { font-size: var(--kl-fs-2xl); font-weight: var(--kl-fw-bold); line-height: var(--kl-lh-tight); }
+.kl-num--ember { color: var(--kl-ember-300); }
+.kl-num__unit { font-size: 0.5em; font-weight: var(--kl-fw-medium); color: var(--kl-text-3); margin-left: 0.15em; }
+
+/* Código inline */
+.kl-code {
+  font-family: var(--kl-font-mono);
+  font-size: 0.9285em;
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-1);
+  padding: 0.1em 0.35em;
+  color: var(--kl-ember-300);
+}
+
+/* Bloco de código / saída de terminal */
+.kl-pre {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  line-height: 1.6;
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-3);
+  padding: var(--kl-s-5) var(--kl-s-6);
+  color: var(--kl-text-2);
+  overflow-x: auto;
+  margin: 0;
+  tab-size: 2;
+}
+
+/* Tecla */
+.kl-kbd {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  background: var(--kl-raised);
+  border: 1px solid var(--kl-line-loud);
+  border-bottom-width: 2px;
+  border-radius: var(--kl-r-1);
+  padding: 1px 5px;
+  color: var(--kl-text-2);
+}
+
+/* =====================================================================
+   WORDMARK
+   ===================================================================== */
+
+/* kiln▮ — mono, caixa baixa, com um cursor de bloco âmbar colado.
+   O cursor é o elemento de marca: onde ele aparece, a marca aparece. */
+.kl-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.14em;
+  font-family: var(--kl-font-mono);
+  font-weight: var(--kl-fw-bold);
+  font-size: var(--kl-fs-md);
+  letter-spacing: -0.02em;
+  color: var(--kl-text);
+  text-transform: lowercase;
+  line-height: 1;
+  user-select: none;
+}
+.kl-wordmark__cursor {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.92em;
+  background: var(--kl-ember-500);
+  border-radius: var(--kl-r-1);
+  flex: none;
+}
+.kl-wordmark--blink .kl-wordmark__cursor { animation: kl-blink 1.4s steps(1, end) infinite; }
+@keyframes kl-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0.15; } }
+
+/* Wordmark sobre preenchimento âmbar (avatar de app, faixa) */
+.kl-wordmark--inverse { color: var(--kl-text-on-ember); }
+.kl-wordmark--inverse .kl-wordmark__cursor { background: var(--kl-text-on-ember); }
+
+/* Ícone de app: bloco âmbar com o cursor recortado */
+.kl-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--kl-ember-500);
+  border-radius: var(--kl-r-2);
+  color: var(--kl-text-on-ember);
+  font-family: var(--kl-font-mono);
+  font-weight: var(--kl-fw-bold);
+  font-size: var(--kl-fs-base);
+  line-height: 1;
+  flex: none;
+}
+
+/* =====================================================================
+   ESTRUTURA — régua de seção
+   ===================================================================== */
+
+/* Label + hairline que atravessa o resto da largura. É como o sistema
+   abre qualquer bloco de conteúdo. */
+.kl-rule {
+  display: flex;
+  align-items: center;
+  gap: var(--kl-s-5);
+  margin: 0 0 var(--kl-s-6);
+}
+.kl-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--kl-line);
+}
+
+/* Divisória simples */
+.kl-hr { height: 1px; background: var(--kl-line); border: 0; margin: var(--kl-s-8) 0; }
+
+/* =====================================================================
+   BOTÕES
+   ===================================================================== */
+
+.kl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kl-s-3);
+  height: var(--kl-ctrl);
+  padding: 0 var(--kl-s-5);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-sm);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: 0.01em;
+  color: var(--kl-text);
+  background: var(--kl-raised);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  box-shadow: var(--kl-e-1);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--kl-dur-1) var(--kl-ease),
+              border-color var(--kl-dur-1) var(--kl-ease),
+              color var(--kl-dur-1) var(--kl-ease);
+}
+.kl-btn:hover { background: var(--kl-overlay); border-color: var(--kl-line-loud); }
+.kl-btn:active { background: var(--kl-raised); transform: translateY(1px); }
+.kl-btn:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+.kl-btn[disabled], .kl-btn[aria-disabled="true"] {
+  opacity: 0.42;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Primário — o único preenchimento âmbar da interface. Um por vista. */
+.kl-btn--primary {
+  background: var(--kl-ember-500);
+  border-color: var(--kl-ember-700);
+  color: var(--kl-text-on-ember);
+  font-weight: var(--kl-fw-semibold);
+}
+.kl-btn--primary:hover { background: var(--kl-ember-300); border-color: var(--kl-ember-500); }
+.kl-btn--primary:active { background: var(--kl-ember-700); color: var(--kl-ember-100); }
+
+/* Fantasma — ação de baixa consequência, densidade de barra de ferramentas */
+.kl-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--kl-text-2);
+}
+.kl-btn--ghost:hover { background: var(--kl-raised); border-color: var(--kl-line); color: var(--kl-text); }
+
+/* Destrutivo — texto vermelho sobre superfície neutra. Preenchimento
+   vermelho sólido só em diálogo de confirmação. */
+.kl-btn--danger { color: var(--kl-err); border-color: var(--kl-line); }
+.kl-btn--danger:hover { background: var(--kl-err-bg); border-color: var(--kl-err); color: var(--kl-err); }
+
+.kl-btn--sm { height: var(--kl-ctrl-sm); padding: 0 var(--kl-s-4); font-size: var(--kl-fs-mini); }
+.kl-btn--lg { height: var(--kl-ctrl-lg); padding: 0 var(--kl-s-7); font-size: var(--kl-fs-base); }
+.kl-btn--block { display: flex; width: 100%; }
+
+/* Carregando — o rótulo permanece e a cor não muda; só a opacidade cai.
+   Trocar a cor do texto aqui quebra o contraste do botão primário. */
+.kl-btn--loading { pointer-events: none; opacity: 0.72; }
+.kl-btn--loading .kl-spinner { display: inline-block; }
+
+.kl-spinner {
+  width: 11px; height: 11px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: kl-spin 620ms linear infinite;
+  flex: none;
+}
+@keyframes kl-spin { to { transform: rotate(360deg); } }
+
+/* =====================================================================
+   CARD / PAINEL
+   ===================================================================== */
+
+.kl-card {
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-3);
+  box-shadow: var(--kl-e-0);
+  transition: border-color var(--kl-dur-1) var(--kl-ease),
+              background var(--kl-dur-1) var(--kl-ease);
+}
+/* Hover só existe em card que é alvo de clique. Card estático não
+   reage — reagir sem destino é ruído. */
+.kl-card--link { cursor: pointer; display: block; text-decoration: none; color: inherit; }
+.kl-card--link:hover { border-color: var(--kl-line-loud); background: var(--kl-raised); }
+.kl-card--link:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+
+.kl-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kl-s-5);
+  padding: var(--kl-s-5) var(--kl-s-6);
+  border-bottom: 1px solid var(--kl-line);
+  min-height: 40px;
+}
+.kl-card__body { padding: var(--kl-s-6); }
+.kl-card__foot {
+  padding: var(--kl-s-4) var(--kl-s-6);
+  border-top: 1px solid var(--kl-line);
+  background: var(--kl-sunken);
+  border-radius: 0 0 var(--kl-r-3) var(--kl-r-3);
+}
+/* Tabela colada na borda do card: zera o padding do corpo. */
+.kl-card__body--flush { padding: 0; }
+
+/* =====================================================================
+   CAMPOS
+   ===================================================================== */
+
+.kl-field { display: flex; flex-direction: column; gap: var(--kl-s-3); }
+
+.kl-input,
+.kl-select,
+.kl-textarea {
+  width: 100%;
+  height: var(--kl-ctrl);
+  padding: 0 var(--kl-s-4);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-sm);
+  color: var(--kl-text);
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  transition: border-color var(--kl-dur-1) var(--kl-ease),
+              background var(--kl-dur-1) var(--kl-ease);
+  appearance: none;
+}
+.kl-textarea { height: auto; min-height: 84px; padding: var(--kl-s-4); line-height: 1.5; resize: vertical; }
+.kl-input::placeholder, .kl-textarea::placeholder { color: var(--kl-text-3); }
+.kl-input:hover, .kl-select:hover, .kl-textarea:hover { border-color: var(--kl-line-loud); }
+.kl-input:focus, .kl-select:focus, .kl-textarea:focus {
+  outline: none;
+  background: var(--kl-base);
+  border-color: var(--kl-ember-500);
+  box-shadow: var(--kl-ring);
+}
+.kl-input[disabled], .kl-select[disabled], .kl-textarea[disabled] {
+  opacity: 0.45; cursor: not-allowed; background: var(--kl-surface);
+}
+.kl-input--invalid, .kl-input[aria-invalid="true"] { border-color: var(--kl-err); }
+.kl-input--invalid:focus { box-shadow: 0 0 0 1px var(--kl-base), 0 0 0 3px var(--kl-err-bg); }
+
+.kl-error {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  color: var(--kl-err);
+  display: flex; align-items: center; gap: var(--kl-s-3);
+}
+
+/* Prefixo colado no input — unidade, protocolo, moeda */
+.kl-input-group { display: flex; align-items: stretch; }
+.kl-input-group__addon {
+  display: inline-flex; align-items: center;
+  padding: 0 var(--kl-s-4);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-3);
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-line);
+  border-right: 0;
+  border-radius: var(--kl-r-2) 0 0 var(--kl-r-2);
+  white-space: nowrap;
+}
+.kl-input-group .kl-input { border-radius: 0 var(--kl-r-2) var(--kl-r-2) 0; }
+
+/* =====================================================================
+   BADGE, CHIP, STATUS
+   ===================================================================== */
+
+/* Retângulo, nunca pílula. */
+.kl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kl-s-3);
+  height: 20px;
+  padding: 0 var(--kl-s-3);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--kl-text-2);
+  background: var(--kl-raised);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  white-space: nowrap;
+}
+.kl-badge--ok    { color: var(--kl-ok);    background: var(--kl-ok-bg);    border-color: transparent; }
+.kl-badge--warn  { color: var(--kl-warn);  background: var(--kl-warn-bg);  border-color: transparent; }
+.kl-badge--err   { color: var(--kl-err);   background: var(--kl-err-bg);   border-color: transparent; }
+.kl-badge--info  { color: var(--kl-info);  background: var(--kl-info-bg);  border-color: transparent; }
+.kl-badge--ember { color: var(--kl-ember-300); background: var(--kl-ember-a08); border-color: var(--kl-ember-a16); }
+
+/* Quadrado de status de 6px. Nunca círculo — círculo é interface de
+   consumidor; aqui é LED de painel. Sempre acompanhado de palavra. */
+.kl-dot {
+  width: 6px; height: 6px;
+  border-radius: var(--kl-r-1);
+  background: var(--kl-text-3);
+  flex: none;
+}
+.kl-dot--ok   { background: var(--kl-ok); }
+.kl-dot--warn { background: var(--kl-warn); }
+.kl-dot--err  { background: var(--kl-err); }
+.kl-dot--info { background: var(--kl-info); }
+
+.kl-status {
+  display: inline-flex; align-items: center; gap: var(--kl-s-3);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-2);
+}
+
+/* =====================================================================
+   TABELA DE DADOS
+   ===================================================================== */
+
+/* Envolva sempre em .kl-table-wrap: o scroll horizontal pertence à
+   tabela, nunca ao body. */
+.kl-table-wrap { width: 100%; overflow-x: auto; }
+
+.kl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  font-variant-numeric: tabular-nums;
+}
+.kl-table th {
+  text-align: left;
+  padding: var(--kl-s-4) var(--kl-s-5);
+  font-size: var(--kl-fs-micro);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: var(--kl-tr-label);
+  text-transform: uppercase;
+  color: var(--kl-text-3);
+  background: var(--kl-surface);
+  border-bottom: 1px solid var(--kl-line);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+}
+.kl-table td {
+  padding: var(--kl-s-4) var(--kl-s-5);
+  border-bottom: 1px solid var(--kl-line-soft);
+  color: var(--kl-text-2);
+  white-space: nowrap;
+}
+.kl-table tbody tr:last-child td { border-bottom: 0; }
+.kl-table tbody tr:hover td { background: var(--kl-raised); }
+.kl-table tbody tr[aria-selected="true"] td { background: var(--kl-ember-a08); }
+.kl-table .kl-td--key { color: var(--kl-text); }
+/* Número sempre à direita: a coluna vira uma régua vertical. */
+.kl-table .kl-td--num, .kl-table .kl-th--num { text-align: right; }
+
+/* Lista chave-valor — metadados de recurso */
+.kl-kv { display: grid; grid-template-columns: minmax(96px, auto) 1fr; gap: var(--kl-s-4) var(--kl-s-6); }
+.kl-kv dt {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  letter-spacing: var(--kl-tr-label);
+  text-transform: uppercase;
+  color: var(--kl-text-3);
+  padding-top: 1px;
+}
+.kl-kv dd {
+  margin: 0;
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text);
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+/* Barra fina de proporção — uso de cota, progresso de job */
+.kl-meter {
+  height: 4px;
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-1);
+  overflow: hidden;
+}
+.kl-meter__fill { height: 100%; background: var(--kl-ember-500); }
+.kl-meter__fill--warn { background: var(--kl-warn); }
+.kl-meter__fill--err  { background: var(--kl-err); }
+
+/* =====================================================================
+   NAVEGAÇÃO
+   ===================================================================== */
+
+.kl-nav { display: flex; align-items: center; gap: var(--kl-s-1); }
+.kl-nav__item {
+  display: inline-flex; align-items: center;
+  height: var(--kl-ctrl-sm);
+  padding: 0 var(--kl-s-4);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-3);
+  text-decoration: none;
+  border-radius: var(--kl-r-2);
+  border: 1px solid transparent;
+  transition: color var(--kl-dur-1) var(--kl-ease), background var(--kl-dur-1) var(--kl-ease);
+}
+.kl-nav__item:hover { color: var(--kl-text); background: var(--kl-raised); }
+.kl-nav__item:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+/* Ativo = texto claro + marca âmbar embaixo. Sem preenchimento. */
+.kl-nav__item[aria-current="page"] {
+  color: var(--kl-text);
+  background: var(--kl-raised);
+  border-color: var(--kl-line);
+}
+.kl-nav__item[aria-current="page"]::before {
+  content: "";
+  width: 5px; height: 5px;
+  border-radius: var(--kl-r-1);
+  background: var(--kl-ember-500);
+  margin-right: var(--kl-s-3);
+}
+
+/* =====================================================================
+   TOAST
+   ===================================================================== */
+
+.kl-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--kl-s-8);
+  transform: translate(-50%, 12px);
+  display: flex; align-items: center; gap: var(--kl-s-4);
+  padding: var(--kl-s-4) var(--kl-s-6);
+  background: var(--kl-overlay);
+  border: 1px solid var(--kl-line-loud);
+  border-radius: var(--kl-r-2);
+  box-shadow: var(--kl-e-2);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--kl-dur-3) var(--kl-ease-out),
+              transform var(--kl-dur-3) var(--kl-ease-out);
+  z-index: 60;
+}
+.kl-toast[data-open="true"] { opacity: 1; transform: translate(-50%, 0); }
+
+/* =====================================================================
+   ACESSIBILIDADE
+   ===================================================================== */
+
+.kl-sr {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

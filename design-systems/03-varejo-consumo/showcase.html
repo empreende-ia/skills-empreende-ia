@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fervo — Design System</title>
+<meta name="description" content="Design system da Fervo: comida de rua, delivery e loja de esquina. Tokens, paleta, tipografia e componentes.">
+<meta name="theme-color" content="#d92d0b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23241512'/><circle cx='16' cy='16' r='9.5' fill='%23d92d0b'/><circle cx='16' cy='16' r='3.8' fill='%23fff6f1'/></svg>">
+<style>
+/* =====================================================================
+   FERVO — tokens (cópia da fonte da verdade: tokens.css)
+   ===================================================================== */
+:root{
+  /* 1. Assinatura — tomate */
+  --primary-300:#ff8a66; --primary-400:#ff5c33; --primary-500:#d92d0b;
+  --primary-600:#b32209; --primary-700:#8a1907;
+  --primary-on-light:var(--primary-600);
+  --primary-alpha-06:rgba(217,45,11,.06);
+  --primary-alpha-14:rgba(217,45,11,.14);
+  --primary-alpha-32:rgba(217,45,11,.32);
+  --primary-alpha-45:rgba(217,45,11,.45);
+
+  /* 2. Secundárias — categoria e ilustração, nunca botão */
+  --accent-mostarda:#e8a33d; --accent-limao:#7fb800; --accent-uva:#6b2d5c;
+
+  /* 3. Neutros e superfícies — temperatura quente, igual à assinatura */
+  --bg-base:#fff6f1; --bg-surface:#ffffff; --bg-elevated:#ffe9de;
+  --bg-ink:#241512; --bg-ink-soft:#3a221c; --bg-overlay:rgba(36,21,18,.62);
+
+  /* 4. Texto — 3 níveis */
+  --fg:#241512; --fg-muted:#6b4a40; --fg-subtle:#8a6553;
+  --fg-on-primary:#ffffff; --fg-on-primary-soft:#ffe0d4;
+  --fg-on-ink:#fff6f1; --fg-on-ink-muted:#d9bdb2;
+
+  /* 5. Bordas */
+  --border:#ebd5c9; --border-muted:#f6e5dc;
+  --border-active:var(--primary-500); --border-ink:#241512;
+
+  /* 6. Semânticas — erro é carmim, não o tomate da marca */
+  --success:#0f7b3f; --warning:#b26a00; --danger:#a11043; --info:#1b6aa8;
+  --success-wash:#e6f4ec; --warning-wash:#fdf0dc; --danger-wash:#fce8ef; --info-wash:#e7f1fa;
+
+  /* 7. Tipografia — só pilhas nativas */
+  --font-display:'Arial Narrow','Helvetica Neue Condensed','Liberation Sans Narrow',
+                 'Nimbus Sans Narrow','Roboto Condensed','Franklin Gothic Medium',
+                 Impact,system-ui,sans-serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',
+              Helvetica,'Liberation Sans',Arial,sans-serif;
+  --fs-display-2xl:5.5rem; --fs-display-xl:4.25rem; --fs-display-lg:3.25rem;
+  --fs-display-md:2.5rem;  --fs-heading-lg:2rem;    --fs-heading-md:1.5rem;
+  --fs-heading-sm:1.25rem; --fs-body-lg:1.125rem;   --fs-body:1rem;
+  --fs-body-sm:.875rem;    --fs-caption:.75rem;
+  --fw-regular:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700; --fw-black:900;
+  --tracking-display:-.035em; --tracking-heading:-.02em;
+  --tracking-body:0; --tracking-overline:.16em;
+  --lh-display:.92; --lh-heading:1.12; --lh-tight:1.3; --lh-body:1.6;
+
+  /* 8. Espaço */
+  --space-1:.25rem; --space-2:.5rem;  --space-3:.75rem; --space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem; --space-8:2rem;   --space-10:2.5rem;
+  --space-12:3rem;  --space-16:4rem;  --space-20:5rem;  --space-24:6rem;
+  --section-y:var(--space-20);
+  --container-prose:44rem; --container-content:72rem; --container-wide:82rem;
+
+  /* 9. Raio — generoso, assimétrico onde a marca assina */
+  --radius-xs:4px; --radius-sm:8px; --radius-md:14px;
+  --radius-lg:22px; --radius-xl:32px; --radius-full:999px;
+  --radius-asym:32px 8px 32px 8px;
+  --radius-asym-alt:8px 32px 8px 32px;
+
+  /* 10. Elevação — sombra difusa e tingida */
+  --shadow-sm:0 2px 6px -2px rgba(60,20,10,.12);
+  --shadow-md:0 12px 22px -14px rgba(60,20,10,.26);
+  --shadow-lg:0 26px 46px -26px rgba(60,20,10,.34);
+  --shadow-pop:0 16px 30px -14px var(--primary-alpha-45);
+  --shadow-inset:inset 0 2px 0 rgba(255,255,255,.5);
+
+  /* 11. Motion */
+  --ease-smooth:cubic-bezier(.4,0,.2,1);
+  --ease-out:cubic-bezier(0,0,.2,1);
+  --ease-pop:cubic-bezier(.34,1.4,.64,1);
+  --dur-fast:120ms; --dur-base:220ms; --dur-slow:420ms;
+
+  /* 12. Foco e camadas */
+  --ring:0 0 0 3px var(--primary-alpha-32);
+  --ring-on-primary:0 0 0 3px rgba(255,255,255,.72);
+  --ring-offset:2px;
+  --z-sticky:1020; --z-overlay:1040; --z-modal:1050; --z-toast:1070;
+  --bp-sm:640px; --bp-md:768px; --bp-lg:1024px; --bp-xl:1280px;
+
+  /* 13. Assinaturas da marca */
+  --bloco-tomate:var(--primary-500);
+  --faixa-tomate:repeating-linear-gradient(-45deg,#d92d0b 0 22px,#c02708 22px 44px);
+  --grifo-preco:linear-gradient(180deg,transparent 54%,var(--primary-alpha-14) 54% 90%,transparent 90%);
+  --selo-borda:2px dashed rgba(255,255,255,.6);
+}
+
+/* ===================== BASE ===================== */
+html{box-sizing:border-box;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;background:var(--bg-base);color:var(--fg);
+  font-family:var(--font-sans);font-size:var(--fs-body);
+  line-height:var(--lh-body);-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{max-width:100%}
+
+/* ===================== UTILITÁRIAS .fv- ===================== */
+.fv-display-2xl,.fv-display-xl,.fv-display-lg,.fv-display-md{
+  font-family:var(--font-display);font-weight:var(--fw-bold);
+  letter-spacing:var(--tracking-display);line-height:var(--lh-display);margin:0}
+.fv-display-2xl{font-size:var(--fs-display-2xl);text-transform:uppercase}
+.fv-display-xl{font-size:var(--fs-display-xl)}
+.fv-display-lg{font-size:var(--fs-display-lg);text-transform:uppercase}
+.fv-display-md{font-size:var(--fs-display-md)}
+.fv-heading-lg{font-family:var(--font-display);font-size:var(--fs-heading-lg);
+  font-weight:var(--fw-bold);letter-spacing:var(--tracking-heading);
+  line-height:var(--lh-heading);margin:0}
+.fv-heading-md{font-family:var(--font-display);font-size:var(--fs-heading-md);
+  font-weight:var(--fw-bold);letter-spacing:var(--tracking-heading);
+  line-height:var(--lh-tight);margin:0}
+.fv-heading-sm{font-size:var(--fs-heading-sm);font-weight:var(--fw-semibold);
+  line-height:var(--lh-tight);margin:0}
+.fv-body-lg{font-size:var(--fs-body-lg);line-height:var(--lh-body);color:var(--fg-muted)}
+.fv-body{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--fg-muted)}
+.fv-body-sm{font-size:var(--fs-body-sm);line-height:1.5;color:var(--fg-muted)}
+.fv-caption{font-size:var(--fs-caption);line-height:1.4;color:var(--fg-subtle)}
+.fv-overline{display:inline-block;font-family:var(--font-sans);font-size:var(--fs-caption);
+  font-weight:var(--fw-bold);letter-spacing:var(--tracking-overline);
+  text-transform:uppercase;color:var(--primary-on-light)}
+
+/* Wordmark */
+.fv-wordmark{display:inline-flex;align-items:center;gap:.06em;font-family:var(--font-display);
+  font-weight:var(--fw-black);text-transform:uppercase;letter-spacing:-.03em;line-height:1;
+  color:var(--fg);font-size:2rem}
+.fv-wordmark__o{position:relative;display:inline-block;width:.74em;height:.74em;border-radius:50%;
+  background:var(--primary-500);margin-left:.04em}
+.fv-wordmark__o::after{content:'';position:absolute;inset:30%;border-radius:50%;background:var(--bg-base)}
+.fv-wordmark--on-primary{color:var(--fg-on-primary)}
+.fv-wordmark--on-primary .fv-wordmark__o{background:var(--fg-on-primary)}
+.fv-wordmark--on-primary .fv-wordmark__o::after{background:var(--primary-500)}
+.fv-wordmark--on-ink{color:var(--fg-on-ink)}
+.fv-wordmark--on-ink .fv-wordmark__o::after{background:var(--bg-ink)}
+.fv-wordmark--mono{color:currentColor}
+.fv-wordmark--mono .fv-wordmark__o{background:currentColor}
+.fv-wordmark--mono .fv-wordmark__o::after{background:var(--bg-base)}
+
+/* Botões */
+.fv-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);
+  font-family:var(--font-sans);font-size:var(--fs-body);font-weight:var(--fw-bold);
+  line-height:1;padding:.875rem 1.5rem;border:2px solid transparent;
+  border-radius:var(--radius-md);cursor:pointer;text-decoration:none;
+  transition:background-color var(--dur-fast) var(--ease-smooth),
+             border-color var(--dur-fast) var(--ease-smooth),
+             box-shadow var(--dur-base) var(--ease-pop),
+             transform var(--dur-base) var(--ease-pop)}
+.fv-btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.fv-btn[disabled],.fv-btn.is-disabled{cursor:not-allowed;background:var(--bg-elevated);
+  color:var(--fg-subtle);border-color:var(--border);box-shadow:none;transform:none}
+.fv-btn--primary{background:var(--primary-500);color:var(--fg-on-primary);box-shadow:var(--shadow-pop)}
+.fv-btn--primary:hover,.fv-btn--primary.is-hover{background:var(--primary-600);transform:translateY(-2px)}
+.fv-btn--primary:active,.fv-btn--primary.is-pressed{background:var(--primary-700);transform:translateY(0);box-shadow:var(--shadow-sm)}
+.fv-btn--primary.is-focus{box-shadow:var(--ring)}
+.fv-btn--ink{background:var(--bg-ink);color:var(--fg-on-ink)}
+.fv-btn--ink:hover,.fv-btn--ink.is-hover{background:var(--bg-ink-soft);transform:translateY(-2px)}
+.fv-btn--ink:active,.fv-btn--ink.is-pressed{background:#150b09;transform:translateY(0)}
+.fv-btn--outline{background:transparent;color:var(--fg);border-color:var(--border-ink)}
+.fv-btn--outline:hover,.fv-btn--outline.is-hover{background:var(--primary-alpha-06);
+  border-color:var(--primary-500);color:var(--primary-on-light)}
+.fv-btn--outline:active,.fv-btn--outline.is-pressed{background:var(--primary-alpha-14)}
+.fv-btn--ghost-on-primary{background:transparent;color:var(--fg-on-primary);border-color:rgba(255,255,255,.7)}
+.fv-btn--ghost-on-primary:hover{background:rgba(255,255,255,.16);border-color:#fff}
+.fv-btn--ghost-on-primary:focus-visible{box-shadow:var(--ring-on-primary)}
+.fv-btn--lg{font-size:var(--fs-body-lg);padding:1.0625rem 2rem}
+.fv-btn--sm{font-size:var(--fs-body-sm);padding:.625rem 1rem;border-radius:var(--radius-sm)}
+.fv-btn--block{display:flex;width:100%}
+
+/* Campos */
+.fv-label{display:block;margin-bottom:var(--space-2);font-size:var(--fs-caption);
+  font-weight:var(--fw-bold);letter-spacing:var(--tracking-overline);
+  text-transform:uppercase;color:var(--fg-subtle)}
+.fv-input{width:100%;padding:.875rem 1rem;background:var(--bg-surface);color:var(--fg);
+  font-family:inherit;font-size:var(--fs-body);border:2px solid var(--border);
+  border-radius:var(--radius-md);
+  transition:border-color var(--dur-fast) var(--ease-smooth),box-shadow var(--dur-fast) var(--ease-smooth)}
+.fv-input::placeholder{color:var(--fg-subtle)}
+.fv-input:hover{border-color:#dcbdae}
+.fv-input:focus,.fv-input.is-focus{outline:none;border-color:var(--primary-500);box-shadow:var(--ring)}
+.fv-input.is-invalid{border-color:var(--danger)}
+.fv-input:disabled{background:var(--bg-elevated);color:var(--fg-subtle);cursor:not-allowed}
+.fv-hint{margin:var(--space-2) 0 0;font-size:var(--fs-body-sm);color:var(--fg-subtle)}
+.fv-error{margin:var(--space-2) 0 0;font-size:var(--fs-body-sm);color:var(--danger);font-weight:var(--fw-semibold)}
+
+/* Badge */
+.fv-badge{display:inline-flex;align-items:center;gap:var(--space-2);padding:.3125rem .75rem;
+  border-radius:var(--radius-full);font-size:var(--fs-caption);font-weight:var(--fw-bold);
+  letter-spacing:.06em;text-transform:uppercase;line-height:1.3}
+.fv-badge--primary{background:var(--primary-500);color:var(--fg-on-primary)}
+.fv-badge--soft{background:var(--primary-alpha-14);color:var(--primary-700)}
+.fv-badge--ink{background:var(--bg-ink);color:var(--fg-on-ink)}
+.fv-badge--success{background:var(--success-wash);color:var(--success)}
+.fv-badge--warning{background:var(--warning-wash);color:var(--warning)}
+.fv-badge--danger{background:var(--danger-wash);color:var(--danger)}
+.fv-badge--info{background:var(--info-wash);color:var(--info)}
+
+/* Selo */
+.fv-selo{position:relative;display:inline-flex;flex-direction:column;align-items:center;
+  justify-content:center;width:5.5rem;height:5.5rem;border-radius:50%;
+  background:var(--primary-500);color:var(--fg-on-primary);font-family:var(--font-display);
+  font-weight:var(--fw-black);text-transform:uppercase;text-align:center;line-height:.95;
+  letter-spacing:-.02em;transform:rotate(-8deg);box-shadow:var(--shadow-md)}
+.fv-selo::after{content:'';position:absolute;inset:7px;border:var(--selo-borda);border-radius:50%}
+.fv-selo__valor{font-size:1.5rem}
+.fv-selo__nota{font-size:.625rem;letter-spacing:.08em;font-weight:var(--fw-bold);padding:0 .4rem}
+.fv-selo--ink{background:var(--bg-ink);color:var(--fg-on-ink)}
+.fv-selo--mostarda{background:var(--accent-mostarda);color:var(--fg)}
+.fv-selo--mostarda::after{border-color:rgba(36,21,18,.45)}
+.fv-selo--estrela{border-radius:0;box-shadow:none;width:6.25rem;height:6.25rem;
+  clip-path:polygon(50% 0%,62.36% 11.96%,79.39% 9.55%,82.36% 26.49%,97.55% 34.55%,
+   90% 50%,97.55% 65.45%,82.36% 73.51%,79.39% 90.45%,62.36% 88.04%,
+   50% 100%,37.64% 88.04%,20.61% 90.45%,17.64% 73.51%,2.45% 65.45%,
+   10% 50%,2.45% 34.55%,17.64% 26.49%,20.61% 9.55%,37.64% 11.96%)}
+.fv-selo--estrela::after{display:none}
+
+/* Preço */
+.fv-preco{display:inline-flex;align-items:flex-start;gap:.15em;font-family:var(--font-display);
+  font-weight:var(--fw-black);color:var(--fg);line-height:.9;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums}
+.fv-preco__moeda{font-size:.34em;font-weight:var(--fw-bold);padding-top:.28em;letter-spacing:0}
+.fv-preco__int{font-size:1em}
+.fv-preco__cent{font-size:.4em;padding-top:.18em;letter-spacing:0}
+.fv-preco--xl{font-size:var(--fs-display-xl)}
+.fv-preco--lg{font-size:var(--fs-display-md)}
+.fv-preco--md{font-size:var(--fs-heading-lg)}
+.fv-preco--tomate{color:var(--primary-on-light)}
+.fv-preco--on-primary{color:var(--fg-on-primary)}
+.fv-preco--grifado .fv-preco__int{background:var(--grifo-preco);padding:0 .06em}
+.fv-preco-de{font-family:var(--font-sans);font-size:var(--fs-body);font-weight:var(--fw-semibold);
+  color:var(--fg-subtle);text-decoration:line-through;text-decoration-thickness:2px}
+
+/* Card de produto — o componente característico */
+.fv-produto{position:relative;display:flex;flex-direction:column;background:var(--bg-surface);
+  border:2px solid var(--border);border-radius:var(--radius-asym);overflow:hidden;
+  transition:border-color var(--dur-base) var(--ease-smooth),
+             box-shadow var(--dur-base) var(--ease-smooth),
+             transform var(--dur-base) var(--ease-pop)}
+.fv-produto:hover,.fv-produto.is-hover{border-color:var(--primary-500);
+  box-shadow:var(--shadow-pop);transform:translateY(-4px)}
+.fv-produto:focus-within{border-color:var(--primary-500);box-shadow:var(--ring)}
+.fv-produto__midia{position:relative;background:var(--bg-elevated);
+  padding:var(--space-5) var(--space-5) 0;min-height:172px;display:flex;
+  align-items:flex-end;justify-content:center}
+.fv-produto__midia svg{width:100%;max-width:220px;height:auto;display:block}
+.fv-produto__selo{position:absolute;top:.5rem;right:.5rem}
+.fv-produto__corpo{padding:var(--space-5);display:flex;flex-direction:column;
+  gap:var(--space-3);flex:1}
+.fv-produto__corpo > .fv-badge{align-self:flex-start}
+.fv-produto__nome{font-family:var(--font-display);font-size:var(--fs-heading-md);
+  font-weight:var(--fw-bold);letter-spacing:var(--tracking-heading);line-height:1.05;
+  margin:0;text-transform:uppercase}
+.fv-produto__desc{margin:0;font-size:var(--fs-body-sm);color:var(--fg-muted);line-height:1.5}
+.fv-produto__rodape{margin-top:auto;display:flex;align-items:flex-end;
+  justify-content:space-between;gap:var(--space-3);flex-wrap:wrap}
+
+/* Faixa de oferta */
+.fv-faixa{background:var(--faixa-tomate);color:var(--fg-on-primary);
+  font-family:var(--font-display);font-weight:var(--fw-black);text-transform:uppercase;
+  letter-spacing:.04em;font-size:var(--fs-heading-sm);padding:var(--space-3) var(--space-4);
+  overflow:hidden;white-space:nowrap}
+.fv-faixa__trilho{display:inline-flex;gap:var(--space-8);align-items:center;
+  animation:fv-desfila 26s linear infinite}
+.fv-faixa__sep{color:var(--fg-on-primary-soft)}
+@keyframes fv-desfila{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Blocos */
+.fv-bloco{border-radius:var(--radius-xl);padding:var(--space-12)}
+.fv-bloco--tomate{background:var(--bloco-tomate);color:var(--fg-on-primary)}
+.fv-bloco--tomate .fv-body,.fv-bloco--tomate .fv-body-lg{color:var(--fg-on-primary)}
+.fv-bloco--ink{background:var(--bg-ink);color:var(--fg-on-ink)}
+.fv-bloco--ink .fv-body,.fv-bloco--ink .fv-body-lg{color:var(--fg-on-ink-muted)}
+.fv-bloco--papel{background:var(--bg-surface);border:2px solid var(--border)}
+
+/* Item de cardápio */
+.fv-item{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4);
+  background:var(--bg-surface);border-bottom:1px solid var(--border-muted);
+  transition:background-color var(--dur-fast) var(--ease-smooth)}
+.fv-item:first-child{border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.fv-item:last-child{border-bottom:none;border-radius:0 0 var(--radius-lg) var(--radius-lg)}
+.fv-item:hover{background:var(--primary-alpha-06)}
+.fv-item__texto{flex:1;min-width:0}
+
+/* Card genérico */
+.fv-card{background:var(--bg-surface);border:2px solid var(--border);
+  border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-sm)}
+
+/* =====================================================================
+   SHOWCASE — layout da página de demonstração (prefixo .sc-)
+   ===================================================================== */
+.sc-wrap{max-width:var(--container-wide);margin:0 auto;padding:0 var(--space-5)}
+
+.sc-topo{position:sticky;top:0;z-index:var(--z-sticky);background:rgba(255,246,241,.92);
+  backdrop-filter:blur(10px);border-bottom:2px solid var(--border)}
+.sc-topo__in{max-width:var(--container-wide);margin:0 auto;padding:var(--space-3) var(--space-5);
+  display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.sc-nav{display:flex;gap:var(--space-5);flex-wrap:wrap}
+.sc-nav a{font-size:var(--fs-body-sm);font-weight:var(--fw-semibold);color:var(--fg-muted);
+  text-decoration:none;padding:.25rem 0;border-bottom:2px solid transparent;
+  transition:color var(--dur-fast) var(--ease-smooth),border-color var(--dur-fast) var(--ease-smooth)}
+.sc-nav a:hover{color:var(--primary-on-light);border-color:var(--primary-500)}
+.sc-nav a:focus-visible{outline:none;box-shadow:var(--ring);border-radius:var(--radius-xs)}
+
+.sc-sec{padding:var(--section-y) 0 0}
+.sc-sec:last-of-type{padding-bottom:var(--section-y)}
+.sc-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-6);
+  flex-wrap:wrap;margin-bottom:var(--space-8);
+  border-bottom:3px solid var(--border-ink);padding-bottom:var(--space-4)}
+.sc-cab__txt{max-width:var(--container-prose)}
+.sc-cab h2{margin:var(--space-2) 0 0;font-family:var(--font-display);
+  font-size:var(--fs-display-md);font-weight:var(--fw-bold);text-transform:uppercase;
+  letter-spacing:var(--tracking-display);line-height:.95}
+.sc-cab p{margin:var(--space-3) 0 0;color:var(--fg-muted);font-size:var(--fs-body)}
+
+.sc-grade{display:grid;gap:var(--space-6)}
+.sc-g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.sc-g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.sc-g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.sc-topo-alinhado{align-items:start}
+
+/* ---- Hero ---- */
+.sc-hero{padding-top:var(--space-12)}
+.sc-hero__bloco{background:var(--bloco-tomate);border-radius:var(--radius-asym);
+  padding:var(--space-12);color:var(--fg-on-primary);position:relative;overflow:hidden}
+.sc-hero__grade{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+  gap:var(--space-10);align-items:center}
+.sc-hero h1{margin:var(--space-4) 0 0;font-family:var(--font-display);
+  font-size:var(--fs-display-2xl);font-weight:var(--fw-black);text-transform:uppercase;
+  letter-spacing:var(--tracking-display);line-height:.88;color:var(--fg-on-primary)}
+.sc-hero__sub{margin:var(--space-5) 0 0;font-size:var(--fs-body-lg);
+  color:var(--fg-on-primary);max-width:32rem;line-height:1.5}
+.sc-hero__acoes{display:flex;gap:var(--space-3);margin-top:var(--space-8);flex-wrap:wrap}
+.sc-hero__over{display:inline-block;font-size:var(--fs-caption);font-weight:var(--fw-bold);
+  letter-spacing:var(--tracking-overline);text-transform:uppercase;
+  color:var(--fg-on-primary);background:rgba(0,0,0,.22);padding:.4rem .8rem;
+  border-radius:var(--radius-full)}
+.sc-hero__cartao{background:var(--bg-surface);border-radius:var(--radius-asym-alt);
+  padding:var(--space-6);color:var(--fg);box-shadow:var(--shadow-lg)}
+
+/* ---- Aplicações do wordmark ---- */
+.sc-apl{border-radius:var(--radius-lg);padding:var(--space-8);display:flex;
+  align-items:center;justify-content:center;min-height:132px;text-align:center}
+.sc-apl--papel{background:var(--bg-surface);border:2px solid var(--border)}
+.sc-apl--tomate{background:var(--primary-500)}
+.sc-apl--ink{background:var(--bg-ink)}
+.sc-apl--mono{background:var(--bg-base);color:var(--fg);border:2px dashed var(--border)}
+.sc-apl-legenda{margin:var(--space-3) 0 0;font-size:var(--fs-caption);color:var(--fg-subtle)}
+
+/* ---- Paleta ---- */
+.sc-grupo{margin-bottom:var(--space-10)}
+.sc-grupo__tit{display:flex;align-items:baseline;gap:var(--space-3);margin-bottom:var(--space-4);
+  flex-wrap:wrap}
+.sc-grupo__tit h3{margin:0;font-family:var(--font-display);font-size:var(--fs-heading-lg);
+  font-weight:var(--fw-bold);text-transform:uppercase;letter-spacing:var(--tracking-heading)}
+.sc-grupo__tit span{font-size:var(--fs-body-sm);color:var(--fg-muted)}
+.sc-swatches{display:grid;gap:var(--space-4);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr))}
+.sc-sw{display:flex;flex-direction:column;text-align:left;padding:0;border:2px solid var(--border);
+  border-radius:var(--radius-md);background:var(--bg-surface);cursor:pointer;overflow:hidden;
+  font-family:inherit;
+  transition:border-color var(--dur-fast) var(--ease-smooth),
+             box-shadow var(--dur-base) var(--ease-smooth),
+             transform var(--dur-base) var(--ease-pop)}
+.sc-sw:hover{border-color:var(--primary-500);box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.sc-sw:focus-visible{outline:none;border-color:var(--primary-500);box-shadow:var(--ring)}
+.sc-sw__cor{height:76px;width:100%;display:block}
+.sc-sw__info{padding:var(--space-3);display:flex;flex-direction:column;gap:2px}
+.sc-sw__nome{font-size:var(--fs-body-sm);font-weight:var(--fw-bold);color:var(--fg);
+  line-height:1.25}
+.sc-sw__hex{font-size:var(--fs-caption);font-weight:var(--fw-bold);color:var(--fg-muted);
+  letter-spacing:.04em;text-transform:uppercase}
+.sc-sw__uso{font-size:var(--fs-caption);color:var(--fg-subtle);line-height:1.35;margin-top:2px}
+
+/* ---- Tipografia ---- */
+.sc-spec{border-bottom:1px solid var(--border);padding:var(--space-6) 0}
+.sc-spec:last-child{border-bottom:none}
+.sc-spec__meta{display:flex;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-3)}
+.sc-spec__meta code{font-family:var(--font-sans);font-size:var(--fs-caption);
+  font-weight:var(--fw-bold);letter-spacing:.06em;text-transform:uppercase;
+  background:var(--bg-elevated);color:var(--fg-muted);padding:.2rem .5rem;
+  border-radius:var(--radius-xs)}
+.sc-spec__amostra{overflow:hidden}
+
+/* ---- Estados / demos ---- */
+.sc-demo{background:var(--bg-surface);border:2px solid var(--border);
+  border-radius:var(--radius-lg);padding:var(--space-6)}
+.sc-demo__tit{margin:0 0 var(--space-5);font-size:var(--fs-caption);font-weight:var(--fw-bold);
+  letter-spacing:var(--tracking-overline);text-transform:uppercase;color:var(--fg-subtle)}
+.sc-linha{display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:center}
+.sc-estado{display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-start}
+.sc-estado small{font-size:var(--fs-caption);color:var(--fg-subtle);font-weight:var(--fw-semibold)}
+
+/* ---- Raio e elevação ---- */
+.sc-raio{background:var(--bg-elevated);border:2px solid var(--border);height:104px;
+  display:flex;align-items:center;justify-content:center;font-size:var(--fs-caption);
+  font-weight:var(--fw-bold);color:var(--fg-muted);text-align:center;padding:var(--space-2)}
+.sc-elev{background:var(--bg-surface);border-radius:var(--radius-lg);height:104px;
+  display:flex;align-items:center;justify-content:center;font-size:var(--fs-caption);
+  font-weight:var(--fw-bold);color:var(--fg-muted)}
+.sc-elev-cel{padding:var(--space-3)}
+
+/* ---- Regras ---- */
+.sc-regra{border-radius:var(--radius-lg);padding:var(--space-5);border:2px solid var(--border);
+  background:var(--bg-surface);display:flex;flex-direction:column;gap:var(--space-2)}
+.sc-regra__tag{font-size:var(--fs-caption);font-weight:var(--fw-black);
+  letter-spacing:var(--tracking-overline);text-transform:uppercase}
+.sc-regra--faz{border-color:#a9d3bb}
+.sc-regra--faz .sc-regra__tag{color:var(--success)}
+.sc-regra--nao{border-color:#eab9cb}
+.sc-regra--nao .sc-regra__tag{color:var(--danger)}
+.sc-regra p{margin:0;font-size:var(--fs-body-sm);color:var(--fg-muted);line-height:1.5}
+.sc-regra strong{color:var(--fg)}
+
+/* ---- Toast ---- */
+.sc-toast{position:fixed;left:50%;bottom:var(--space-8);transform:translate(-50%,140%);
+  z-index:var(--z-toast);background:var(--bg-ink);color:var(--fg-on-ink);
+  padding:var(--space-3) var(--space-5);border-radius:var(--radius-full);
+  font-size:var(--fs-body-sm);font-weight:var(--fw-bold);box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:var(--space-3);pointer-events:none;
+  transition:transform var(--dur-base) var(--ease-pop),opacity var(--dur-base) var(--ease-smooth);
+  opacity:0;max-width:calc(100vw - 2rem)}
+.sc-toast.is-on{transform:translate(-50%,0);opacity:1}
+.sc-toast__pt{width:.6rem;height:.6rem;border-radius:50%;background:var(--primary-400);flex:none}
+
+/* ---- Rodapé ---- */
+.sc-rodape{background:var(--bg-ink);color:var(--fg-on-ink);margin-top:var(--space-20);
+  padding:var(--space-12) 0}
+.sc-rodape .sc-wrap{display:flex;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;
+  align-items:flex-end}
+.sc-rodape p{margin:var(--space-3) 0 0;color:var(--fg-on-ink-muted);font-size:var(--fs-body-sm);
+  max-width:34rem}
+
+/* ---- Tabela de contraste ---- */
+.sc-tab{width:100%;border-collapse:collapse;font-size:var(--fs-body-sm)}
+.sc-tab th,.sc-tab td{text-align:left;padding:var(--space-3);border-bottom:1px solid var(--border)}
+.sc-tab th{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.1em;
+  color:var(--fg-subtle);font-weight:var(--fw-bold)}
+.sc-tab td{color:var(--fg-muted)}
+.sc-tab td:first-child{color:var(--fg);font-weight:var(--fw-semibold)}
+.sc-rolagem{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.sc-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sc-pular{position:fixed;top:.5rem;left:-9999px;z-index:var(--z-toast);
+  background:var(--primary-500);color:#fff;padding:var(--space-2) var(--space-4);
+  border-radius:var(--radius-md);font-weight:var(--fw-bold);text-decoration:none}
+.sc-pular:focus{left:.5rem;box-shadow:var(--shadow-lg)}
+
+/* ---- Responsivo ---- */
+@media (max-width:900px){
+  :root{--fs-display-2xl:3.75rem;--fs-display-xl:3rem;--fs-display-lg:2.5rem;
+        --fs-display-md:2rem;--section-y:3.5rem}
+  .sc-hero__grade{grid-template-columns:1fr;gap:var(--space-8)}
+  .sc-hero__bloco,.fv-bloco{padding:var(--space-6)}
+}
+@media (max-width:560px){
+  :root{--fs-display-2xl:2.85rem;--fs-display-xl:2.4rem}
+  .sc-topo .sc-nav{display:none}
+  .sc-sw__cor{height:60px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important}
+  .fv-btn:hover,.fv-produto:hover,.sc-sw:hover{transform:none !important}
+  .fv-faixa__trilho{animation:none}
+}
+</style>
+</head>
+<body>
+
+<a class="sc-pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="sc-topo">
+  <div class="sc-topo__in">
+    <span class="fv-wordmark" style="font-size:1.5rem">FERV<span class="fv-wordmark__o" aria-hidden="true"></span><span class="sc-sr">O</span></span>
+    <nav class="sc-nav" aria-label="Seções do design system">
+      <a href="#marca">Marca</a>
+      <a href="#paleta">Paleta</a>
+      <a href="#tipo">Tipografia</a>
+      <a href="#componentes">Componentes</a>
+      <a href="#forma">Forma</a>
+      <a href="#regras">Regras</a>
+    </nav>
+    <a class="fv-btn fv-btn--primary fv-btn--sm" href="#componentes">Ver componentes</a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="sc-wrap sc-hero">
+    <div class="sc-hero__bloco">
+      <div class="sc-hero__grade">
+        <div>
+          <span class="sc-hero__over">Design System · versão 1.0</span>
+          <h1>Fome<br>não espera<br>carregar.</h1>
+          <p class="sc-hero__sub">
+            Este é o sistema visual da Fervo — comida de rua, delivery e loja de esquina.
+            Bloco de cor no lugar de enfeite, preço grande no lugar de promessa e um botão só
+            que importa: o de pedir.
+          </p>
+          <div class="sc-hero__acoes">
+            <a class="fv-btn fv-btn--lg" style="background:#fff;color:var(--primary-600)" href="#componentes">Pedir agora</a>
+            <a class="fv-btn fv-btn--lg fv-btn--ghost-on-primary" href="#paleta">Ver a paleta</a>
+          </div>
+        </div>
+
+        <aside class="sc-hero__cartao">
+          <span class="fv-overline">Combo da esquina</span>
+          <h2 class="fv-heading-lg" style="margin-top:.5rem;text-transform:uppercase">
+            Duplo cheddar + fritas + guaraná
+          </h2>
+          <p class="fv-body-sm" style="margin:.75rem 0 1.25rem">
+            Dois hambúrgueres de 120 g, cheddar derretido na chapa, fritas rústicas
+            e um guaraná de 350 ml gelado.
+          </p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+            <div>
+              <div><span class="fv-preco-de">R$ 62,90</span></div>
+              <div class="fv-preco fv-preco--lg fv-preco--tomate fv-preco--grifado" style="margin-top:.35rem">
+                <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">44</span><span class="fv-preco__cent">,90</span>
+              </div>
+            </div>
+            <span class="fv-selo" role="img" aria-label="Trinta por cento de desconto">
+              <span class="fv-selo__valor">-30%</span>
+              <span class="fv-selo__nota">só hoje</span>
+            </span>
+          </div>
+          <a class="fv-btn fv-btn--primary fv-btn--block" href="#componentes" style="margin-top:1.25rem">Adicionar ao pedido</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FAIXA ============================ -->
+  <section class="sc-wrap" style="margin-top:var(--space-8)">
+    <div class="fv-faixa" style="border-radius:var(--radius-full)" aria-label="Ofertas do dia">
+      <span class="fv-faixa__trilho">
+        <span>Entrega em 30 min ou o próximo é por nossa conta</span><span class="fv-faixa__sep">◆</span>
+        <span>Frete grátis acima de R$ 40</span><span class="fv-faixa__sep">◆</span>
+        <span>Chapa acesa das 11h à meia-noite</span><span class="fv-faixa__sep">◆</span>
+        <span>Entrega em 30 min ou o próximo é por nossa conta</span><span class="fv-faixa__sep">◆</span>
+        <span>Frete grátis acima de R$ 40</span><span class="fv-faixa__sep">◆</span>
+        <span>Chapa acesa das 11h à meia-noite</span><span class="fv-faixa__sep">◆</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============================ MARCA ============================ -->
+  <section class="sc-wrap sc-sec" id="marca">
+    <div class="sc-cab">
+      <div class="sc-cab__txt">
+        <span class="fv-overline">01 · Marca</span>
+        <h2>O wordmark e onde ele pousa</h2>
+        <p>
+          <strong style="color:var(--fg)">FERVO</strong> em condensada preta, caixa alta, tracking
+          −0,03em. O <strong style="color:var(--fg)">O</strong> não é letra: é um disco tomate com
+          anel interno — chapa quente vista de cima. Esse disco é o símbolo isolado, o avatar e o
+          favicon. Nunca reescreva o O como letra.
+        </p>
+      </div>
+    </div>
+
+    <div class="sc-grade sc-g4">
+      <div>
+        <div class="sc-apl sc-apl--papel">
+          <span class="fv-wordmark">FERV<span class="fv-wordmark__o" aria-hidden="true"></span><span class="sc-sr">O</span></span>
+        </div>
+        <p class="sc-apl-legenda">Sobre papel quente — uso padrão. Tinta preta, disco tomate.</p>
+      </div>
+      <div>
+        <div class="sc-apl sc-apl--tomate">
+          <span class="fv-wordmark fv-wordmark--on-primary">FERV<span class="fv-wordmark__o" aria-hidden="true"></span><span class="sc-sr">O</span></span>
+        </div>
+        <p class="sc-apl-legenda">Sobre bloco tomate — o disco vira branco com miolo tomate.</p>
+      </div>
+      <div>
+        <div class="sc-apl sc-apl--ink">
+          <span class="fv-wordmark fv-wordmark--on-ink">FERV<span class="fv-wordmark__o" aria-hidden="true"></span><span class="sc-sr">O</span></span>
+        </div>
+        <p class="sc-apl-legenda">Sobre tinta — embalagem, rodapé, guardanapo, cardápio noturno.</p>
+      </div>
+      <div>
+        <div class="sc-apl sc-apl--mono">
+          <span class="fv-wordmark fv-wordmark--mono">FERV<span class="fv-wordmark__o" aria-hidden="true"></span><span class="sc-sr">O</span></span>
+        </div>
+        <p class="sc-apl-legenda">Monocromático — carimbo, gravação, fatura, aplicação de 1 cor.</p>
+      </div>
+    </div>
+
+    <div class="sc-grade sc-g3" style="margin-top:var(--space-8)">
+      <div class="fv-card">
+        <span class="fv-overline">Símbolo isolado</span>
+        <div style="display:flex;gap:var(--space-4);align-items:center;margin-top:var(--space-4)">
+          <svg width="72" height="72" viewBox="0 0 32 32" role="img" aria-label="Símbolo Fervo">
+            <rect width="32" height="32" rx="8" fill="#241512"/>
+            <circle cx="16" cy="16" r="9.5" fill="#d92d0b"/>
+            <circle cx="16" cy="16" r="3.8" fill="#fff6f1"/>
+          </svg>
+          <svg width="72" height="72" viewBox="0 0 32 32" role="img" aria-label="Símbolo Fervo em tomate">
+            <rect width="32" height="32" rx="8" fill="#d92d0b"/>
+            <circle cx="16" cy="16" r="9.5" fill="#fff6f1"/>
+            <circle cx="16" cy="16" r="3.8" fill="#d92d0b"/>
+          </svg>
+        </div>
+        <p class="fv-body-sm" style="margin-top:var(--space-4)">
+          Tile de 8px de raio, disco centralizado, miolo com 40% do diâmetro. Serve de favicon,
+          ícone de app e avatar de rede.
+        </p>
+      </div>
+      <div class="fv-card">
+        <span class="fv-overline">Área de respiro</span>
+        <p class="fv-body-sm" style="margin-top:var(--space-4)">
+          A margem livre em volta do wordmark é a altura do disco. Nada entra nesse espaço —
+          nem foto, nem texto, nem selo. Tamanho mínimo do wordmark: 96 px de largura na tela,
+          22 mm no impresso.
+        </p>
+      </div>
+      <div class="fv-card">
+        <span class="fv-overline">O que nunca fazer</span>
+        <p class="fv-body-sm" style="margin-top:var(--space-4)">
+          Não inclinar, não aplicar contorno, não colocar sobre foto sem bloco de cor por baixo,
+          não trocar o disco por outra cor da paleta e não escrever "Fervo" em caixa baixa
+          em peça de marca.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PALETA ============================ -->
+  <section class="sc-wrap sc-sec" id="paleta">
+    <div class="sc-cab">
+      <div class="sc-cab__txt">
+        <span class="fv-overline">02 · Cor</span>
+        <h2>A cor é estrutura, não acabamento</h2>
+        <p>
+          O tomate <strong style="color:var(--fg)">#D92D0B</strong> pinta seção inteira. Se ele
+          aparece só como filete, a marca some da rua. Clique em qualquer amostra para copiar o hex.
+        </p>
+      </div>
+      <span class="fv-badge fv-badge--soft">Clique para copiar</span>
+    </div>
+
+    <div class="sc-grupo">
+      <div class="sc-grupo__tit">
+        <h3>Assinatura — tomate</h3>
+        <span>Bloco, botão de pedir, selo e faixa. O −500 é a assinatura.</span>
+      </div>
+      <div class="sc-swatches" id="pal-primary"></div>
+    </div>
+
+    <div class="sc-grupo">
+      <div class="sc-grupo__tit">
+        <h3>Neutros e superfícies</h3>
+        <span>Cinza quente, porque a assinatura é quente. Base nunca é branco puro.</span>
+      </div>
+      <div class="sc-swatches" id="pal-neutro"></div>
+    </div>
+
+    <div class="sc-grupo">
+      <div class="sc-grupo__tit">
+        <h3>Texto e bordas</h3>
+        <span>Três níveis de tinta, três de borda. Um quarto vira ilegível.</span>
+      </div>
+      <div class="sc-swatches" id="pal-texto"></div>
+    </div>
+
+    <div class="sc-grupo">
+      <div class="sc-grupo__tit">
+        <h3>Semânticas</h3>
+        <span>O erro é carmim, não tomate — senão ninguém distingue "pedir" de "deu ruim".</span>
+      </div>
+      <div class="sc-swatches" id="pal-semantica"></div>
+    </div>
+
+    <div class="sc-grupo">
+      <div class="sc-grupo__tit">
+        <h3>Secundárias</h3>
+        <span>Categoria de cardápio e ilustração. Nunca em botão, nunca em CTA.</span>
+      </div>
+      <div class="sc-swatches" id="pal-secundaria"></div>
+    </div>
+
+    <div class="fv-card">
+      <span class="fv-overline">Contraste medido, não estimado</span>
+      <div class="sc-rolagem" style="margin-top:var(--space-4)">
+        <table class="sc-tab">
+          <thead>
+            <tr><th>Combinação</th><th>Razão</th><th>Vale para</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>#241512 sobre #FFF6F1</td><td>15,2:1</td><td>Tudo. É a dupla padrão.</td></tr>
+            <tr><td>#6B4A40 sobre #FFF6F1</td><td>7,4:1</td><td>Parágrafo longo, descrição de produto.</td></tr>
+            <tr><td>#8A6553 sobre #FFF6F1</td><td>4,8:1</td><td>Label, caption, preço antigo riscado.</td></tr>
+            <tr><td>#FFFFFF sobre #D92D0B</td><td>4,8:1</td><td>Texto sobre bloco tomate, inclusive corpo.</td></tr>
+            <tr><td>#FFE0D4 sobre #D92D0B</td><td>4,3:1</td><td><strong>Só ≥ 24px</strong> ou ≥ 18,66px em negrito.</td></tr>
+            <tr><td>#B32209 sobre #FFF6F1</td><td>6,6:1</td><td>Link, preço em destaque, overline.</td></tr>
+            <tr><td>#D92D0B sobre #FFF6F1</td><td>4,4:1</td><td><strong>Não use em texto pequeno.</strong> É cor de fundo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TIPOGRAFIA ============================ -->
+  <section class="sc-wrap sc-sec" id="tipo">
+    <div class="sc-cab">
+      <div class="sc-cab__txt">
+        <span class="fv-overline">03 · Tipografia</span>
+        <h2>Letreiro na frente, recado atrás</h2>
+        <p>
+          Duas famílias, ambas nativas do sistema — o arquivo abre offline, sem CDN e sem webfont.
+          Display é condensada pesada (a placa da calçada). Texto é a sans neutra do sistema
+          (o cardápio que se lê no celular, na fila, com uma mão só).
+        </p>
+      </div>
+    </div>
+
+    <div class="sc-grade sc-g2" style="margin-bottom:var(--space-8)">
+      <div class="fv-card">
+        <span class="fv-overline">Display</span>
+        <p class="fv-heading-md" style="margin:var(--space-2) 0 var(--space-3)">Arial Narrow → Liberation Sans Narrow → Roboto Condensed</p>
+        <p class="fv-body-sm">
+          Caixa alta em título de seção e nome de produto. Tracking sempre negativo.
+          Line-height 0,92 — a condensada aguenta linha colada, e é isso que faz o letreiro.
+        </p>
+      </div>
+      <div class="fv-card">
+        <span class="fv-overline">Texto</span>
+        <p class="fv-heading-md" style="margin:var(--space-2) 0 var(--space-3);font-family:var(--font-sans);font-weight:700">
+          -apple-system → Segoe UI → Helvetica → Arial
+        </p>
+        <p class="fv-body-sm">
+          Caixa de frase, tracking zero, line-height 1,6. Nunca condensada em parágrafo:
+          texto corrido em face estreita cansa em três linhas.
+        </p>
+      </div>
+    </div>
+
+    <div class="sc-demo">
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>display-2xl</code><code>88 / 0.92 / −0.035em</code><code>peso 900</code><code>caixa alta</code></div>
+        <div class="sc-spec__amostra"><span class="fv-display-2xl">Chapa quente</span></div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>display-lg</code><code>52 / 0.92 / −0.035em</code><code>peso 700</code><code>caixa alta</code></div>
+        <div class="sc-spec__amostra"><span class="fv-display-lg">Cardápio da esquina</span></div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>display-md</code><code>40 / 0.92 / −0.035em</code><code>peso 700</code></div>
+        <div class="sc-spec__amostra"><span class="fv-display-md">Feito na hora, servido na hora</span></div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>heading-md</code><code>24 / 1.3 / −0.02em</code><code>display</code></div>
+        <div class="sc-spec__amostra"><span class="fv-heading-md">Duplo cheddar da casa</span></div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>body-lg</code><code>18 / 1.6 / 0</code><code>sans</code></div>
+        <div class="sc-spec__amostra">
+          <p class="fv-body-lg" style="max-width:var(--container-prose);margin:0">
+            Dois hambúrgueres de 120 g selados na chapa, cheddar derretido por cima,
+            picles e maionese defumada no pão brioche tostado na manteiga.
+          </p>
+        </div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>body</code><code>16 / 1.6 / 0</code><code>piso do corpo</code></div>
+        <div class="sc-spec__amostra">
+          <p class="fv-body" style="max-width:var(--container-prose);margin:0">
+            A cozinha abre às 11h e fecha à meia-noite, todos os dias. Pedido acima de R$ 40
+            sai com entrega grátis em um raio de 4 km. Fora desse raio, a taxa aparece no
+            carrinho antes de você confirmar — nunca depois.
+          </p>
+        </div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>overline</code><code>12 / 0.16em</code><code>caixa alta</code></div>
+        <div class="sc-spec__amostra"><span class="fv-overline">Porções para dividir</span></div>
+      </div>
+      <div class="sc-spec">
+        <div class="sc-spec__meta"><code>preço</code><code>display 900 · tabular-nums</code><code>o elemento gráfico da marca</code></div>
+        <div class="sc-spec__amostra" style="display:flex;align-items:flex-end;gap:var(--space-8);flex-wrap:wrap">
+          <span class="fv-preco fv-preco--xl fv-preco--tomate">
+            <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">29</span><span class="fv-preco__cent">,90</span>
+          </span>
+          <span class="fv-preco fv-preco--lg">
+            <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">18</span><span class="fv-preco__cent">,50</span>
+          </span>
+          <span class="fv-preco fv-preco--md">
+            <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">9</span><span class="fv-preco__cent">,90</span>
+          </span>
+          <div><span class="fv-preco-de">R$ 42,00</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ COMPONENTES ============================ -->
+  <section class="sc-wrap sc-sec" id="componentes">
+    <div class="sc-cab">
+      <div class="sc-cab__txt">
+        <span class="fv-overline">04 · Componentes</span>
+        <h2>O que vai para a tela</h2>
+        <p>
+          Botão, card de produto, campo, badge, selo e item de cardápio. É com esses seis que
+          uma loja Fervo inteira se monta.
+        </p>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="sc-demo" style="margin-bottom:var(--space-6)">
+      <p class="sc-demo__tit">Botões — todos os estados</p>
+      <div class="sc-grade sc-g2">
+        <div>
+          <p class="fv-body-sm" style="margin:0 0 var(--space-4);color:var(--fg-subtle)">
+            <strong style="color:var(--fg)">Primário</strong> — pedir, adicionar, finalizar.
+            Um por tela.
+          </p>
+          <div class="sc-linha">
+            <span class="sc-estado"><button class="fv-btn fv-btn--primary" type="button">Pedir agora</button><small>padrão</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--primary is-hover" type="button">Pedir agora</button><small>hover</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--primary is-focus" type="button">Pedir agora</button><small>foco</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--primary is-pressed" type="button">Pedir agora</button><small>pressionado</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--primary" type="button" disabled>Pedir agora</button><small>desabilitado</small></span>
+          </div>
+        </div>
+        <div>
+          <p class="fv-body-sm" style="margin:0 0 var(--space-4);color:var(--fg-subtle)">
+            <strong style="color:var(--fg)">Tinta</strong> — ação importante que não é comprar.
+          </p>
+          <div class="sc-linha">
+            <span class="sc-estado"><button class="fv-btn fv-btn--ink" type="button">Ver cardápio</button><small>padrão</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--ink is-hover" type="button">Ver cardápio</button><small>hover</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--ink is-pressed" type="button">Ver cardápio</button><small>pressionado</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--ink" type="button" disabled>Ver cardápio</button><small>desabilitado</small></span>
+          </div>
+        </div>
+        <div>
+          <p class="fv-body-sm" style="margin:0 0 var(--space-4);color:var(--fg-subtle)">
+            <strong style="color:var(--fg)">Contorno</strong> — terciário, filtros, "continuar comprando".
+          </p>
+          <div class="sc-linha">
+            <span class="sc-estado"><button class="fv-btn fv-btn--outline" type="button">Continuar comprando</button><small>padrão</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--outline is-hover" type="button">Continuar comprando</button><small>hover</small></span>
+            <span class="sc-estado"><button class="fv-btn fv-btn--outline is-pressed" type="button">Continuar comprando</button><small>pressionado</small></span>
+          </div>
+        </div>
+        <div style="background:var(--primary-500);border-radius:var(--radius-md);padding:var(--space-5)">
+          <p class="fv-body-sm" style="margin:0 0 var(--space-4);color:var(--fg-on-primary)">
+            <strong>Fantasma sobre tomate</strong> — dentro de bloco de cor, o contorno vira branco.
+          </p>
+          <div class="sc-linha">
+            <button class="fv-btn fv-btn--ghost-on-primary" type="button">Ver o combo</button>
+            <button class="fv-btn" style="background:#fff;color:var(--primary-600)" type="button">Quero esse</button>
+          </div>
+        </div>
+      </div>
+      <p class="fv-body-sm" style="margin:var(--space-5) 0 0;color:var(--fg-subtle)">
+        Tab pelos botões para ver o anel de foco real. O estado desabilitado troca de superfície
+        em vez de baixar a opacidade — texto apagado por opacidade não passa contraste.
+      </p>
+    </div>
+
+    <!-- Card de produto -->
+    <div class="sc-grade sc-g3" style="margin-bottom:var(--space-6)">
+
+      <article class="fv-produto">
+        <div class="fv-produto__midia">
+          <span class="fv-produto__selo">
+            <span class="fv-selo" role="img" aria-label="Campeão de vendas da casa">
+              <span class="fv-selo__valor" style="font-size:1.1rem">TOP</span>
+              <span class="fv-selo__nota">da casa</span>
+            </span>
+          </span>
+          <svg viewBox="0 0 200 140" role="img" aria-label="Ilustração de hambúrguer duplo">
+            <path d="M20 78C20 42 56 18 100 18s80 24 80 60z" fill="#e8a33d"/>
+            <ellipse cx="70" cy="46" rx="6.5" ry="3.4" fill="#fff6f1" transform="rotate(-20 70 46)"/>
+            <ellipse cx="102" cy="34" rx="6.5" ry="3.4" fill="#fff6f1" transform="rotate(6 102 34)"/>
+            <ellipse cx="134" cy="50" rx="6.5" ry="3.4" fill="#fff6f1" transform="rotate(24 134 50)"/>
+            <g fill="#7fb800">
+              <rect x="18" y="74" width="164" height="10"/>
+              <circle cx="30" cy="84" r="9"/><circle cx="55" cy="84" r="9"/><circle cx="80" cy="84" r="9"/>
+              <circle cx="105" cy="84" r="9"/><circle cx="130" cy="84" r="9"/><circle cx="155" cy="84" r="9"/>
+              <circle cx="174" cy="84" r="8"/>
+            </g>
+            <g fill="#f5b53d">
+              <rect x="22" y="86" width="156" height="10" rx="3"/>
+              <path d="M46 96l10 15 10-15z"/><path d="M118 96l10 17 10-17z"/>
+            </g>
+            <rect x="18" y="96" width="164" height="18" rx="9" fill="#6b3a22"/>
+            <path d="M22 114h156v4a16 16 0 0 1-16 16H38a16 16 0 0 1-16-16z" fill="#d1801f"/>
+          </svg>
+        </div>
+        <div class="fv-produto__corpo">
+          <span class="fv-badge fv-badge--soft">Hambúrgueres</span>
+          <h3 class="fv-produto__nome">Duplo cheddar da casa</h3>
+          <p class="fv-produto__desc">
+            Dois de 120 g na chapa, cheddar derretido, picles e maionese defumada no pão brioche.
+          </p>
+          <div class="fv-produto__rodape">
+            <div>
+              <div><span class="fv-preco-de">R$ 42,00</span></div>
+              <div class="fv-preco fv-preco--md fv-preco--tomate" style="margin-top:.25rem">
+                <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">34</span><span class="fv-preco__cent">,90</span>
+              </div>
+            </div>
+            <button class="fv-btn fv-btn--primary fv-btn--sm" type="button">Adicionar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="fv-produto is-hover">
+        <div class="fv-produto__midia">
+          <span class="fv-produto__selo">
+            <span class="fv-selo fv-selo--mostarda" role="img" aria-label="Novidade">
+              <span class="fv-selo__valor" style="font-size:1.2rem">NOVO</span>
+              <span class="fv-selo__nota">na chapa</span>
+            </span>
+          </span>
+          <svg viewBox="0 0 200 140" role="img" aria-label="Ilustração de porção de fritas">
+            <g fill="#e8a33d">
+              <rect x="62" y="18" width="13" height="58" rx="5" transform="rotate(-14 68 47)"/>
+              <rect x="84" y="10" width="13" height="66" rx="5" transform="rotate(-4 90 43)"/>
+              <rect x="104" y="14" width="13" height="62" rx="5" transform="rotate(7 110 45)"/>
+              <rect x="124" y="24" width="13" height="54" rx="5" transform="rotate(16 130 51)"/>
+            </g>
+            <path d="M52 66h96l-11 58a10 10 0 0 1-10 8H73a10 10 0 0 1-10-8z" fill="#d92d0b"/>
+            <rect x="55" y="80" width="90" height="14" fill="#fff6f1" opacity=".22"/>
+            <circle cx="100" cy="106" r="11" fill="#fff6f1" opacity=".9"/>
+            <circle cx="100" cy="106" r="4.4" fill="#d92d0b"/>
+          </svg>
+        </div>
+        <div class="fv-produto__corpo">
+          <span class="fv-badge fv-badge--soft">Porções</span>
+          <h3 class="fv-produto__nome">Fritas rústicas com alho</h3>
+          <p class="fv-produto__desc">
+            Batata com casca, alho tostado, sal grosso e um punhado de salsinha. Serve duas pessoas.
+          </p>
+          <div class="fv-produto__rodape">
+            <div class="fv-preco fv-preco--md">
+              <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">24</span><span class="fv-preco__cent">,00</span>
+            </div>
+            <button class="fv-btn fv-btn--primary fv-btn--sm" type="button">Adicionar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="fv-produto">
+        <div class="fv-produto__midia">
+          <svg viewBox="0 0 200 140" role="img" aria-label="Ilustração de copo de guaraná gelado">
+            <rect x="96" y="4" width="9" height="40" rx="4.5" fill="#7fb800" transform="rotate(16 100 24)"/>
+            <path d="M60 44h80l-10 78a11 11 0 0 1-11 10H81a11 11 0 0 1-11-10z" fill="#241512"/>
+            <rect x="56" y="34" width="88" height="15" rx="7.5" fill="#d92d0b"/>
+            <rect x="72" y="62" width="56" height="8" rx="4" fill="#fff6f1" opacity=".25"/>
+            <rect x="72" y="78" width="40" height="8" rx="4" fill="#fff6f1" opacity=".18"/>
+            <circle cx="100" cy="106" r="12" fill="#fff6f1" opacity=".9"/>
+            <circle cx="100" cy="106" r="4.8" fill="#241512"/>
+          </svg>
+        </div>
+        <div class="fv-produto__corpo">
+          <span class="fv-badge fv-badge--soft">Bebidas</span>
+          <h3 class="fv-produto__nome">Guaraná da roça 350 ml</h3>
+          <p class="fv-produto__desc">
+            Garrafa gelada direto da câmara, servida com gelo e uma rodela de limão.
+          </p>
+          <div class="fv-produto__rodape">
+            <div class="fv-preco fv-preco--md">
+              <span class="fv-preco__moeda">R$</span><span class="fv-preco__int">8</span><span class="fv-preco__cent">,90</span>
+            </div>
+            <button class="fv-btn fv-btn--primary fv-btn--sm" type="button">Adicionar</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="sc-grade sc-g2 sc-topo-alinhado">
+      <!-- Campos -->
+      <div class="sc-demo">
+        <p class="sc-demo__tit">Campos e mensagens</p>
+        <div style="display:grid;gap:var(--space-5)">
+          <div>
+            <label class="fv-label" for="ct-end">Endereço de entrega</label>
+            <input class="fv-input" id="ct-end" type="text" placeholder="Rua, número e complemento">
+            <p class="fv-hint">A gente confere o raio de entrega antes de fechar o pedido.</p>
+          </div>
+          <div>
+            <label class="fv-label" for="ct-foco">Estado de foco</label>
+            <input class="fv-input is-focus" id="ct-foco" type="text" value="Av. Osvaldo Aranha, 1424">
+          </div>
+          <div>
+            <label class="fv-label" for="ct-erro">Estado de erro</label>
+            <input class="fv-input is-invalid" id="ct-erro" type="text" value="90000">
+            <p class="fv-error">CEP incompleto — faltam três dígitos.</p>
+          </div>
+          <div>
+            <label class="fv-label" for="ct-off">Campo desabilitado</label>
+            <input class="fv-input" id="ct-off" type="text" value="Cupom já aplicado" disabled>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges, selos, item -->
+      <div class="sc-demo">
+        <p class="sc-demo__tit">Badges e selos</p>
+        <div class="sc-linha" style="margin-bottom:var(--space-6)">
+          <span class="fv-badge fv-badge--primary">Oferta</span>
+          <span class="fv-badge fv-badge--soft">Hambúrgueres</span>
+          <span class="fv-badge fv-badge--ink">Retirada</span>
+          <span class="fv-badge fv-badge--success">Pedido a caminho</span>
+          <span class="fv-badge fv-badge--warning">Últimas 4 unidades</span>
+          <span class="fv-badge fv-badge--danger">Cozinha fechada</span>
+          <span class="fv-badge fv-badge--info">Abre às 11h</span>
+        </div>
+        <div class="sc-linha" style="gap:var(--space-6)">
+          <span class="fv-selo" role="img" aria-label="Frete grátis">
+            <span class="fv-selo__valor" style="font-size:1.05rem">FRETE</span>
+            <span class="fv-selo__nota">grátis</span>
+          </span>
+          <span class="fv-selo fv-selo--ink" role="img" aria-label="Vinte e cinco por cento de desconto">
+            <span class="fv-selo__valor">-25%</span>
+            <span class="fv-selo__nota">combo</span>
+          </span>
+          <span class="fv-selo fv-selo--estrela" role="img" aria-label="Dois por um às terças">
+            <span class="fv-selo__valor" style="font-size:1.3rem">2×1</span>
+            <span class="fv-selo__nota">terça</span>
+          </span>
+        </div>
+        <p class="fv-body-sm" style="margin:var(--space-5) 0 0;color:var(--fg-subtle)">
+          Selo carrega promessa curta — no máximo duas linhas, sempre em caixa alta.
+          A variante estrela é reservada: uma por tela, e só quando a oferta é real.
+        </p>
+      </div>
+    </div>
+
+    <!-- Item de cardápio -->
+    <div style="margin-top:var(--space-6)">
+      <p class="sc-demo__tit" style="margin-bottom:var(--space-4)">Item de cardápio — lista densa</p>
+      <div style="border:2px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+        <div class="fv-item">
+          <span class="fv-selo fv-selo--mostarda" style="width:3.25rem;height:3.25rem;flex:none">
+            <span class="fv-selo__valor" style="font-size:.8rem">1kg</span>
+          </span>
+          <span class="fv-item__texto">
+            <strong class="fv-heading-sm">Costela desfiada na brasa</strong>
+            <p class="fv-body-sm" style="margin:.25rem 0 0">Oito horas de defumação, farofa de bacon e vinagrete de laranja.</p>
+          </span>
+          <span class="fv-preco fv-preco--md"><span class="fv-preco__moeda">R$</span><span class="fv-preco__int">89</span><span class="fv-preco__cent">,00</span></span>
+        </div>
+        <div class="fv-item">
+          <span class="fv-selo" style="width:3.25rem;height:3.25rem;flex:none">
+            <span class="fv-selo__valor" style="font-size:.8rem">-20%</span>
+          </span>
+          <span class="fv-item__texto">
+            <strong class="fv-heading-sm">Bolinho de feijoada · 8 unidades</strong>
+            <p class="fv-body-sm" style="margin:.25rem 0 0">Recheio cremoso, crosta de panko e geleia de pimenta da casa.</p>
+          </span>
+          <span class="fv-preco fv-preco--md fv-preco--tomate"><span class="fv-preco__moeda">R$</span><span class="fv-preco__int">32</span><span class="fv-preco__cent">,90</span></span>
+        </div>
+        <div class="fv-item">
+          <span class="fv-selo fv-selo--ink" style="width:3.25rem;height:3.25rem;flex:none">
+            <span class="fv-selo__valor" style="font-size:.8rem">VEG</span>
+          </span>
+          <span class="fv-item__texto">
+            <strong class="fv-heading-sm">Burger de grão-de-bico</strong>
+            <p class="fv-body-sm" style="margin:.25rem 0 0">Hambúrguer de grão-de-bico e beterraba, tahine e rúcula no pão australiano.</p>
+          </span>
+          <span class="fv-preco fv-preco--md"><span class="fv-preco__moeda">R$</span><span class="fv-preco__int">28</span><span class="fv-preco__cent">,00</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FORMA ============================ -->
+  <section class="sc-wrap sc-sec" id="forma">
+    <div class="sc-cab">
+      <div class="sc-cab__txt">
+        <span class="fv-overline">05 · Forma</span>
+        <h2>Raio, assimetria e elevação</h2>
+        <p>
+          Raio proporcional ao elemento — e um canto assimétrico reservado ao card de produto
+          e ao bloco de hero. Elevação é sombra difusa (fundo claro pede sombra), tingida de
+          tomate quando o elemento é de compra.
+        </p>
+      </div>
+    </div>
+
+    <div class="sc-grade sc-g4" style="margin-bottom:var(--space-8)">
+      <div><div class="sc-raio" style="border-radius:var(--radius-sm)">radius-sm · 8px</div><p class="sc-apl-legenda">Chip, botão pequeno, tag.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-md)">radius-md · 14px</div><p class="sc-apl-legenda">Botão, input, imagem pequena.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-lg)">radius-lg · 22px</div><p class="sc-apl-legenda">Card, painel, lista.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-xl)">radius-xl · 32px</div><p class="sc-apl-legenda">Bloco de seção, container.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-asym);background:var(--primary-alpha-14);border-color:var(--primary-500)">radius-asym</div><p class="sc-apl-legenda"><strong>Assinatura.</strong> Só card de produto e hero.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-asym-alt);background:var(--primary-alpha-14);border-color:var(--primary-500)">radius-asym-alt</div><p class="sc-apl-legenda">Espelho do anterior — cartão sobreposto ao bloco.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-full)">radius-full</div><p class="sc-apl-legenda">Selo, badge, faixa, avatar.</p></div>
+      <div><div class="sc-raio" style="border-radius:var(--radius-xs)">radius-xs · 4px</div><p class="sc-apl-legenda">Detalhe miúdo, código, marcador.</p></div>
+    </div>
+
+    <div class="sc-grade sc-g4">
+      <div class="sc-elev-cel"><div class="sc-elev" style="box-shadow:var(--shadow-sm)">shadow-sm</div><p class="sc-apl-legenda">Card em repouso.</p></div>
+      <div class="sc-elev-cel"><div class="sc-elev" style="box-shadow:var(--shadow-md)">shadow-md</div><p class="sc-apl-legenda">Selo, menu, popover.</p></div>
+      <div class="sc-elev-cel"><div class="sc-elev" style="box-shadow:var(--shadow-lg)">shadow-lg</div><p class="sc-apl-legenda">Cartão sobre bloco de cor, modal.</p></div>
+      <div class="sc-elev-cel"><div class="sc-elev" style="box-shadow:var(--shadow-pop)">shadow-pop</div><p class="sc-apl-legenda"><strong>Tingida de tomate.</strong> Só em elemento de compra.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ REGRAS ============================ -->
+  <section class="sc-wrap sc-sec" id="regras">
+    <div class="sc-cab">
+      <div class="sc-cab__txt">
+        <span class="fv-overline">06 · Regras de uso</span>
+        <h2>O que segura o sistema de pé</h2>
+        <p>
+          Barulhento no lugar certo, nunca desleixado. Estas seis regras são a diferença entre
+          uma marca de rua e um panfleto.
+        </p>
+      </div>
+    </div>
+
+    <div class="sc-grade sc-g3">
+      <div class="sc-regra sc-regra--faz">
+        <span class="sc-regra__tag">Faça</span>
+        <p><strong>Pinte o bloco inteiro.</strong> Seção de hero, faixa de oferta e chamada de combo
+          são áreas cheias de tomate. A cor precisa ser lida de longe, no story e na calçada.</p>
+      </div>
+      <div class="sc-regra sc-regra--nao">
+        <span class="sc-regra__tag">Não faça</span>
+        <p><strong>Tomate em texto pequeno.</strong> #D92D0B em 14px sobre papel dá 4,4:1 e reprova.
+          Texto e link usam #B32209. O −500 é cor de fundo, não de tinta.</p>
+      </div>
+
+      <div class="sc-regra sc-regra--faz">
+        <span class="sc-regra__tag">Faça</span>
+        <p><strong>Um botão de comprar por tela.</strong> O tomate cheio é exclusividade do
+          "Adicionar" e do "Finalizar pedido". Todo o resto é tinta ou contorno.</p>
+      </div>
+      <div class="sc-regra sc-regra--nao">
+        <span class="sc-regra__tag">Não faça</span>
+        <p><strong>Mostarda, limão ou uva em botão.</strong> Secundária serve categoria e ilustração.
+          No botão ela vira uma segunda marca disputando com a primeira.</p>
+      </div>
+
+      <div class="sc-regra sc-regra--faz">
+        <span class="sc-regra__tag">Faça</span>
+        <p><strong>Preço com o tratamento completo.</strong> R$ pequeno no topo, inteiro gigante em
+          condensada, centavos elevados, tabular-nums. Preço antigo riscado sempre à esquerda do novo.</p>
+      </div>
+      <div class="sc-regra sc-regra--nao">
+        <span class="sc-regra__tag">Não faça</span>
+        <p><strong>Contagem regressiva piscando.</strong> Urgência aqui vem do selo e do preço grande,
+          não de animação. Nada pulsa nesta marca — a faixa desliza, e só.</p>
+      </div>
+
+      <div class="sc-regra sc-regra--faz">
+        <span class="sc-regra__tag">Faça</span>
+        <p><strong>Foto real da comida, sangrando na borda.</strong> Quando não houver foto, use a
+          ilustração chapada da paleta — nunca banco de imagem genérico.</p>
+      </div>
+      <div class="sc-regra sc-regra--nao">
+        <span class="sc-regra__tag">Não faça</span>
+        <p><strong>Condensada em parágrafo.</strong> A display é letreiro: título, nome de produto e
+          preço. Texto corrido em face estreita cansa na terceira linha.</p>
+      </div>
+
+      <div class="sc-regra sc-regra--faz">
+        <span class="sc-regra__tag">Faça</span>
+        <p><strong>Erro com ícone e texto.</strong> O carmim #A11043 é perto do tomate para quem
+          enxerga cor e igual para quem não enxerga. Cor sozinha nunca comunica estado.</p>
+      </div>
+      <div class="sc-regra sc-regra--nao">
+        <span class="sc-regra__tag">Não faça</span>
+        <p><strong>Canto assimétrico em tudo.</strong> O <code>radius-asym</code> é assinatura porque
+          é raro: card de produto e bloco de hero. Espalhado, vira ruído.</p>
+      </div>
+    </div>
+
+    <div class="fv-bloco fv-bloco--ink" style="margin-top:var(--space-8)">
+      <span class="fv-overline" style="color:var(--primary-300)">Voz da Fervo</span>
+      <h3 class="fv-display-md" style="margin-top:var(--space-3);color:var(--fg-on-ink);text-transform:uppercase">
+        Fala como quem está atrás do balcão
+      </h3>
+      <div class="sc-grade sc-g2" style="margin-top:var(--space-6)">
+        <p class="fv-body-lg" style="margin:0">
+          Segunda pessoa, "você". Frase curta, verbo na frente, ponto final.
+          Preço aparece por extenso e sem eufemismo — "R$ 34,90", nunca "a partir de".
+          Prazo é promessa: se a gente diz 30 minutos, é 30 minutos.
+        </p>
+        <p class="fv-body-lg" style="margin:0">
+          Nada de emoji, nada de caixa alta em frase inteira fora do letreiro, nada de
+          "imperdível" ou "sabor inesquecível". A comida é que faz esse trabalho.
+          O texto só tira o obstáculo do caminho de quem está com fome.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sc-rodape">
+  <div class="sc-wrap">
+    <div>
+      <span class="fv-wordmark fv-wordmark--on-ink">FERV<span class="fv-wordmark__o" aria-hidden="true"></span><span class="sc-sr">O</span></span>
+      <p>
+        Design system da Fervo · versão 1.0. Fonte da verdade em <strong style="color:var(--fg-on-ink)">tokens.css</strong>,
+        manual em <strong style="color:var(--fg-on-ink)">README.md</strong>. Nenhum valor visual nasce fora do token.
+      </p>
+    </div>
+    <p style="margin:0">
+      Material bônus · kit de design systems<br>
+      Zero dependência externa: sem CDN, sem webfont, abre offline.
+    </p>
+  </div>
+</footer>
+
+<div class="sc-toast" id="toast" role="status" aria-live="polite">
+  <span class="sc-toast__pt" aria-hidden="true"></span><span id="toast-txt">Hex copiado</span>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var PALETAS = {
+    'pal-primary': [
+      ['primary-300', '#ff8a66', 'Highlight sobre tomate ou tinta'],
+      ['primary-400', '#ff5c33', 'Hover em superfície escura'],
+      ['primary-500', '#d92d0b', 'A ASSINATURA · bloco, botão, selo'],
+      ['primary-600', '#b32209', 'Pressed + texto e link no claro'],
+      ['primary-700', '#8a1907', 'Texto miúdo, borda forte']
+    ],
+    'pal-neutro': [
+      ['bg-base', '#fff6f1', 'A página · papel quente'],
+      ['bg-surface', '#ffffff', 'Card, painel, linha de cardápio'],
+      ['bg-elevated', '#ffe9de', 'Input, chip, mídia de produto'],
+      ['bg-ink', '#241512', 'Bloco escuro quente, rodapé'],
+      ['bg-ink-soft', '#3a221c', 'Card dentro do bloco escuro']
+    ],
+    'pal-texto': [
+      ['fg', '#241512', 'Título e corpo'],
+      ['fg-muted', '#6b4a40', 'Parágrafo, descrição de produto'],
+      ['fg-subtle', '#8a6553', 'Label, caption, preço antigo'],
+      ['border', '#ebd5c9', 'Borda padrão'],
+      ['border-muted', '#f6e5dc', 'Divisória de lista'],
+      ['border-ink', '#241512', 'Contorno grosso, régua de seção']
+    ],
+    'pal-semantica': [
+      ['success', '#0f7b3f', 'Pedido confirmado, em rota'],
+      ['warning', '#b26a00', 'Estoque baixo, atraso'],
+      ['danger', '#a11043', 'Erro, cancelamento, recusa'],
+      ['info', '#1b6aa8', 'Horário, aviso neutro']
+    ],
+    'pal-secundaria': [
+      ['accent-mostarda', '#e8a33d', 'Categoria porções, fritura, pão'],
+      ['accent-limao', '#7fb800', 'Categoria bebidas e leves'],
+      ['accent-uva', '#6b2d5c', 'Categoria sobremesas']
+    ]
+  };
+
+  function montaSwatch(nome, hex, uso) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sc-sw';
+    b.setAttribute('data-hex', hex);
+    b.setAttribute('aria-label', 'Copiar ' + hex + ' — ' + nome);
+
+    var cor = document.createElement('span');
+    cor.className = 'sc-sw__cor';
+    cor.style.background = hex;
+    if (hex === '#ffffff') { cor.style.boxShadow = 'inset 0 0 0 1px #ebd5c9'; }
+
+    var info = document.createElement('span');
+    info.className = 'sc-sw__info';
+
+    var n = document.createElement('span');
+    n.className = 'sc-sw__nome';
+    n.textContent = nome;
+
+    var h = document.createElement('span');
+    h.className = 'sc-sw__hex';
+    h.textContent = hex;
+
+    var u = document.createElement('span');
+    u.className = 'sc-sw__uso';
+    u.textContent = uso;
+
+    info.appendChild(n); info.appendChild(h); info.appendChild(u);
+    b.appendChild(cor); b.appendChild(info);
+    return b;
+  }
+
+  Object.keys(PALETAS).forEach(function (id) {
+    var alvo = document.getElementById(id);
+    if (!alvo) { return; }
+    PALETAS[id].forEach(function (t) {
+      alvo.appendChild(montaSwatch(t[0], t[1], t[2]));
+    });
+  });
+
+  var toast = document.getElementById('toast');
+  var toastTxt = document.getElementById('toast-txt');
+  var timer = null;
+
+  function avisa(msg) {
+    toastTxt.textContent = msg;
+    toast.classList.add('is-on');
+    if (timer) { clearTimeout(timer); }
+    timer = setTimeout(function () { toast.classList.remove('is-on'); }, 1800);
+  }
+
+  function copia(texto) {
+    // file:// costuma bloquear a Clipboard API — por isso o fallback existe.
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(
+        function () { avisa(texto + ' copiado'); },
+        function () { copiaLegado(texto); }
+      );
+    } else {
+      copiaLegado(texto);
+    }
+  }
+
+  function copiaLegado(texto) {
+    var ta = document.createElement('textarea');
+    ta.value = texto;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    avisa(ok ? texto + ' copiado' : 'Copie na mão: ' + texto);
+  }
+
+  document.addEventListener('click', function (ev) {
+    var alvo = ev.target.closest ? ev.target.closest('.sc-sw') : null;
+    if (!alvo) { return; }
+    copia(alvo.getAttribute('data-hex'));
+  });
+}());
+</script>
+
+</body>
+</html>

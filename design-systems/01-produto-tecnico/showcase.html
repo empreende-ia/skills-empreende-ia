@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiln — Design System</title>
+<meta name="description" content="Design system do Kiln: plano de controle para pipelines de dados e APIs. Tokens, marca, tipografia e componentes.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0E14'/><rect x='6' y='8' width='4' height='16' rx='1' fill='%23E7EBF3'/><rect x='14' y='8' width='12' height='16' rx='1' fill='%23F08519'/></svg>">
+<style>
+/* =====================================================================
+   KILN — Design System · tokens.css
+   Fonte de verdade. Tudo que é visual no produto sai daqui.
+
+   Uso:
+     <link rel="stylesheet" href="tokens.css">
+
+   Arquétipo: produto técnico / dev tool / infraestrutura.
+   Regra que governa o sistema: a interface informa, não impressiona.
+   Contraste de TEMPERATURA é a ideia central — âmbar de forja quente
+   contra neutros azulados frios. Nada de glow, nada de gradiente
+   decorativo. Elevação vem de borda e de valor de fundo.
+   ===================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------
+     1. ASSINATURA — âmbar de forja
+     Rampa de 5 passos da única cor de marca. É o calor do sistema:
+     aparece em ação primária, foco, seleção, valor em destaque e no
+     cursor do wordmark. NUNCA significa estado (isso é papel das
+     semânticas, grupo 4). Se tudo é âmbar, nada é âmbar — orçamento
+     prático: no máximo 2 elementos âmbar por tela cheia.
+     ------------------------------------------------------------------- */
+  --kl-ember-100: #FFE2BE;  /* tinta clara: texto sobre fundo âmbar sólido escuro */
+  --kl-ember-300: #FFB25C;  /* texto e ícone de acento sobre fundo escuro (10.8:1) */
+  --kl-ember-500: #F08519;  /* ASSINATURA — preenchimento, borda ativa, cursor */
+  --kl-ember-700: #A85310;  /* pressed, borda de repouso do botão primário */
+  --kl-ember-900: #3A2008;  /* fundo tingido: chip, linha de tabela selecionada */
+
+  /* Alfas do âmbar — usadas onde a cor precisa deixar o fundo passar.
+     Sempre derivadas de --kl-ember-500. */
+  --kl-ember-a08: rgba(240, 133, 25, 0.08);  /* hover de linha, fundo de chip */
+  --kl-ember-a16: rgba(240, 133, 25, 0.16);  /* borda de chip, trilho de meter */
+  --kl-ember-a55: rgba(240, 133, 25, 0.55);  /* anel de foco */
+
+  /* -------------------------------------------------------------------
+     2. NEUTROS — aço frio
+     Quatro valores de superfície, do mais fundo ao mais alto. A
+     hierarquia é por VALOR (o quão claro é o fundo) somada a 1px de
+     borda. Não existe sombra difusa carregando profundidade aqui.
+     ------------------------------------------------------------------- */
+  --kl-sunken:  #070910;  /* poço: bloco de código, corpo de terminal, well */
+  --kl-base:    #0B0E14;  /* página */
+  --kl-surface: #11151D;  /* card, painel, cabeçalho de tabela */
+  --kl-raised:  #171D27;  /* input, linha em hover, aba ativa */
+  --kl-overlay: #1D2531;  /* popover, menu, toast — o único que usa sombra */
+
+  /* Hairlines. Todas 1px. A borda é o elemento estrutural do sistema:
+     ela desenha a grade, separa densidade e devolve a sensação de
+     instrumento medido. */
+  --kl-line-soft: #171E29;  /* divisória interna, entre linhas de tabela */
+  --kl-line:      #212A38;  /* padrão: card, input, botão secundário */
+  --kl-line-loud: #334053;  /* hover, foco não-âmbar, borda de destaque */
+
+  /* -------------------------------------------------------------------
+     3. TEXTO — três níveis, e só três
+     Nível 1 é o dado. Nível 2 é a explicação. Nível 3 é o rótulo.
+     Todos passam AA (>=4.5:1) em qualquer superfície do grupo 2.
+     ------------------------------------------------------------------- */
+  --kl-text:      #E7EBF3;  /* primário: valor, título, conteúdo da célula */
+  --kl-text-2:    #9BA6BA;  /* secundário: parágrafo, descrição, ajuda */
+  --kl-text-3:    #828DA0;  /* terciário: label mono, metadado, unidade, timestamp */
+  --kl-text-on-ember: #1A1206;  /* texto sobre preenchimento âmbar (7.1:1) */
+
+  /* -------------------------------------------------------------------
+     4. SEMÂNTICAS — estado do sistema
+     Existem para dizer se algo está de pé, degradado ou caído. São
+     deliberadamente menos saturadas que a assinatura para não competir
+     com ela. Regra dura: cor de estado só aparece em par — quadrado de
+     6px + palavra. Cor sozinha nunca carrega significado.
+     ------------------------------------------------------------------- */
+  --kl-ok:    #46B67F;  /* operacional, healthy, 2xx, deploy concluído */
+  --kl-warn:  #E0B341;  /* degradado, próximo do limite, retry em curso */
+  --kl-err:   #E8564E;  /* caído, 5xx, job falhou, validação inválida */
+  --kl-info:  #5B8DEF;  /* neutro informativo, build em fila, nota do sistema */
+
+  --kl-ok-bg:   rgba(70, 182, 127, 0.12);
+  --kl-warn-bg: rgba(224, 179, 65, 0.12);
+  --kl-err-bg:  rgba(232, 86, 78, 0.12);
+  --kl-info-bg: rgba(91, 141, 239, 0.12);
+
+  /* -------------------------------------------------------------------
+     5. TIPOGRAFIA — duas faces, papéis separados
+     MONO é estrutural, não decorativa: label, número, metadado,
+     navegação, badge, cabeçalho de tabela, ID, caminho de rota.
+     SANS é só texto corrido — parágrafo, descrição, prosa de vazio.
+     Stacks nativas do sistema. Zero webfont, zero @import: a página
+     abre sem rede e sem reflow de fonte.
+     ------------------------------------------------------------------- */
+  --kl-font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+                  "Liberation Mono", "DejaVu Sans Mono", monospace;
+  --kl-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text",
+                  "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+
+  /* Escala de tipo. Densa de propósito: a UI opera em 13px, não em 16px.
+     16px é reservado para texto que a pessoa lê em sequência. */
+  --kl-fs-micro: 0.6875rem;  /* 11px — label mono, unidade, legenda de eixo */
+  --kl-fs-mini:  0.75rem;    /* 12px — badge, metadado, célula secundária */
+  --kl-fs-sm:    0.8125rem;  /* 13px — PADRÃO da UI: botão, input, tabela, nav */
+  --kl-fs-base:  0.875rem;   /* 14px — corpo denso, item de lista */
+  --kl-fs-md:    1rem;       /* 16px — texto corrido em sans */
+  --kl-fs-lg:    1.25rem;    /* 20px — título de card, número de KPI pequeno */
+  --kl-fs-xl:    1.625rem;   /* 26px — título de seção */
+  --kl-fs-2xl:   2.125rem;   /* 34px — título de página, KPI grande */
+  --kl-fs-3xl:   2.75rem;    /* 44px — display, só na abertura */
+
+  /* Pesos. Quatro, e nenhum a mais. Sem 200, sem 800: a face mono do
+     sistema não tem esses cortes e falsificar peso quebra a métrica. */
+  --kl-fw-regular:  400;
+  --kl-fw-medium:   500;  /* label mono, cabeçalho de tabela */
+  --kl-fw-semibold: 600;  /* botão, título */
+  --kl-fw-bold:     700;  /* número em destaque, wordmark */
+
+  /* Entrelinha */
+  --kl-lh-tight: 1.15;  /* display e números grandes */
+  --kl-lh-ui:    1.35;  /* controles, tabelas, listas */
+  --kl-lh-prose: 1.6;   /* parágrafo em sans */
+
+  /* Tracking. O label mono maiúsculo SEM tracking vira um bloco ilegível;
+     0.08em é o que o torna lido. Display negativo é discreto — este
+     sistema não é de manchete. */
+  --kl-tr-label:   0.08em;
+  --kl-tr-display: -0.015em;
+  --kl-tr-normal:  0;
+
+  /* -------------------------------------------------------------------
+     6. ESPAÇO — base 4, com meio-passo de 2 e 6
+     A régua é mais curta que o padrão de mercado. Densidade é
+     posicionamento: quem usa este produto quer ver mais linhas por tela,
+     não mais respiro. Gutter de página é 24px, não 64px.
+     ------------------------------------------------------------------- */
+  --kl-s-1:  2px;
+  --kl-s-2:  4px;
+  --kl-s-3:  6px;
+  --kl-s-4:  8px;
+  --kl-s-5:  12px;
+  --kl-s-6:  16px;
+  --kl-s-7:  20px;
+  --kl-s-8:  24px;   /* padding padrão de card e gutter de página */
+  --kl-s-9:  32px;
+  --kl-s-10: 48px;   /* separação entre seções */
+  --kl-s-11: 64px;   /* topo e base de página */
+
+  /* Altura de controle. Fixa, para tudo alinhar na mesma linha de base. */
+  --kl-ctrl-sm: 26px;
+  --kl-ctrl:    32px;
+  --kl-ctrl-lg: 38px;
+
+  /* -------------------------------------------------------------------
+     7. RAIOS — quase retos
+     Máximo 6px, em nada. Cantos grandes leem como consumidor; este
+     produto lê como instrumento. Não existe raio total (pílula): badge
+     é retângulo, indicador de status é quadrado.
+     ------------------------------------------------------------------- */
+  --kl-r-0: 0;      /* tabela colada na borda do painel, faixas de largura total */
+  --kl-r-1: 2px;    /* quadrado de status, tag inline, swatch pequeno */
+  --kl-r-2: 4px;    /* PADRÃO — botão, input, badge, chip */
+  --kl-r-3: 6px;    /* card, painel, popover, bloco de código */
+
+  /* -------------------------------------------------------------------
+     8. ELEVAÇÃO — por borda e valor, não por sombra
+     e-0 e e-1 são a regra. e-2 é a exceção e existe só para camada que
+     flutua de verdade sobre o conteúdo (menu, popover, toast).
+     Glow é proibido: nenhuma sombra colorida em nenhum nível.
+     ------------------------------------------------------------------- */
+  --kl-e-0: none;                                  /* superfície colada — card, painel */
+  --kl-e-1: 0 1px 2px rgba(0, 0, 0, 0.45);         /* controle apoiado — botão, input */
+  --kl-e-2: 0 12px 32px -16px rgba(0, 0, 0, 0.9);  /* camada flutuante — popover, toast */
+
+  /* Anel de foco. Um só, âmbar, visível em qualquer superfície. Nunca
+     remova outline sem devolver isto. */
+  --kl-ring: 0 0 0 1px var(--kl-base), 0 0 0 3px var(--kl-ember-a55);
+
+  /* -------------------------------------------------------------------
+     9. MOVIMENTO — curto e reto
+     Transição existe para confirmar que o clique registrou, não para
+     encenar. Nada acima de 220ms, nada com bounce, nada de entrada
+     animada em conteúdo de dado.
+     ------------------------------------------------------------------- */
+  --kl-dur-1: 90ms;   /* cor de hover, borda */
+  --kl-dur-2: 140ms;  /* estado de controle, abrir/fechar pequeno */
+  --kl-dur-3: 220ms;  /* toast, popover */
+  --kl-ease:     cubic-bezier(0.2, 0, 0, 1);
+  --kl-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* -------------------------------------------------------------------
+     10. LAYOUT
+     ------------------------------------------------------------------- */
+  --kl-max-w:      1280px;  /* largura máxima da aplicação */
+  --kl-max-w-prose: 62ch;   /* largura máxima de texto corrido */
+  --kl-header-h:   48px;
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body.kl,
+.kl-root {
+  margin: 0;
+  background: var(--kl-base);
+  color: var(--kl-text);
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-sm);
+  line-height: var(--kl-lh-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: none;   /* mono técnica não liga fi/fl nem => */
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--kl-ember-a16);
+  color: var(--kl-ember-100);
+}
+
+/* =====================================================================
+   TIPOGRAFIA — classes utilitárias
+   ===================================================================== */
+
+.kl-display {
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-3xl);
+  font-weight: var(--kl-fw-semibold);
+  line-height: var(--kl-lh-tight);
+  letter-spacing: var(--kl-tr-display);
+  margin: 0;
+}
+
+.kl-h1 { font-size: var(--kl-fs-2xl); font-weight: var(--kl-fw-semibold); line-height: var(--kl-lh-tight); letter-spacing: var(--kl-tr-display); margin: 0; }
+.kl-h2 { font-size: var(--kl-fs-xl);  font-weight: var(--kl-fw-semibold); line-height: 1.25; letter-spacing: var(--kl-tr-display); margin: 0; }
+.kl-h3 { font-size: var(--kl-fs-lg);  font-weight: var(--kl-fw-semibold); line-height: 1.3; margin: 0; }
+
+/* Texto corrido — a única coisa que usa sans em tamanho de leitura. */
+.kl-prose {
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-md);
+  line-height: var(--kl-lh-prose);
+  color: var(--kl-text-2);
+  max-width: var(--kl-max-w-prose);
+  margin: 0;
+}
+.kl-prose strong { color: var(--kl-text); font-weight: var(--kl-fw-semibold); }
+
+.kl-help {
+  font-family: var(--kl-font-sans);
+  font-size: var(--kl-fs-mini);
+  line-height: 1.45;
+  color: var(--kl-text-3);
+  margin: 0;
+}
+
+/* Label mono — a assinatura tipográfica do sistema. Toda seção, todo
+   campo, todo cabeçalho de coluna começa com um destes. */
+.kl-label {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: var(--kl-tr-label);
+  text-transform: uppercase;
+  color: var(--kl-text-3);
+  /* 1.2 e não 1: maiúscula acentuada em pt-BR (Ú, Ã, Ó) tem o diacrítico
+     cortado quando a caixa é justa. */
+  line-height: 1.2;
+}
+.kl-label--ember { color: var(--kl-ember-500); }
+
+/* Metadado mono em caixa baixa: caminho, ID, hash, timestamp. */
+.kl-meta {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Número. Sempre mono, sempre tabular. Não existe número em sans
+   neste sistema. */
+.kl-num {
+  font-family: var(--kl-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: var(--kl-tr-normal);
+  color: var(--kl-text);
+}
+.kl-num--lg  { font-size: var(--kl-fs-2xl); font-weight: var(--kl-fw-bold); line-height: var(--kl-lh-tight); }
+.kl-num--ember { color: var(--kl-ember-300); }
+.kl-num__unit { font-size: 0.5em; font-weight: var(--kl-fw-medium); color: var(--kl-text-3); margin-left: 0.15em; }
+
+/* Código inline */
+.kl-code {
+  font-family: var(--kl-font-mono);
+  font-size: 0.9285em;
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-1);
+  padding: 0.1em 0.35em;
+  color: var(--kl-ember-300);
+}
+
+/* Bloco de código / saída de terminal */
+.kl-pre {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  line-height: 1.6;
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-3);
+  padding: var(--kl-s-5) var(--kl-s-6);
+  color: var(--kl-text-2);
+  overflow-x: auto;
+  margin: 0;
+  tab-size: 2;
+}
+
+/* Tecla */
+.kl-kbd {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  background: var(--kl-raised);
+  border: 1px solid var(--kl-line-loud);
+  border-bottom-width: 2px;
+  border-radius: var(--kl-r-1);
+  padding: 1px 5px;
+  color: var(--kl-text-2);
+}
+
+/* =====================================================================
+   WORDMARK
+   ===================================================================== */
+
+/* kiln▮ — mono, caixa baixa, com um cursor de bloco âmbar colado.
+   O cursor é o elemento de marca: onde ele aparece, a marca aparece. */
+.kl-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.14em;
+  font-family: var(--kl-font-mono);
+  font-weight: var(--kl-fw-bold);
+  font-size: var(--kl-fs-md);
+  letter-spacing: -0.02em;
+  color: var(--kl-text);
+  text-transform: lowercase;
+  line-height: 1;
+  user-select: none;
+}
+.kl-wordmark__cursor {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.92em;
+  background: var(--kl-ember-500);
+  border-radius: var(--kl-r-1);
+  flex: none;
+}
+.kl-wordmark--blink .kl-wordmark__cursor { animation: kl-blink 1.4s steps(1, end) infinite; }
+@keyframes kl-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0.15; } }
+
+/* Wordmark sobre preenchimento âmbar (avatar de app, faixa) */
+.kl-wordmark--inverse { color: var(--kl-text-on-ember); }
+.kl-wordmark--inverse .kl-wordmark__cursor { background: var(--kl-text-on-ember); }
+
+/* Ícone de app: bloco âmbar com o cursor recortado */
+.kl-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--kl-ember-500);
+  border-radius: var(--kl-r-2);
+  color: var(--kl-text-on-ember);
+  font-family: var(--kl-font-mono);
+  font-weight: var(--kl-fw-bold);
+  font-size: var(--kl-fs-base);
+  line-height: 1;
+  flex: none;
+}
+
+/* =====================================================================
+   ESTRUTURA — régua de seção
+   ===================================================================== */
+
+/* Label + hairline que atravessa o resto da largura. É como o sistema
+   abre qualquer bloco de conteúdo. */
+.kl-rule {
+  display: flex;
+  align-items: center;
+  gap: var(--kl-s-5);
+  margin: 0 0 var(--kl-s-6);
+}
+.kl-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--kl-line);
+}
+
+/* Divisória simples */
+.kl-hr { height: 1px; background: var(--kl-line); border: 0; margin: var(--kl-s-8) 0; }
+
+/* =====================================================================
+   BOTÕES
+   ===================================================================== */
+
+.kl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kl-s-3);
+  height: var(--kl-ctrl);
+  padding: 0 var(--kl-s-5);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-sm);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: 0.01em;
+  color: var(--kl-text);
+  background: var(--kl-raised);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  box-shadow: var(--kl-e-1);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--kl-dur-1) var(--kl-ease),
+              border-color var(--kl-dur-1) var(--kl-ease),
+              color var(--kl-dur-1) var(--kl-ease);
+}
+.kl-btn:hover { background: var(--kl-overlay); border-color: var(--kl-line-loud); }
+.kl-btn:active { background: var(--kl-raised); transform: translateY(1px); }
+.kl-btn:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+.kl-btn[disabled], .kl-btn[aria-disabled="true"] {
+  opacity: 0.42;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Primário — o único preenchimento âmbar da interface. Um por vista. */
+.kl-btn--primary {
+  background: var(--kl-ember-500);
+  border-color: var(--kl-ember-700);
+  color: var(--kl-text-on-ember);
+  font-weight: var(--kl-fw-semibold);
+}
+.kl-btn--primary:hover { background: var(--kl-ember-300); border-color: var(--kl-ember-500); }
+.kl-btn--primary:active { background: var(--kl-ember-700); color: var(--kl-ember-100); }
+
+/* Fantasma — ação de baixa consequência, densidade de barra de ferramentas */
+.kl-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--kl-text-2);
+}
+.kl-btn--ghost:hover { background: var(--kl-raised); border-color: var(--kl-line); color: var(--kl-text); }
+
+/* Destrutivo — texto vermelho sobre superfície neutra. Preenchimento
+   vermelho sólido só em diálogo de confirmação. */
+.kl-btn--danger { color: var(--kl-err); border-color: var(--kl-line); }
+.kl-btn--danger:hover { background: var(--kl-err-bg); border-color: var(--kl-err); color: var(--kl-err); }
+
+.kl-btn--sm { height: var(--kl-ctrl-sm); padding: 0 var(--kl-s-4); font-size: var(--kl-fs-mini); }
+.kl-btn--lg { height: var(--kl-ctrl-lg); padding: 0 var(--kl-s-7); font-size: var(--kl-fs-base); }
+.kl-btn--block { display: flex; width: 100%; }
+
+/* Carregando — o rótulo permanece e a cor não muda; só a opacidade cai.
+   Trocar a cor do texto aqui quebra o contraste do botão primário. */
+.kl-btn--loading { pointer-events: none; opacity: 0.72; }
+.kl-btn--loading .kl-spinner { display: inline-block; }
+
+.kl-spinner {
+  width: 11px; height: 11px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: kl-spin 620ms linear infinite;
+  flex: none;
+}
+@keyframes kl-spin { to { transform: rotate(360deg); } }
+
+/* =====================================================================
+   CARD / PAINEL
+   ===================================================================== */
+
+.kl-card {
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-3);
+  box-shadow: var(--kl-e-0);
+  transition: border-color var(--kl-dur-1) var(--kl-ease),
+              background var(--kl-dur-1) var(--kl-ease);
+}
+/* Hover só existe em card que é alvo de clique. Card estático não
+   reage — reagir sem destino é ruído. */
+.kl-card--link { cursor: pointer; display: block; text-decoration: none; color: inherit; }
+.kl-card--link:hover { border-color: var(--kl-line-loud); background: var(--kl-raised); }
+.kl-card--link:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+
+.kl-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kl-s-5);
+  padding: var(--kl-s-5) var(--kl-s-6);
+  border-bottom: 1px solid var(--kl-line);
+  min-height: 40px;
+}
+.kl-card__body { padding: var(--kl-s-6); }
+.kl-card__foot {
+  padding: var(--kl-s-4) var(--kl-s-6);
+  border-top: 1px solid var(--kl-line);
+  background: var(--kl-sunken);
+  border-radius: 0 0 var(--kl-r-3) var(--kl-r-3);
+}
+/* Tabela colada na borda do card: zera o padding do corpo. */
+.kl-card__body--flush { padding: 0; }
+
+/* =====================================================================
+   CAMPOS
+   ===================================================================== */
+
+.kl-field { display: flex; flex-direction: column; gap: var(--kl-s-3); }
+
+.kl-input,
+.kl-select,
+.kl-textarea {
+  width: 100%;
+  height: var(--kl-ctrl);
+  padding: 0 var(--kl-s-4);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-sm);
+  color: var(--kl-text);
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  transition: border-color var(--kl-dur-1) var(--kl-ease),
+              background var(--kl-dur-1) var(--kl-ease);
+  appearance: none;
+}
+.kl-textarea { height: auto; min-height: 84px; padding: var(--kl-s-4); line-height: 1.5; resize: vertical; }
+.kl-input::placeholder, .kl-textarea::placeholder { color: var(--kl-text-3); }
+.kl-input:hover, .kl-select:hover, .kl-textarea:hover { border-color: var(--kl-line-loud); }
+.kl-input:focus, .kl-select:focus, .kl-textarea:focus {
+  outline: none;
+  background: var(--kl-base);
+  border-color: var(--kl-ember-500);
+  box-shadow: var(--kl-ring);
+}
+.kl-input[disabled], .kl-select[disabled], .kl-textarea[disabled] {
+  opacity: 0.45; cursor: not-allowed; background: var(--kl-surface);
+}
+.kl-input--invalid, .kl-input[aria-invalid="true"] { border-color: var(--kl-err); }
+.kl-input--invalid:focus { box-shadow: 0 0 0 1px var(--kl-base), 0 0 0 3px var(--kl-err-bg); }
+
+.kl-error {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  color: var(--kl-err);
+  display: flex; align-items: center; gap: var(--kl-s-3);
+}
+
+/* Prefixo colado no input — unidade, protocolo, moeda */
+.kl-input-group { display: flex; align-items: stretch; }
+.kl-input-group__addon {
+  display: inline-flex; align-items: center;
+  padding: 0 var(--kl-s-4);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-3);
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-line);
+  border-right: 0;
+  border-radius: var(--kl-r-2) 0 0 var(--kl-r-2);
+  white-space: nowrap;
+}
+.kl-input-group .kl-input { border-radius: 0 var(--kl-r-2) var(--kl-r-2) 0; }
+
+/* =====================================================================
+   BADGE, CHIP, STATUS
+   ===================================================================== */
+
+/* Retângulo, nunca pílula. */
+.kl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kl-s-3);
+  height: 20px;
+  padding: 0 var(--kl-s-3);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--kl-text-2);
+  background: var(--kl-raised);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  white-space: nowrap;
+}
+.kl-badge--ok    { color: var(--kl-ok);    background: var(--kl-ok-bg);    border-color: transparent; }
+.kl-badge--warn  { color: var(--kl-warn);  background: var(--kl-warn-bg);  border-color: transparent; }
+.kl-badge--err   { color: var(--kl-err);   background: var(--kl-err-bg);   border-color: transparent; }
+.kl-badge--info  { color: var(--kl-info);  background: var(--kl-info-bg);  border-color: transparent; }
+.kl-badge--ember { color: var(--kl-ember-300); background: var(--kl-ember-a08); border-color: var(--kl-ember-a16); }
+
+/* Quadrado de status de 6px. Nunca círculo — círculo é interface de
+   consumidor; aqui é LED de painel. Sempre acompanhado de palavra. */
+.kl-dot {
+  width: 6px; height: 6px;
+  border-radius: var(--kl-r-1);
+  background: var(--kl-text-3);
+  flex: none;
+}
+.kl-dot--ok   { background: var(--kl-ok); }
+.kl-dot--warn { background: var(--kl-warn); }
+.kl-dot--err  { background: var(--kl-err); }
+.kl-dot--info { background: var(--kl-info); }
+
+.kl-status {
+  display: inline-flex; align-items: center; gap: var(--kl-s-3);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-2);
+}
+
+/* =====================================================================
+   TABELA DE DADOS
+   ===================================================================== */
+
+/* Envolva sempre em .kl-table-wrap: o scroll horizontal pertence à
+   tabela, nunca ao body. */
+.kl-table-wrap { width: 100%; overflow-x: auto; }
+
+.kl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  font-variant-numeric: tabular-nums;
+}
+.kl-table th {
+  text-align: left;
+  padding: var(--kl-s-4) var(--kl-s-5);
+  font-size: var(--kl-fs-micro);
+  font-weight: var(--kl-fw-medium);
+  letter-spacing: var(--kl-tr-label);
+  text-transform: uppercase;
+  color: var(--kl-text-3);
+  background: var(--kl-surface);
+  border-bottom: 1px solid var(--kl-line);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+}
+.kl-table td {
+  padding: var(--kl-s-4) var(--kl-s-5);
+  border-bottom: 1px solid var(--kl-line-soft);
+  color: var(--kl-text-2);
+  white-space: nowrap;
+}
+.kl-table tbody tr:last-child td { border-bottom: 0; }
+.kl-table tbody tr:hover td { background: var(--kl-raised); }
+.kl-table tbody tr[aria-selected="true"] td { background: var(--kl-ember-a08); }
+.kl-table .kl-td--key { color: var(--kl-text); }
+/* Número sempre à direita: a coluna vira uma régua vertical. */
+.kl-table .kl-td--num, .kl-table .kl-th--num { text-align: right; }
+
+/* Lista chave-valor — metadados de recurso */
+.kl-kv { display: grid; grid-template-columns: minmax(96px, auto) 1fr; gap: var(--kl-s-4) var(--kl-s-6); }
+.kl-kv dt {
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-micro);
+  letter-spacing: var(--kl-tr-label);
+  text-transform: uppercase;
+  color: var(--kl-text-3);
+  padding-top: 1px;
+}
+.kl-kv dd {
+  margin: 0;
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text);
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+/* Barra fina de proporção — uso de cota, progresso de job */
+.kl-meter {
+  height: 4px;
+  background: var(--kl-sunken);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-1);
+  overflow: hidden;
+}
+.kl-meter__fill { height: 100%; background: var(--kl-ember-500); }
+.kl-meter__fill--warn { background: var(--kl-warn); }
+.kl-meter__fill--err  { background: var(--kl-err); }
+
+/* =====================================================================
+   NAVEGAÇÃO
+   ===================================================================== */
+
+.kl-nav { display: flex; align-items: center; gap: var(--kl-s-1); }
+.kl-nav__item {
+  display: inline-flex; align-items: center;
+  height: var(--kl-ctrl-sm);
+  padding: 0 var(--kl-s-4);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text-3);
+  text-decoration: none;
+  border-radius: var(--kl-r-2);
+  border: 1px solid transparent;
+  transition: color var(--kl-dur-1) var(--kl-ease), background var(--kl-dur-1) var(--kl-ease);
+}
+.kl-nav__item:hover { color: var(--kl-text); background: var(--kl-raised); }
+.kl-nav__item:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+/* Ativo = texto claro + marca âmbar embaixo. Sem preenchimento. */
+.kl-nav__item[aria-current="page"] {
+  color: var(--kl-text);
+  background: var(--kl-raised);
+  border-color: var(--kl-line);
+}
+.kl-nav__item[aria-current="page"]::before {
+  content: "";
+  width: 5px; height: 5px;
+  border-radius: var(--kl-r-1);
+  background: var(--kl-ember-500);
+  margin-right: var(--kl-s-3);
+}
+
+/* =====================================================================
+   TOAST
+   ===================================================================== */
+
+.kl-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--kl-s-8);
+  transform: translate(-50%, 12px);
+  display: flex; align-items: center; gap: var(--kl-s-4);
+  padding: var(--kl-s-4) var(--kl-s-6);
+  background: var(--kl-overlay);
+  border: 1px solid var(--kl-line-loud);
+  border-radius: var(--kl-r-2);
+  box-shadow: var(--kl-e-2);
+  font-family: var(--kl-font-mono);
+  font-size: var(--kl-fs-mini);
+  color: var(--kl-text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--kl-dur-3) var(--kl-ease-out),
+              transform var(--kl-dur-3) var(--kl-ease-out);
+  z-index: 60;
+}
+.kl-toast[data-open="true"] { opacity: 1; transform: translate(-50%, 0); }
+
+/* =====================================================================
+   ACESSIBILIDADE
+   ===================================================================== */
+
+.kl-sr {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================================
+   Estilos exclusivos desta página de vitrine (não fazem parte do DS).
+   ===================================================================== */
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--kl-s-8); }
+
+/* ---- topo fixo ---- */
+.top {
+  position: sticky; top: 0; z-index: 40;
+  height: var(--kl-header-h);
+  background: rgba(11, 14, 20, 0.92);
+  border-bottom: 1px solid var(--kl-line);
+  backdrop-filter: blur(8px);
+}
+.top__in { height: 100%; display: flex; align-items: center; gap: var(--kl-s-6); }
+.top__brand { display: flex; align-items: center; gap: var(--kl-s-4); margin-right: var(--kl-s-4); }
+.top__spacer { flex: 1; }
+.top__right { display: flex; align-items: center; gap: var(--kl-s-4); }
+@media (max-width: 860px) { .top .kl-nav, .top__right .kl-badge { display: none; } }
+
+/* ---- seções ---- */
+/* padding só no eixo vertical: o horizontal pertence a .wrap */
+.sec { padding-top: var(--kl-s-10); padding-bottom: var(--kl-s-2); }
+.sec--first { padding-top: var(--kl-s-9); }
+.sec__label { display: flex; align-items: center; gap: var(--kl-s-4); }
+.sec__label::before {
+  content: ""; width: 6px; height: 6px; flex: none;
+  background: var(--kl-ember-500); border-radius: var(--kl-r-1);
+}
+.sub { margin: var(--kl-s-9) 0 var(--kl-s-5); }
+
+/* ---- grades ---- */
+.grid { display: grid; gap: var(--kl-s-5); }
+.g-2 { grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+.g-3 { grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+.g-4 { grid-template-columns: repeat(auto-fit, minmax(min(168px, 100%), 1fr)); }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--kl-s-5); }
+.col { display: flex; flex-direction: column; gap: var(--kl-s-5); }
+.stack-4 { display: flex; flex-direction: column; gap: var(--kl-s-4); }
+
+/* ---- abertura ---- */
+.hero { padding-top: var(--kl-s-11); padding-bottom: var(--kl-s-9); border-bottom: 1px solid var(--kl-line); }
+.hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 344px); gap: var(--kl-s-10); align-items: start; }
+.hero__meta { display: flex; flex-wrap: wrap; gap: var(--kl-s-6) var(--kl-s-8); margin-top: var(--kl-s-9); }
+.hero__meta > div { display: flex; flex-direction: column; gap: var(--kl-s-3); }
+@media (max-width: 900px) { .hero__grid { grid-template-columns: 1fr; gap: var(--kl-s-8); } }
+
+/* ---- marca ---- */
+.brand-tile {
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-3);
+  overflow: hidden;
+}
+.brand-tile__stage {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 108px; padding: var(--kl-s-7);
+}
+.brand-tile__cap {
+  border-top: 1px solid var(--kl-line);
+  padding: var(--kl-s-4) var(--kl-s-5);
+  background: var(--kl-surface);
+}
+.stage--base { background: var(--kl-base); }
+.stage--surface { background: var(--kl-surface); }
+.stage--ember { background: var(--kl-ember-500); }
+.stage--sunken { background: var(--kl-sunken); }
+
+.lockup { display: flex; align-items: center; gap: var(--kl-s-5); }
+.lockup__bar { width: 1px; height: 22px; background: var(--kl-line-loud); }
+
+/* ---- swatches ---- */
+.sw {
+  display: block; width: 100%; text-align: left; padding: 0;
+  background: var(--kl-surface);
+  border: 1px solid var(--kl-line);
+  border-radius: var(--kl-r-2);
+  cursor: pointer; overflow: hidden;
+  font: inherit; color: inherit;
+  transition: border-color var(--kl-dur-1) var(--kl-ease);
+}
+.sw:hover { border-color: var(--kl-line-loud); }
+.sw:focus-visible { outline: none; box-shadow: var(--kl-ring); }
+/* fio interno para que as amostras muito escuras ainda mostrem seus limites */
+.sw__chip { display: block; height: 54px; border-bottom: 1px solid var(--kl-line); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07); }
+.sw__body { display: block; padding: var(--kl-s-4) var(--kl-s-5) var(--kl-s-5); }
+.sw__name {
+  display: block; font-family: var(--kl-font-mono); font-size: var(--kl-fs-mini);
+  color: var(--kl-text); font-weight: var(--kl-fw-medium);
+}
+.sw__hex {
+  display: flex; align-items: center; gap: var(--kl-s-3);
+  font-family: var(--kl-font-mono); font-size: var(--kl-fs-micro);
+  color: var(--kl-text-3); letter-spacing: 0.04em; margin-top: 3px;
+}
+.sw__ratio { color: var(--kl-text-3); }
+.sw__role {
+  display: block; font-family: var(--kl-font-sans); font-size: var(--kl-fs-micro);
+  color: var(--kl-text-3); line-height: 1.4; margin-top: var(--kl-s-3);
+}
+.sw:hover .sw__hex, .sw:focus-visible .sw__hex { color: var(--kl-ember-300); }
+
+/* ---- tipo ---- */
+.spec { display: flex; align-items: baseline; gap: var(--kl-s-6); padding: var(--kl-s-5) 0; border-bottom: 1px solid var(--kl-line-soft); }
+.spec__meta { flex: none; width: 132px; }
+.spec__body { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 640px) {
+  .spec { flex-direction: column; align-items: stretch; gap: var(--kl-s-3); }
+  .spec__meta { width: auto; }
+  .spec__body { width: 100%; }
+}
+
+.face { padding: var(--kl-s-6); }
+.face__sample-mono { font-family: var(--kl-font-mono); font-size: var(--kl-fs-lg); color: var(--kl-text); letter-spacing: -0.01em; }
+.face__sample-sans { font-family: var(--kl-font-sans); font-size: var(--kl-fs-lg); color: var(--kl-text); letter-spacing: -0.015em; }
+
+/* ---- espaço / raio / elevação ---- */
+.ruler { display: flex; flex-direction: column; gap: var(--kl-s-3); }
+.ruler__row { display: flex; align-items: center; gap: var(--kl-s-5); }
+.ruler__bar { height: 10px; background: var(--kl-ember-a16); border-left: 1px solid var(--kl-ember-500); }
+.ruler__lab { font-family: var(--kl-font-mono); font-size: var(--kl-fs-micro); color: var(--kl-text-3); width: 92px; flex: none; }
+
+.g-cards { grid-template-columns: repeat(auto-fit, minmax(min(316px, 100%), 1fr)); align-items: start; }
+
+.rad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--kl-s-4); }
+.rad { display: flex; flex-direction: column; align-items: center; gap: var(--kl-s-4); }
+.rad__box {
+  width: 100%; height: 52px; background: var(--kl-raised);
+  border: 1px solid var(--kl-line-loud);
+}
+
+.elev-row { display: flex; align-items: center; gap: var(--kl-s-5); padding: var(--kl-s-4) 0; }
+.elev-row + .elev-row { border-top: 1px solid var(--kl-line-soft); }
+.elev-chip {
+  width: 56px; height: 34px; flex: none;
+  background: var(--kl-surface); border: 1px solid var(--kl-line); border-radius: var(--kl-r-3);
+}
+.elev-chip--0 { box-shadow: var(--kl-e-0); }
+.elev-chip--1 { box-shadow: var(--kl-e-1); }
+.elev-chip--2 { box-shadow: var(--kl-e-2); background: var(--kl-overlay); border-color: var(--kl-line-loud); }
+
+/* ---- matriz de estados ---- */
+.states { width: 100%; border-collapse: collapse; }
+.states th, .states td { padding: var(--kl-s-5) var(--kl-s-5); border-bottom: 1px solid var(--kl-line-soft); text-align: left; vertical-align: middle; }
+.states th {
+  font-family: var(--kl-font-mono); font-size: var(--kl-fs-micro); font-weight: var(--kl-fw-medium);
+  letter-spacing: var(--kl-tr-label); text-transform: uppercase; color: var(--kl-text-3);
+  border-bottom-color: var(--kl-line); white-space: nowrap;
+}
+.states td:first-child {
+  font-family: var(--kl-font-mono); font-size: var(--kl-fs-micro); color: var(--kl-text-3);
+  letter-spacing: var(--kl-tr-label); text-transform: uppercase; white-space: nowrap;
+}
+.states tr:last-child td { border-bottom: 0; }
+
+/* Réplicas estáticas de estado — só para a vitrine mostrar hover/foco
+   parados. Não copie estas classes para produção. */
+.d-hover.kl-btn { background: var(--kl-overlay); border-color: var(--kl-line-loud); }
+.d-hover.kl-btn--primary { background: var(--kl-ember-300); border-color: var(--kl-ember-500); }
+.d-hover.kl-btn--ghost { background: var(--kl-raised); border-color: var(--kl-line); color: var(--kl-text); }
+.d-hover.kl-btn--danger { background: var(--kl-err-bg); border-color: var(--kl-err); }
+.d-focus.kl-btn { box-shadow: var(--kl-ring); }
+.d-focus.kl-input { background: var(--kl-base); border-color: var(--kl-ember-500); box-shadow: var(--kl-ring); }
+
+/* ---- regras faça/não faça ---- */
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(452px, 100%), 1fr)); gap: var(--kl-s-5); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--kl-s-5); }
+@media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+.rule-card { border: 1px solid var(--kl-line); border-radius: var(--kl-r-3); overflow: hidden; background: var(--kl-surface); }
+.rule-card__head {
+  display: flex; align-items: center; gap: var(--kl-s-4);
+  padding: var(--kl-s-4) var(--kl-s-5); border-bottom: 1px solid var(--kl-line);
+  font-family: var(--kl-font-mono); font-size: var(--kl-fs-micro);
+  letter-spacing: var(--kl-tr-label); text-transform: uppercase;
+}
+.rule-card--do .rule-card__head { color: var(--kl-ok); background: var(--kl-ok-bg); }
+.rule-card--dont .rule-card__head { color: var(--kl-err); background: var(--kl-err-bg); }
+.rule-card__stage { padding: var(--kl-s-7) var(--kl-s-6); background: var(--kl-base); display: flex; align-items: center; justify-content: center; min-height: 92px; }
+.rule-card__note { padding: var(--kl-s-4) var(--kl-s-5); border-top: 1px solid var(--kl-line); font-size: var(--kl-fs-mini); color: var(--kl-text-2); line-height: 1.45; font-family: var(--kl-font-sans); }
+
+/* amostras erradas, só para ilustrar o "não faça" */
+.bad-badge {
+  display: inline-flex; align-items: center; height: 30px; padding: 0 16px;
+  border-radius: 999px; background: rgba(70,182,127,0.18); color: var(--kl-ok);
+  font-family: var(--kl-font-sans); font-size: 13px; font-weight: 600;
+}
+.bad-btn {
+  display: inline-flex; align-items: center; height: 40px; padding: 0 22px;
+  border-radius: 999px; border: 0; cursor: default;
+  background: linear-gradient(90deg, #F08519, #FFB25C);
+  box-shadow: 0 0 28px rgba(240,133,25,0.55);
+  color: #1A1206; font-family: var(--kl-font-sans); font-weight: 700; font-size: 14px;
+}
+.bad-num { font-family: var(--kl-font-sans); font-size: var(--kl-fs-lg); color: var(--kl-text); }
+.bad-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--kl-ember-500); display: inline-block; }
+
+/* ---- listas ---- */
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--kl-s-4); }
+.checklist li { display: flex; gap: var(--kl-s-4); font-size: var(--kl-fs-base); color: var(--kl-text-2); line-height: 1.45; font-family: var(--kl-font-sans); }
+.checklist li::before { content: ""; width: 6px; height: 6px; border-radius: var(--kl-r-1); background: var(--kl-line-loud); flex: none; margin-top: 7px; }
+.checklist li b { color: var(--kl-text); font-weight: var(--kl-fw-semibold); }
+.checklist--never li::before { background: var(--kl-err); }
+/* em coluna estreita a regra quebra melhor com o título em linha própria */
+.checklist--stack li { display: block; padding-left: 14px; position: relative; }
+.checklist--stack li::before { position: absolute; left: 0; top: 7px; }
+.checklist--stack li b { display: block; margin-bottom: 2px; }
+
+/* ---- rodapé ---- */
+.foot { margin-top: var(--kl-s-10); border-top: 1px solid var(--kl-line); padding: var(--kl-s-8) 0 var(--kl-s-11); }
+.foot__in { display: flex; flex-wrap: wrap; gap: var(--kl-s-6); align-items: center; justify-content: space-between; }
+</style>
+</head>
+<body class="kl">
+
+<a class="kl-sr" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="top">
+  <div class="wrap top__in">
+    <div class="top__brand">
+      <span class="kl-mark" aria-hidden="true">k</span>
+      <span class="kl-wordmark kl-wordmark--blink">kiln<span class="kl-wordmark__cursor"></span></span>
+    </div>
+    <nav class="kl-nav" aria-label="Navegação do produto">
+      <a class="kl-nav__item" aria-current="page" href="#conteudo">visão&nbsp;geral</a>
+      <a class="kl-nav__item" href="#componentes">rotas</a>
+      <a class="kl-nav__item" href="#componentes">execuções</a>
+      <a class="kl-nav__item" href="#componentes">alertas</a>
+    </nav>
+    <span class="top__spacer"></span>
+    <div class="top__right">
+      <span class="kl-badge">v0.9.2</span>
+      <button class="kl-btn kl-btn--sm kl-btn--primary" type="button">nova&nbsp;pipeline</button>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ABERTURA -->
+  <section class="wrap hero">
+    <div class="hero__grid">
+      <div>
+        <p class="kl-label kl-label--ember" style="margin:0 0 var(--kl-s-6)">design system · plano de controle</p>
+        <h1 class="kl-display">Kiln</h1>
+        <p class="kl-prose" style="margin-top:var(--kl-s-6)">
+          Kiln é o plano de controle para pipelines de dados e APIs internas: ingestão, execução agendada,
+          alerta e auditoria em uma superfície só. Este documento é a fonte de verdade visual do produto —
+          <strong>tudo aqui sai de <span class="kl-code">tokens.css</span></strong>, e nada aqui existe para impressionar.
+          A interface tem uma função: dizer o que está de pé, o que quebrou e o que fazer agora.
+        </p>
+      </div>
+
+      <aside class="kl-card">
+        <div class="kl-card__head">
+          <span class="kl-label">inventário</span>
+          <span class="kl-status"><span class="kl-dot kl-dot--ok"></span>estável</span>
+        </div>
+        <div class="kl-card__body">
+          <dl class="kl-kv">
+            <dt>tokens</dt><dd>79</dd>
+            <dt>componentes</dt><dd>22</dd>
+            <dt>folha</dt><dd>29 kB · sem build</dd>
+            <dt>webfonts</dt><dd>0</dd>
+            <dt>contraste</dt><dd>4,5:1 mínimo · AA</dd>
+          </dl>
+        </div>
+        <div class="kl-card__foot">
+          <span class="kl-meta">tudo nesta página vem de tokens.css</span>
+        </div>
+      </aside>
+    </div>
+
+    <div class="hero__meta">
+      <div><span class="kl-label">versão</span><span class="kl-meta">0.9.2</span></div>
+      <div><span class="kl-label">atualizado</span><span class="kl-meta">2026-08-02</span></div>
+      <div><span class="kl-label">faces</span><span class="kl-meta">mono estrutural + sans de leitura</span></div>
+      <div><span class="kl-label">assinatura</span><span class="kl-meta" style="color:var(--kl-ember-300)">#F08519</span></div>
+      <div><span class="kl-label">dependências</span><span class="kl-meta">nenhuma</span></div>
+    </div>
+  </section>
+
+  <!-- MARCA -->
+  <section class="wrap sec sec--first">
+    <div class="kl-rule"><span class="kl-label sec__label">marca</span></div>
+    <p class="kl-prose" style="margin-bottom:var(--kl-s-8)">
+      O wordmark é <strong>kiln</strong> em caixa baixa, na face mono, com um cursor de bloco âmbar colado à direita.
+      O cursor é a marca: é a única forma âmbar que pode aparecer sozinha, sem rótulo. Nunca há versão em sans,
+      nunca há versão em caixa alta, nunca há contorno.
+    </p>
+
+    <div class="grid g-4">
+      <div class="brand-tile">
+        <div class="brand-tile__stage stage--base">
+          <span class="kl-wordmark" style="font-size:1.5rem">kiln<span class="kl-wordmark__cursor"></span></span>
+        </div>
+        <div class="brand-tile__cap"><span class="kl-label">sobre a base</span></div>
+      </div>
+
+      <div class="brand-tile">
+        <div class="brand-tile__stage stage--surface">
+          <span class="kl-wordmark" style="font-size:1.5rem">kiln<span class="kl-wordmark__cursor"></span></span>
+        </div>
+        <div class="brand-tile__cap"><span class="kl-label">sobre superfície</span></div>
+      </div>
+
+      <div class="brand-tile">
+        <div class="brand-tile__stage stage--ember">
+          <span class="kl-wordmark kl-wordmark--inverse" style="font-size:1.5rem">kiln<span class="kl-wordmark__cursor"></span></span>
+        </div>
+        <div class="brand-tile__cap"><span class="kl-label">invertido sobre âmbar</span></div>
+      </div>
+
+      <div class="brand-tile">
+        <div class="brand-tile__stage stage--sunken">
+          <span class="row" style="gap:var(--kl-s-5)">
+            <span class="kl-mark" style="width:24px;height:24px;font-size:11px">k</span>
+            <span class="kl-mark">k</span>
+            <span class="kl-mark" style="width:44px;height:44px;font-size:20px;border-radius:var(--kl-r-3)">k</span>
+          </span>
+        </div>
+        <div class="brand-tile__cap"><span class="kl-label">ícone 24 · 32 · 44</span></div>
+      </div>
+    </div>
+
+    <div class="grid g-2" style="margin-top:var(--kl-s-5)">
+      <div class="brand-tile">
+        <div class="brand-tile__stage stage--base" style="justify-content:flex-start">
+          <span class="lockup">
+            <span class="kl-wordmark" style="font-size:1.25rem">kiln<span class="kl-wordmark__cursor"></span></span>
+            <span class="lockup__bar"></span>
+            <span class="kl-meta">plano de controle para pipelines</span>
+          </span>
+        </div>
+        <div class="brand-tile__cap"><span class="kl-label">lockup horizontal · barra de 1px separa marca e descritor</span></div>
+      </div>
+
+      <div class="brand-tile">
+        <div class="brand-tile__stage stage--base" style="justify-content:flex-start">
+          <span class="row" style="gap:var(--kl-s-6)">
+            <span class="kl-mark">k</span>
+            <span class="col" style="gap:2px">
+              <span class="kl-wordmark" style="font-size:1rem">kiln<span class="kl-wordmark__cursor"></span></span>
+              <span class="kl-meta" style="font-size:var(--kl-fs-micro)">org · dados-plataforma</span>
+            </span>
+          </span>
+        </div>
+        <div class="brand-tile__cap"><span class="kl-label">lockup empilhado · usado no seletor de organização</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PALETA -->
+  <section class="wrap sec" id="paleta">
+    <div class="kl-rule"><span class="kl-label sec__label">paleta</span></div>
+    <p class="kl-prose" style="margin-bottom:var(--kl-s-8)">
+      Uma cor quente contra neutros frios. O contraste de temperatura é a ideia inteira: o âmbar só faz sentido
+      porque tudo em volta é aço azulado. <strong>Clique em qualquer amostra para copiar o hex.</strong>
+      Os valores marcados com razão de contraste foram medidos sobre <span class="kl-code">--kl-base</span>.
+    </p>
+
+    <p class="kl-label sub">assinatura · âmbar de forja</p>
+    <div class="grid g-4" id="ramp-ember"></div>
+
+    <p class="kl-label sub">neutros · superfície e hairline</p>
+    <div class="grid g-4" id="ramp-neutral"></div>
+
+    <p class="kl-label sub">texto · três níveis</p>
+    <div class="grid g-4" id="ramp-text"></div>
+
+    <p class="kl-label sub">estado · sempre em par com uma palavra</p>
+    <div class="grid g-4" id="ramp-state"></div>
+
+    <div class="kl-card" style="margin-top:var(--kl-s-8)">
+      <div class="kl-card__body">
+        <ul class="checklist">
+          <li><b>Âmbar não é estado.</b> Verde, amarelo e vermelho dizem se o sistema está de pé. O âmbar diz onde a pessoa deve agir.</li>
+          <li><b>Dois âmbares por tela, no máximo.</b> Um botão primário e um valor em destaque. Se precisar de um terceiro, a tela tem hierarquia demais.</li>
+          <li><b>Cor nunca carrega significado sozinha.</b> Todo estado aparece como quadrado de 6px + palavra, para sobreviver a daltonismo e a print em preto e branco.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPOGRAFIA -->
+  <section class="wrap sec" id="tipografia">
+    <div class="kl-rule"><span class="kl-label sec__label">tipografia</span></div>
+    <p class="kl-prose" style="margin-bottom:var(--kl-s-8)">
+      Duas faces com papéis que não se misturam. A <strong>mono é estrutural</strong>: rótulo, número, metadado, navegação,
+      cabeçalho de tabela, ID e caminho de rota. A <strong>sans é só texto corrido</strong>: parágrafo, descrição, estado vazio.
+      Se o conteúdo é um dado, ele é mono. Ambas são stacks nativas do sistema operacional — a página abre sem rede.
+    </p>
+
+    <div class="grid g-2">
+      <div class="kl-card">
+        <div class="kl-card__head">
+          <span class="kl-label">face estrutural · mono</span>
+          <span class="kl-badge kl-badge--ember">padrão da ui</span>
+        </div>
+        <div class="kl-card__body face">
+          <p class="face__sample-mono" style="margin:0">ABCDEFGHIJKLM abcdefghijklm</p>
+          <p class="face__sample-mono" style="margin:var(--kl-s-4) 0 0">0123456789 · /v1/pipelines/:id/runs</p>
+          <div class="kl-hr" style="margin:var(--kl-s-6) 0"></div>
+          <p class="kl-help" style="margin-bottom:var(--kl-s-4)">Números tabulares alinham por casa decimal — a coluna vira régua:</p>
+          <div class="kl-num" style="text-align:right;width:140px;line-height:1.5;font-size:var(--kl-fs-base)">
+            1.204,00<br>98.117,50<br>7,25<br>412.980,10
+          </div>
+          <p class="kl-meta" style="margin-top:var(--kl-s-6);display:block">ui-monospace, "SF Mono", Menlo, Consolas, monospace</p>
+        </div>
+      </div>
+
+      <div class="kl-card">
+        <div class="kl-card__head">
+          <span class="kl-label">face de leitura · sans</span>
+          <span class="kl-badge">só texto corrido</span>
+        </div>
+        <div class="kl-card__body face">
+          <p class="face__sample-sans" style="margin:0">ABCDEFGHIJKLM abcdefghijklm</p>
+          <p class="face__sample-sans" style="margin:var(--kl-s-4) 0 0">Documentação, descrição, estado vazio</p>
+          <div class="kl-hr" style="margin:var(--kl-s-6) 0"></div>
+          <p class="kl-prose" style="font-size:var(--kl-fs-base)">
+            Um retry é reexecução do mesmo passo com o mesmo payload. O Kiln guarda o payload original por
+            30 dias, então reexecutar uma pipeline de ontem produz exatamente o mesmo resultado de ontem —
+            inclusive o mesmo erro, se o erro estiver no seu código.
+          </p>
+          <p class="kl-meta" style="margin-top:var(--kl-s-6);display:block">-apple-system, "Segoe UI", Roboto, Arial, sans-serif</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="kl-label sub">escala</p>
+    <div class="kl-card">
+      <div class="kl-card__body" style="padding-top:0;padding-bottom:0">
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">3xl · 44px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">abertura</div></div>
+          <div class="spec__body kl-display">Kiln</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">2xl · 34px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">título de página · kpi</div></div>
+          <div class="spec__body kl-h1">Pipelines em execução</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">xl · 26px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">título de seção</div></div>
+          <div class="spec__body kl-h2">Latência por rota</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">lg · 20px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">título de card</div></div>
+          <div class="spec__body kl-h3">Janela de retenção</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">md · 16px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">texto corrido · sans</div></div>
+          <div class="spec__body" style="font-family:var(--kl-font-sans);font-size:var(--kl-fs-md);color:var(--kl-text-2)">Cada execução guarda o payload de entrada e o diff do schema.</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">base · 14px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">corpo denso</div></div>
+          <div class="spec__body" style="font-family:var(--kl-font-sans);font-size:var(--kl-fs-base);color:var(--kl-text-2)">Cada execução guarda o payload de entrada e o diff do schema.</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">sm · 13px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">padrão da ui · mono</div></div>
+          <div class="spec__body" style="font-family:var(--kl-font-mono);font-size:var(--kl-fs-sm);color:var(--kl-text)">POST /v1/exports/parquet — 1.902 ms</div>
+        </div>
+        <div class="spec">
+          <div class="spec__meta"><div class="kl-label">mini · 12px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">tabela · badge</div></div>
+          <div class="spec__body" style="font-family:var(--kl-font-mono);font-size:var(--kl-fs-mini);color:var(--kl-text-2)">run_8f2c41 · concluída em 4,2 s</div>
+        </div>
+        <div class="spec" style="border-bottom:0">
+          <div class="spec__meta"><div class="kl-label">micro · 11px</div><div class="kl-meta" style="font-size:var(--kl-fs-micro)">label · unidade</div></div>
+          <div class="spec__body kl-label">taxa de erro · últimas 24 h</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESPAÇO, RAIO, ELEVAÇÃO -->
+  <section class="wrap sec" id="grade">
+    <div class="kl-rule"><span class="kl-label sec__label">espaço, raio e elevação</span></div>
+
+    <div class="grid g-cards">
+      <div class="kl-card">
+        <div class="kl-card__head"><span class="kl-label">escala de espaço</span><span class="kl-meta">base 4 · 11 passos</span></div>
+        <div class="kl-card__body">
+          <div class="ruler" id="ruler"></div>
+          <p class="kl-help" style="margin-top:var(--kl-s-6)">
+            Gutter de página: 24px. Padding de card: 24px. Altura de controle: 32px. A régua é curta de propósito —
+            densidade é posicionamento, não descuido.
+          </p>
+        </div>
+      </div>
+
+      <div class="kl-card">
+        <div class="kl-card__head"><span class="kl-label">raios</span><span class="kl-meta">máximo 6px</span></div>
+        <div class="kl-card__body">
+          <div class="rad-grid">
+            <div class="rad"><div class="rad__box" style="border-radius:0"></div><div class="kl-label">r-0 · 0</div></div>
+            <div class="rad"><div class="rad__box" style="border-radius:2px"></div><div class="kl-label">r-1 · 2</div></div>
+            <div class="rad"><div class="rad__box" style="border-radius:4px"></div><div class="kl-label">r-2 · 4</div></div>
+            <div class="rad"><div class="rad__box" style="border-radius:6px"></div><div class="kl-label">r-3 · 6</div></div>
+          </div>
+          <p class="kl-help" style="margin-top:var(--kl-s-6)">
+            Não existe raio total neste sistema. Badge é retângulo, indicador de status é quadrado, avatar é quadrado de 4px.
+            O padrão é <span class="kl-code">r-2</span>; <span class="kl-code">r-3</span> só em card e popover.
+          </p>
+        </div>
+      </div>
+
+      <div class="kl-card">
+        <div class="kl-card__head"><span class="kl-label">elevação</span><span class="kl-meta">borda + valor</span></div>
+        <div class="kl-card__body">
+          <div class="elev-row">
+            <span class="elev-chip elev-chip--0"></span>
+            <span><span class="kl-label">e-0 · sem sombra</span><p class="kl-help" style="margin-top:5px">card, painel, faixa</p></span>
+          </div>
+          <div class="elev-row">
+            <span class="elev-chip elev-chip--1"></span>
+            <span><span class="kl-label">e-1 · 1px de apoio</span><p class="kl-help" style="margin-top:5px">botão, input</p></span>
+          </div>
+          <div class="elev-row">
+            <span class="elev-chip elev-chip--2"></span>
+            <span><span class="kl-label">e-2 · camada que flutua</span><p class="kl-help" style="margin-top:5px">popover, menu, toast</p></span>
+          </div>
+          <p class="kl-help" style="margin-top:var(--kl-s-6)">
+            Sombra colorida é proibida em todos os níveis. O que separa um plano do outro é 1px de borda e um degrau
+            de fundo — <span class="kl-code">#070910 → #0B0E14 → #11151D → #171D27 → #1D2531</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENTES -->
+  <section class="wrap sec" id="componentes">
+    <div class="kl-rule"><span class="kl-label sec__label">componentes</span></div>
+
+    <p class="kl-label sub">botões · matriz de estados</p>
+    <div class="kl-card">
+      <div class="kl-card__body--flush kl-card__body" style="padding:0;overflow-x:auto">
+        <table class="states">
+          <thead>
+            <tr>
+              <th style="width:120px">variante</th>
+              <th>repouso</th><th>hover</th><th>foco</th><th>desabilitado</th><th>carregando</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>primário</td>
+              <td><button class="kl-btn kl-btn--primary" type="button">executar agora</button></td>
+              <td><span class="kl-btn kl-btn--primary d-hover">executar agora</span></td>
+              <td><span class="kl-btn kl-btn--primary d-focus">executar agora</span></td>
+              <td><span class="kl-btn kl-btn--primary" aria-disabled="true">executar agora</span></td>
+              <td><span class="kl-btn kl-btn--primary kl-btn--loading"><span class="kl-spinner"></span>executando</span></td>
+            </tr>
+            <tr>
+              <td>secundário</td>
+              <td><button class="kl-btn" type="button">ver logs</button></td>
+              <td><span class="kl-btn d-hover">ver logs</span></td>
+              <td><span class="kl-btn d-focus">ver logs</span></td>
+              <td><span class="kl-btn" aria-disabled="true">ver logs</span></td>
+              <td><span class="kl-btn kl-btn--loading"><span class="kl-spinner"></span>carregando</span></td>
+            </tr>
+            <tr>
+              <td>fantasma</td>
+              <td><button class="kl-btn kl-btn--ghost" type="button">duplicar</button></td>
+              <td><span class="kl-btn kl-btn--ghost d-hover">duplicar</span></td>
+              <td><span class="kl-btn kl-btn--ghost d-focus">duplicar</span></td>
+              <td><span class="kl-btn kl-btn--ghost" aria-disabled="true">duplicar</span></td>
+              <td><span class="kl-btn kl-btn--ghost kl-btn--loading"><span class="kl-spinner"></span>duplicando</span></td>
+            </tr>
+            <tr>
+              <td>destrutivo</td>
+              <td><button class="kl-btn kl-btn--danger" type="button">apagar pipeline</button></td>
+              <td><span class="kl-btn kl-btn--danger d-hover">apagar pipeline</span></td>
+              <td><span class="kl-btn kl-btn--danger d-focus">apagar pipeline</span></td>
+              <td><span class="kl-btn kl-btn--danger" aria-disabled="true">apagar pipeline</span></td>
+              <td><span class="kl-btn kl-btn--danger kl-btn--loading"><span class="kl-spinner"></span>apagando</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="kl-card__foot">
+        <div class="row" style="gap:var(--kl-s-5)">
+          <span class="kl-label">interativo</span>
+          <button class="kl-btn kl-btn--sm kl-btn--primary" type="button">sm</button>
+          <button class="kl-btn kl-btn--primary" type="button">padrão · 32px</button>
+          <button class="kl-btn kl-btn--lg" type="button">lg · 38px</button>
+          <span class="kl-help">Passe o mouse e navegue com <span class="kl-kbd">Tab</span> — os estados acima são réplicas paradas.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="kl-label sub">campos</p>
+    <div class="grid g-2" style="align-items:start">
+      <div class="kl-card">
+        <div class="kl-card__head"><span class="kl-label">formulário · nova pipeline</span></div>
+        <div class="kl-card__body">
+          <div class="stack-4" style="gap:var(--kl-s-6)">
+            <div class="kl-field">
+              <label class="kl-label" for="f-nome">nome da pipeline</label>
+              <input class="kl-input" id="f-nome" type="text" value="faturamento-diario">
+              <p class="kl-help">Caixa baixa, hífen como separador. Vira o identificador na API.</p>
+            </div>
+
+            <div class="kl-field">
+              <label class="kl-label" for="f-hook">endpoint de destino</label>
+              <div class="kl-input-group">
+                <span class="kl-input-group__addon">https://</span>
+                <input class="kl-input" id="f-hook" type="text" placeholder="api.suaempresa.com.br/ingest">
+              </div>
+            </div>
+
+            <div class="kl-field">
+              <label class="kl-label" for="f-cron">agendamento</label>
+              <select class="kl-select" id="f-cron">
+                <option>0 6 * * * — todo dia às 06:00</option>
+                <option>*/15 * * * * — a cada 15 minutos</option>
+                <option>0 0 1 * * — todo dia 1º</option>
+              </select>
+            </div>
+
+            <div class="kl-field">
+              <label class="kl-label" for="f-token">token de serviço</label>
+              <input class="kl-input kl-input--invalid" id="f-token" type="text" value="sk_live_3f9" aria-invalid="true" aria-describedby="f-token-err">
+              <p class="kl-error" id="f-token-err"><span class="kl-dot kl-dot--err"></span>token com 11 caracteres; o formato exige 40</p>
+            </div>
+
+            <div class="kl-field">
+              <label class="kl-label" for="f-obs">observação</label>
+              <textarea class="kl-textarea" id="f-obs" placeholder="Opcional. Fica no histórico de auditoria."></textarea>
+            </div>
+
+            <div class="kl-field">
+              <label class="kl-label" for="f-lock">região (bloqueada no plano atual)</label>
+              <input class="kl-input" id="f-lock" type="text" value="sa-east-1" disabled>
+            </div>
+          </div>
+        </div>
+        <div class="kl-card__foot">
+          <div class="row" style="justify-content:flex-end;gap:var(--kl-s-4)">
+            <button class="kl-btn kl-btn--ghost" type="button">cancelar</button>
+            <button class="kl-btn kl-btn--primary" type="button">criar pipeline</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="kl-card">
+          <div class="kl-card__head"><span class="kl-label">badges e status</span></div>
+          <div class="kl-card__body">
+            <div class="row" style="gap:var(--kl-s-4)">
+              <span class="kl-badge kl-badge--ok">operacional</span>
+              <span class="kl-badge kl-badge--warn">degradado</span>
+              <span class="kl-badge kl-badge--err">caído</span>
+              <span class="kl-badge kl-badge--info">em fila</span>
+              <span class="kl-badge kl-badge--ember">novo</span>
+              <span class="kl-badge">rascunho</span>
+            </div>
+            <div class="kl-hr"></div>
+            <div class="col" style="gap:var(--kl-s-5)">
+              <span class="kl-status"><span class="kl-dot kl-dot--ok"></span>ingestão · 12.480 req/min · sem incidente há 31 dias</span>
+              <span class="kl-status"><span class="kl-dot kl-dot--warn"></span>exportação parquet · fila com 1.204 itens</span>
+              <span class="kl-status"><span class="kl-dot kl-dot--err"></span>validação de schema · 11,6% de falha desde 14:02</span>
+              <span class="kl-status"><span class="kl-dot"></span>webhook de teste · nunca executado</span>
+            </div>
+            <p class="kl-help" style="margin-top:var(--kl-s-6)">
+              O quadrado nunca aparece sem a palavra ao lado. Quem imprime este painel em preto e branco continua entendendo.
+            </p>
+          </div>
+        </div>
+
+        <div class="kl-card">
+          <div class="kl-card__head">
+            <span class="kl-label">card de recurso</span>
+            <span class="kl-status"><span class="kl-dot kl-dot--ok"></span>ativa</span>
+          </div>
+          <div class="kl-card__body">
+            <h3 class="kl-h3" style="font-family:var(--kl-font-mono);font-size:var(--kl-fs-base)">faturamento-diario</h3>
+            <p class="kl-help" style="margin-top:var(--kl-s-3)">Consolida notas emitidas e envia para o data warehouse todo dia às 06:00.</p>
+            <div class="kl-hr" style="margin:var(--kl-s-6) 0"></div>
+            <dl class="kl-kv">
+              <dt>id</dt><dd>pl_8f2c41d9</dd>
+              <dt>última</dt><dd>hoje, 06:00:12 · 4,2 s</dd>
+              <dt>próxima</dt><dd>amanhã, 06:00:00</dd>
+              <dt>destino</dt><dd>warehouse.interno/vendas</dd>
+            </dl>
+            <div style="margin-top:var(--kl-s-6)">
+              <div class="row" style="justify-content:space-between;gap:var(--kl-s-4);margin-bottom:var(--kl-s-3)">
+                <span class="kl-label">cota do plano</span>
+                <span class="kl-meta">68,4% de 50 M eventos</span>
+              </div>
+              <div class="kl-meter"><div class="kl-meter__fill" style="width:68.4%"></div></div>
+            </div>
+          </div>
+          <div class="kl-card__foot">
+            <div class="row" style="gap:var(--kl-s-4)">
+              <button class="kl-btn kl-btn--sm" type="button">reexecutar</button>
+              <button class="kl-btn kl-btn--sm kl-btn--ghost" type="button">ver logs</button>
+              <span class="top__spacer"></span>
+              <button class="kl-btn kl-btn--sm kl-btn--danger" type="button">pausar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="kl-label sub">tabela de dados</p>
+    <div class="kl-card">
+      <div class="kl-card__head">
+        <span class="kl-label">rotas · janela de 24 h</span>
+        <div class="row" style="gap:var(--kl-s-4)">
+          <span class="kl-meta">atualizado há 12 s</span>
+          <button class="kl-btn kl-btn--sm kl-btn--ghost" type="button">exportar csv</button>
+        </div>
+      </div>
+      <div class="kl-card__body kl-card__body--flush">
+        <div class="kl-table-wrap">
+          <table class="kl-table">
+            <thead>
+              <tr>
+                <th>rota</th>
+                <th>método</th>
+                <th class="kl-th--num">p50</th>
+                <th class="kl-th--num">p95</th>
+                <th class="kl-th--num">erro</th>
+                <th class="kl-th--num">req/min</th>
+                <th>estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="kl-td--key">/v1/ingest/events</td><td>POST</td>
+                <td class="kl-td--num">21 ms</td><td class="kl-td--num">84 ms</td>
+                <td class="kl-td--num">0,02%</td><td class="kl-td--num">12.480</td>
+                <td><span class="kl-status"><span class="kl-dot kl-dot--ok"></span>operacional</span></td>
+              </tr>
+              <tr>
+                <td class="kl-td--key">/v1/webhooks/dispatch</td><td>POST</td>
+                <td class="kl-td--num">18 ms</td><td class="kl-td--num">62 ms</td>
+                <td class="kl-td--num">0,00%</td><td class="kl-td--num">8.117</td>
+                <td><span class="kl-status"><span class="kl-dot kl-dot--ok"></span>operacional</span></td>
+              </tr>
+              <tr>
+                <td class="kl-td--key">/v1/pipelines/:id/runs</td><td>GET</td>
+                <td class="kl-td--num">44 ms</td><td class="kl-td--num">141 ms</td>
+                <td class="kl-td--num">0,00%</td><td class="kl-td--num">3.204</td>
+                <td><span class="kl-status"><span class="kl-dot kl-dot--ok"></span>operacional</span></td>
+              </tr>
+              <tr aria-selected="true">
+                <td class="kl-td--key">/v1/schemas/validate</td><td>POST</td>
+                <td class="kl-td--num">96 ms</td><td class="kl-td--num">318 ms</td>
+                <td class="kl-td--num">11,60%</td><td class="kl-td--num">441</td>
+                <td><span class="kl-status"><span class="kl-dot kl-dot--err"></span>caído</span></td>
+              </tr>
+              <tr>
+                <td class="kl-td--key">/v1/exports/parquet</td><td>POST</td>
+                <td class="kl-td--num">870 ms</td><td class="kl-td--num">1.902 ms</td>
+                <td class="kl-td--num">2,14%</td><td class="kl-td--num">96</td>
+                <td><span class="kl-status"><span class="kl-dot kl-dot--warn"></span>degradado</span></td>
+              </tr>
+              <tr>
+                <td class="kl-td--key">/v1/keys/rotate</td><td>PUT</td>
+                <td class="kl-td--num">12 ms</td><td class="kl-td--num">29 ms</td>
+                <td class="kl-td--num">0,00%</td><td class="kl-td--num">3</td>
+                <td><span class="kl-status"><span class="kl-dot kl-dot--ok"></span>operacional</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="kl-card__foot">
+        <div class="row" style="justify-content:space-between">
+          <span class="kl-meta">6 rotas · 24.341 req/min agregado</span>
+          <span class="kl-meta">linha selecionada usa fundo âmbar a 8%</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="kl-label sub">números e saída de terminal</p>
+    <div class="grid g-2" style="align-items:start">
+      <div class="grid" style="gap:var(--kl-s-5);grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr))">
+        <div class="kl-card"><div class="kl-card__body">
+          <div class="kl-label">eventos · 24 h</div>
+          <div class="kl-num kl-num--lg" style="margin-top:var(--kl-s-4)">48,2<span class="kl-num__unit">M</span></div>
+          <div class="kl-status" style="margin-top:var(--kl-s-4)"><span class="kl-dot kl-dot--ok"></span>+6,1% vs. ontem</div>
+        </div></div>
+        <div class="kl-card"><div class="kl-card__body">
+          <div class="kl-label">latência p95</div>
+          <div class="kl-num kl-num--lg kl-num--ember" style="margin-top:var(--kl-s-4)">96<span class="kl-num__unit">ms</span></div>
+          <div class="kl-status" style="margin-top:var(--kl-s-4)"><span class="kl-dot kl-dot--warn"></span>meta: 80 ms</div>
+        </div></div>
+        <div class="kl-card"><div class="kl-card__body">
+          <div class="kl-label">taxa de erro</div>
+          <div class="kl-num kl-num--lg" style="margin-top:var(--kl-s-4)">0,31<span class="kl-num__unit">%</span></div>
+          <div class="kl-status" style="margin-top:var(--kl-s-4)"><span class="kl-dot kl-dot--ok"></span>dentro do orçamento</div>
+        </div></div>
+      </div>
+
+      <pre class="kl-pre">$ kiln runs tail faturamento-diario
+
+06:00:12  <span style="color:var(--kl-ok)">ok</span>    extract.notas        1.204 linhas   0,9 s
+06:00:13  <span style="color:var(--kl-ok)">ok</span>    transform.moeda      1.204 linhas   0,4 s
+06:00:14  <span style="color:var(--kl-warn)">warn</span>  validate.schema      3 campos nulos
+06:00:16  <span style="color:var(--kl-ok)">ok</span>    load.warehouse       1.201 linhas   2,9 s
+
+concluída em 4,2 s · 3 linhas descartadas · <span style="color:var(--kl-ember-300)">run_8f2c41</span></pre>
+    </div>
+  </section>
+
+  <!-- REGRAS -->
+  <section class="wrap sec" id="regras">
+    <div class="kl-rule"><span class="kl-label sec__label">regras de uso</span></div>
+    <p class="kl-prose" style="margin-bottom:var(--kl-s-8)">
+      Um design system é feito de proibições. Estas são as do Kiln — cada uma existe porque a alternativa
+      já apareceu em algum protótipo e envelheceu mal.
+    </p>
+
+    <div class="pairs">
+      <div class="pair">
+        <div class="rule-card rule-card--do">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--ok"></span>faça</div>
+          <div class="rule-card__stage"><button class="kl-btn kl-btn--primary" type="button">executar agora</button></div>
+          <div class="rule-card__note">Preenchimento chapado, canto de 4px, rótulo em mono e caixa baixa.</div>
+        </div>
+        <div class="rule-card rule-card--dont">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--err"></span>não faça</div>
+          <div class="rule-card__stage"><span class="bad-btn">Executar Agora</span></div>
+          <div class="rule-card__note">Gradiente, glow e pílula. Isso é botão de landing page, não de plano de controle.</div>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="rule-card rule-card--do">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--ok"></span>faça</div>
+          <div class="rule-card__stage"><span class="kl-num" style="font-size:var(--kl-fs-lg);font-weight:var(--kl-fw-bold)">1.902<span class="kl-num__unit">ms</span></span></div>
+          <div class="rule-card__note">Número em mono, tabular, com a unidade menor e em texto terciário.</div>
+        </div>
+        <div class="rule-card rule-card--dont">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--err"></span>não faça</div>
+          <div class="rule-card__stage"><span class="bad-num">1.902 ms</span></div>
+          <div class="rule-card__note">Número em sans não alinha em coluna e mente sobre a largura ao atualizar.</div>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="rule-card rule-card--do">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--ok"></span>faça</div>
+          <div class="rule-card__stage"><span class="kl-status"><span class="kl-dot kl-dot--err"></span>caído desde 14:02</span></div>
+          <div class="rule-card__note">Quadrado de 6px + palavra + horário. Estado é informação, não decoração.</div>
+        </div>
+        <div class="rule-card rule-card--dont">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--err"></span>não faça</div>
+          <div class="rule-card__stage"><span class="bad-dot"></span></div>
+          <div class="rule-card__note">Bolinha colorida sozinha, e ainda por cima na cor da marca. Ninguém sabe o que é.</div>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="rule-card rule-card--do">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--ok"></span>faça</div>
+          <div class="rule-card__stage"><span class="kl-badge kl-badge--ok">operacional</span></div>
+          <div class="rule-card__note">Badge de 20px em mono. Cabe dentro da linha da tabela sem esticá-la.</div>
+        </div>
+        <div class="rule-card rule-card--dont">
+          <div class="rule-card__head"><span class="kl-dot kl-dot--err"></span>não faça</div>
+          <div class="rule-card__stage"><span class="bad-badge">Operacional</span></div>
+          <div class="rule-card__note">Pílula em sans: ocupa mais altura, quebra o ritmo da tabela e some no meio dos dados.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g-2" style="margin-top:var(--kl-s-8);align-items:start">
+      <div class="kl-card">
+        <div class="kl-card__head"><span class="kl-label">sempre</span></div>
+        <div class="kl-card__body">
+          <ul class="checklist checklist--stack">
+            <li><b>Todo dado é mono.</b> Se aparece um número em sans, é bug de implementação.</li>
+            <li><b>Uma ação primária por vista.</b> O âmbar marca o caminho principal; dois caminhos principais é nenhum.</li>
+            <li><b>1px de borda antes de qualquer sombra.</b> A hierarquia é desenhada, não borrada.</li>
+            <li><b>Estado vazio explica a causa.</b> "Nenhuma execução ainda — a primeira roda às 06:00", nunca só "Sem dados".</li>
+            <li><b>Erro mostra o valor recebido.</b> Dizer "token inválido" não ajuda; dizer "11 caracteres, o formato exige 40" ajuda.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="kl-card">
+        <div class="kl-card__head"><span class="kl-label">nunca</span></div>
+        <div class="kl-card__body">
+          <ul class="checklist checklist--stack checklist--never">
+            <li><b>Gradiente decorativo e sombra colorida.</b> Nenhum, em nível nenhum.</li>
+            <li><b>Âmbar para significar estado.</b> Verde, amarelo e vermelho fazem esse trabalho.</li>
+            <li><b>Cantos acima de 6px ou formas em pílula.</b> Inclui avatar, badge e indicador.</li>
+            <li><b>Emoji em rótulo, título ou vazio.</b> A face mono já é o ícone do sistema.</li>
+            <li><b>Animação em conteúdo de dado.</b> Número que entra deslizando faz a pessoa duvidar do número.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span class="lockup">
+      <span class="kl-wordmark">kiln<span class="kl-wordmark__cursor"></span></span>
+      <span class="lockup__bar"></span>
+      <span class="kl-meta">design system · v0.9.2</span>
+    </span>
+    <span class="kl-meta">tokens.css · README.md · SKILL.md</span>
+  </div>
+</footer>
+
+<div class="kl-toast" id="toast" role="status" aria-live="polite">
+  <span class="kl-dot kl-dot--ok" aria-hidden="true"></span>
+  <span id="toast-msg">copiado</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- rampas de cor: renderizadas a partir de uma lista, para o hex
+         nunca divergir entre a amostra e o rótulo ---- */
+  var RAMPS = {
+    "ramp-ember": [
+      ["--kl-ember-100", "#FFE2BE", "15,5:1", "tinta clara sobre âmbar sólido escuro"],
+      ["--kl-ember-300", "#FFB25C", "10,8:1", "texto e ícone de acento sobre fundo escuro"],
+      ["--kl-ember-500", "#F08519", "7,4:1",  "assinatura — preenchimento, foco, cursor"],
+      ["--kl-ember-700", "#A85310", "3,6:1",  "pressed e borda do botão primário · não use em texto"],
+      ["--kl-ember-900", "#3A2008", "",       "fundo tingido de chip e faixa"]
+    ],
+    "ramp-neutral": [
+      ["--kl-sunken",    "#070910", "", "poço: bloco de código, input, rodapé de card"],
+      ["--kl-base",      "#0B0E14", "", "página"],
+      ["--kl-surface",   "#11151D", "", "card, painel, cabeçalho de tabela"],
+      ["--kl-raised",    "#171D27", "", "input em repouso, linha em hover, aba ativa"],
+      ["--kl-overlay",   "#1D2531", "", "popover, menu, toast"],
+      ["--kl-line-soft", "#171E29", "", "divisória entre linhas de tabela"],
+      ["--kl-line",      "#212A38", "", "borda padrão de card, input e botão"],
+      ["--kl-line-loud", "#334053", "", "borda em hover e destaque não-âmbar"]
+    ],
+    "ramp-text": [
+      ["--kl-text",           "#E7EBF3", "16,2:1", "o dado: valor, título, célula"],
+      ["--kl-text-2",         "#9BA6BA", "7,9:1",  "a explicação: parágrafo, descrição, ajuda"],
+      ["--kl-text-3",         "#828DA0", "5,8:1",  "o rótulo: label mono, metadado, unidade"],
+      ["--kl-text-on-ember",  "#1A1206", "7,1:1",  "texto sobre preenchimento âmbar"]
+    ],
+    "ramp-state": [
+      ["--kl-ok",   "#46B67F", "7,6:1", "operacional · 2xx · deploy concluído"],
+      ["--kl-warn", "#E0B341", "9,8:1", "degradado · perto do limite · retry"],
+      ["--kl-err",  "#E8564E", "5,4:1", "caído · 5xx · validação inválida"],
+      ["--kl-info", "#5B8DEF", "6,0:1", "informativo · em fila · nota do sistema"]
+    ]
+  };
+
+  Object.keys(RAMPS).forEach(function (id) {
+    var host = document.getElementById(id);
+    if (!host) return;
+    RAMPS[id].forEach(function (item) {
+      var name = item[0], hex = item[1], ratio = item[2], role = item[3];
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "sw";
+      b.setAttribute("data-hex", hex);
+      b.setAttribute("aria-label", "Copiar " + hex + ", token " + name);
+      b.innerHTML =
+        '<span class="sw__chip" style="background:' + hex + '"></span>' +
+        '<span class="sw__body">' +
+          '<span class="sw__name">' + name + '</span>' +
+          '<span class="sw__hex">' + hex +
+            (ratio ? '<span class="sw__ratio">· ' + ratio + '</span>' : '') +
+          '</span>' +
+          '<span class="sw__role">' + role + '</span>' +
+        '</span>';
+      host.appendChild(b);
+    });
+  });
+
+  /* ---- régua de espaço ---- */
+  var STEPS = [["s-1", 2], ["s-2", 4], ["s-3", 6], ["s-4", 8], ["s-5", 12], ["s-6", 16],
+               ["s-7", 20], ["s-8", 24], ["s-9", 32], ["s-10", 48], ["s-11", 64]];
+  var ruler = document.getElementById("ruler");
+  if (ruler) {
+    STEPS.forEach(function (s) {
+      var row = document.createElement("div");
+      row.className = "ruler__row";
+      row.innerHTML = '<span class="ruler__lab">' + s[0] + ' · ' + s[1] + 'px</span>' +
+                      '<span class="ruler__bar" style="width:' + s[1] + 'px"></span>';
+      ruler.appendChild(row);
+    });
+  }
+
+  /* ---- copiar hex ---- */
+  var toast = document.getElementById("toast");
+  var toastMsg = document.getElementById("toast-msg");
+  var timer = null;
+
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.setAttribute("data-open", "true");
+    clearTimeout(timer);
+    timer = setTimeout(function () { toast.removeAttribute("data-open"); }, 1900);
+  }
+
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  document.addEventListener("click", function (ev) {
+    var el = ev.target.closest ? ev.target.closest("[data-hex]") : null;
+    if (!el) return;
+    var hex = el.getAttribute("data-hex");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(hex).then(
+        function () { showToast(hex + " copiado"); },
+        function () { showToast(legacyCopy(hex) ? hex + " copiado" : hex + " — copie manualmente"); }
+      );
+    } else {
+      showToast(legacyCopy(hex) ? hex + " copiado" : hex + " — copie manualmente");
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
